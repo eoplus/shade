@@ -1,0 +1,6 @@
+
+gcc val_snell.c ../tr_interface.c -lm -lgsl -lgslcblas -Winline -finline-functions -o val_snell.o
+./val_snell.o
+
+gcc val_fresnel.c ../tr_interface.c ../debug.c -lm -lgsl -lgslcblas -Winline -finline-functions -o val_fresnel.o
+./val_fresnel.o

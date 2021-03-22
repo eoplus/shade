@@ -1,0 +1,28 @@
+"Run Title:  Monochromatic infinite depth run"
+"Wavelength = 550.0 nm"
+    1         4     "(num of wavelengths, num of sheets)"
+"line 4: reserved for future use"
+"line 5: reserved for future use"
+ 550.0    1     "(wavelength and wavelength band)"
+"K funcs"       2       6     "(sheet title, num rows, num cols)"
+ "depth" "Kd" "Ku" "Ko" "Knet" "KLu"
+ "(m)" "(1/m)" "(1/m)" "(1/m)" "(1/m)" "(1/m)"
+   0.005   8.5150E-01   8.2318E-01   8.3312E-01   8.5158E-01   8.4614E-01
+   1.005   8.5330E-01   8.5827E-01   8.5752E-01   8.5328E-01   8.5346E-01
+"AOPs"       3       6     "(sheet title, num rows, num cols)"
+ "depth" "Lu/Ed" "R=Eu/Ed" "Mud" "Muu" "Mu"
+ "(m)" "(1/sr)" " " " " " " " "
+ "in air"   7.0368E-03   0.0716   0.5000   0.2040   0.3949
+   0.000   6.2829E-04   0.0030   0.8301   0.3693   0.8221
+   1.000   6.2933E-04   0.0030   0.8284   0.3653   0.8203
+"IRRAD"       3       6     "(sheet title, num rows, num cols)"
+ "depth" "Ed" "Eu" "Eo" "Lu" "Lu/Ed"
+ "(m)" "(W/m^2 nm)" "(W/m^2 nm)" "(W/m^2 nm)" "(W/m^2 sr nm)" "(1/sr)"
+ "in air"   1.0000E+00   7.1616E-02   2.3511E+00   7.0368E-03   7.0368E-03
+   0.000   9.3116E-01   2.7764E-03   1.1293E+00   5.8504E-04   6.2829E-04
+   1.000   3.9653E-01   1.1881E-03   4.8193E-01   2.4955E-04   6.2933E-04
+"IOPs"       2       7     "(sheet title, num rows, num cols)"
+ "depth" "a" "b" "c" "omega0" "bb" "bb/b"
+ "(m)" "(1/m)" "(1/m)" "(1/m)" " " "(1/m)"
+   0.000      0.7000      0.3000      1.0000      0.3000     0.00549     0.01830
+   1.000      0.7000      0.3000      1.0000      0.3000     0.00549     0.01830

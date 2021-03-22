@@ -1,0 +1,14 @@
+
+# Ignored folders:
+
+anc/skyrad/skyrad_original
+hpc_ugent
+input
+older_versions
+plots
+R
+ref
+res
+sandbox
+test
+val

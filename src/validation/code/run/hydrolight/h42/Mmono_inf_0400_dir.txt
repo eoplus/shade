@@ -1,0 +1,84 @@
+"Run Title:  Monochromatic infinite depth run"
+    1        16     "(num of wavelengths, num of sheets)"
+"wavelength (nm)" "depth (m)"
+"line 5: reserved for future use"
+"KLu" "KLu (1/m)"       1       3
+ " "
+" " "wavelen"    0.005    1.005
+ 550.0  4.3355E-01  4.5586E-01
+"Ku" "Ku (1/m)"       1       3
+ " "
+" " "wavelen"    0.005    1.005
+ 550.0  3.7174E-01  4.2593E-01
+"Kd" "Kd (1/m)"       1       3
+ " "
+" " "wavelen"    0.005    1.005
+ 550.0  4.4692E-01  4.6353E-01
+"Eo_quantum" "Eo [microEinst/(m^2 s)]"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  5.4794E+00  5.0085E+00  3.2885E+00
+"Rrs" "Rrs (1/sr)"       1       5
+ " "
+" " "in air" "Rrs" "Ed" "Lw" "Lu"
+ 550.0  1.1640E-03  1.0000E+00  1.1640E-03  1.1640E-03
+"R" "R = Eu/Ed"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  2.6105E-02  9.2188E-03  9.7020E-03
+"Lu over Ed" "Lu/Ed (1/sr)"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  1.1640E-03  2.1876E-03  2.2094E-03
+"Eu" "Eu (W/m^2 nm)"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  2.6105E-02  9.0617E-03  6.0442E-03
+"Ed" "Ed (W/m^2 nm)"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  1.0000E+00  9.8296E-01  6.2299E-01
+"Eo" "Eo (W/m^2 nm)"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  1.1920E+00  1.0895E+00  7.1538E-01
+"Lu" "Lu (W/m^2 nm sr)"       1       4
+ " "
+" " "wavel" "in air"    0.000    1.000
+ 550.0  1.1640E-03  2.1504E-03  1.3764E-03
+"Ed_in_air" "Ed in air (W/m^2 nm)"       1       4
+ " "
+" " "wavel" "Ed_diffuse" "Ed_direct" "Ed_total"
+ 550.0  0.0000E+00  1.0000E+00  1.0000E+00
+"bb fraction" "backscat ratio bb/b"       5       3
+ " "
+" " "wavelen"    0.000    1.000
+ 550.0  1.8300E-02  1.8300E-02
+ " "
+" " "bb/b ratio for component  1"
+" " "wavelen"    0.000    1.000
+ 550.0  1.8300E-02  1.8300E-02
+"bb" "backscat coef b (1/m)"       5       3
+ " "
+" " "wavelen"    0.000    1.000
+ 550.0  1.0980E-02  1.0980E-02
+ " "
+" " "bb (1/m) for component  1"
+" " "wavelen"    0.000    1.000
+ 550.0  1.0980E-02  1.0980E-02
+"b" "scat coef b (1/m)"       5       3
+ " "
+" " "wavelen"    0.000    1.000
+ 550.0  6.0000E-01  6.0000E-01
+ " "
+" " "b (1/m) for component  1"
+" " "wavelen"    0.000    1.000
+ 550.0  6.0000E-01  6.0000E-01
+"a" "abs coef a (1/m)"       5       3
+ " "
+" " "wavelen"    0.000    1.000
+ 550.0  4.0000E-01  4.0000E-01
+ " "
+" " "a (1/m) for component  1"
+" " "wavelen"    0.000    1.000
+ 550.0  4.0000E-01  4.0000E-01

@@ -1,0 +1,16 @@
+
+Backward Monte Carlo radiative transfer code
+Version: 1.7
+Author: Alexandre Castagna
+
+System properties:
+  Rays:    1.00e+06
+  Source:  pir at z = -0.00 m
+  SZA:     (1): 60.0 (º)
+  f0:      1.00 (W/m2)
+  n_air:   1.00 (unitless)
+  n_water: 1.00 (unitless)
+  c coef.: 1.00 (1/m)
+  w0:      (1): 0.800 (unitless)
+  Scat.:   Isotropic (Henyey-Greenstein with g = 0)
+  Bottom:  Undefined, at INFINITE depth

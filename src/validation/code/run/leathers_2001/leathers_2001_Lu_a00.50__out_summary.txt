@@ -1,0 +1,22 @@
+
+Backward Monte Carlo radiative transfer code
+Version: 1.5
+Author: Alexandre Castagna
+
+System properties:
+  Rays:    1.00e+06
+  Source:  lu with 28.00º FOV at z = 6.60e-01 m
+  SZA:     (8): 0.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0 (º)
+  f0:      1.00 (W/m2)
+  n_air:   1.00 (unitless)
+  n_water: 1.34 (unitless)
+  c coef.: 1.50 (1/m)
+  w0:      (1): 0.667 (unitless)
+  Scat.:   Fournier-Forand, with fbb of 1.830e-02 (unitless)
+  Bottom:  Undefined, at INFINITE depth
+
+Structures:
+  Number of cylinders: 2
+                               base                            axis      height   closed     radius
+  01   0.00e+00, 0.00e+00, 0.00e+00    0.00e+00, 0.00e+00, 1.00e+00    1.20e-01      1,1   1.50e-01
+  02   0.00e+00, 0.00e+00, 0.00e+00    0.00e+00, 0.00e+00, 1.00e+00    6.60e-01      1,1   4.40e-02

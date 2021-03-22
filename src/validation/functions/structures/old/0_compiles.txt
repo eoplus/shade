@@ -1,0 +1,5 @@
+gcc test_ellipse.c ../../../src/structures.c -lm -o test_ellipse.o
+./test_ellipse.o
+
+gcc test_cylinder.c ../../../src/structures.c -lm -o test_cylinder.o
+./test_cylinder.o

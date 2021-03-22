@@ -1,0 +1,31 @@
+sim_nr: 10000000
+sim_ns: 1
+sim_sza(s): 0.0
+sim_saa(s): 0.0
+sim_f0: 1.0
+skr_resx: 1
+skr_resy: 1
+skr_fls:
+anc/skyrad/550_continental_clean_80_02_sza_00_sky.txt
+iop_na: 1.0
+iop_nw: 1.0
+iop_c: 0.1
+iop_nw0: 1
+iop_w0: 0.8
+scat_tp: hg
+scat_g: 0.0
+btt_d: INFINITY
+src_tp: rad
+src_fov: 0.001
+src_axs: 0.0 0.0
+src_ref_o: 0.0 0.0 0.0
+src_rel_o: 0.0 0.0 0.0
+acc_geom: none
+acc_ext: 1.0
+acc_resx: 0.1
+acc_resy: 0.1
+str_def: 1
+str_ncl: 0
+str_ncn: 0
+str_ncb: 1
+-4.5 0.0 -0.0000005 0.0 0.0 0.0 6.55 38.4 0.000001 0.0 0.0 0.0 0.0 1 1

@@ -32,13 +32,13 @@
    int const sim_ns, 
    int const iop_nw0,
    int const btt_nbr,
-   double const *sim_sza, 
-   double const *sim_saa, 
+   double const * sim_sza, 
+   double const * sim_saa, 
    double const sim_f0,
    double CMPLX_T const iop_na, 
    double CMPLX_T const iop_nw, 
    double const iop_c, 
-   double const *iop_w0,
+   double const * iop_w0,
    int const str_ncl,
    int const str_ncn,
    int const str_ncb,
@@ -114,24 +114,24 @@
    struct timeval tv;
    gettimeofday (&tv, 0);
    unsigned long int seed = tv.tv_sec + tv.tv_usec;
-   gsl_rng *random = gsl_rng_alloc (gsl_rng_ranlxs0);
+   gsl_rng * random = gsl_rng_alloc (gsl_rng_ranlxs0);
    gsl_rng_set (random, seed);
 
    // Variables for interaction with the bottom:
    double s_scat_i[3] = {1.0};							// Incident spherical direction
    double s_scat_r[3] = {1.0};							// Reflected spherical direction
-   double *btt_dhr = calloc_1d(btt_nbr, "btt_dhr (mc_backward.c)");		// Directional-hemispherical reflectance of the bottom at a given incidence angle
-   double *btt_bdr = calloc_1d(btt_nbr, "btt_bdr (mc_backward.c)");		// Bi-directional reflectance of the bottom for a given geometry
+   double * btt_dhr = calloc_1d(btt_nbr, "btt_dhr (mc_backward.c)");		// Directional-hemispherical reflectance of the bottom at a given incidence angle
+   double * btt_bdr = calloc_1d(btt_nbr, "btt_bdr (mc_backward.c)");		// Bi-directional reflectance of the bottom for a given geometry
 
    // Variables for interaction from bottom to Sun: 
-   struct Fm *sun_Fmat = (struct Fm*) calloc(sim_ns, sizeof(struct Fm));	// Fresnel transmittance / reflectance matrix
-   double **sun_sw = calloc_2d (sim_ns, 3, "sun_sw (mc.c)");			// Underwater Sun nadir angle, with dimensions [sim_ns][2]: [][0] Polar angle; [][1] Azimuth
-   double **sun_sa = calloc_2d (sim_ns, 3, "sun_sa (mc.c)");			// In-air Sun nadir angle, with dimensions [sim_ns][2]: [][0] Polar angle; [][1] Azimuth
-   double **sun_uw = calloc_2d (sim_ns, 3, "sun_uw (mc.c)");			// Underwater Sun Cartesian directions, with dimensions [sim_ns][3]: [][0] X; [][1] Y; [][2] Z
-   double **sun_ua = calloc_2d (sim_ns, 3, "sun_ua (mc.c)");			// In-air Sun Cartesian directions, with dimensions [sim_ns][3]: [][0] X; [][1] Y; [][2] Z
-   double *sun_rra = calloc_1d (sim_ns, "sun_rra (mc.c)");			// Sun relative azimuth rotation for the sky radiance distribution reference, with dimension [sim_ns]
-   double *sun_btt_l   = calloc_1d (sim_ns, "sun_btt_l (mc.c)");		// Pathlengths from bottom to surface in the direction of Sun, with dimension [sim_ns]
-   double *sun_btt_scl = calloc_1d (sim_ns, "sun_btt_scl (mc.c)");		// Partial scaling for reflectance at bottom to Sun, with dimension [sim_ns]
+   struct Fm * sun_Fmat = (struct Fm*) calloc(sim_ns, sizeof(struct Fm));	// Fresnel transmittance / reflectance matrix
+   double ** sun_sw = calloc_2d (sim_ns, 3, "sun_sw (mc.c)");			// Underwater Sun nadir angle, with dimensions [sim_ns][2]: [][0] Polar angle; [][1] Azimuth
+   double ** sun_sa = calloc_2d (sim_ns, 3, "sun_sa (mc.c)");			// In-air Sun nadir angle, with dimensions [sim_ns][2]: [][0] Polar angle; [][1] Azimuth
+   double ** sun_uw = calloc_2d (sim_ns, 3, "sun_uw (mc.c)");			// Underwater Sun Cartesian directions, with dimensions [sim_ns][3]: [][0] X; [][1] Y; [][2] Z
+   double ** sun_ua = calloc_2d (sim_ns, 3, "sun_ua (mc.c)");			// In-air Sun Cartesian directions, with dimensions [sim_ns][3]: [][0] X; [][1] Y; [][2] Z
+   double * sun_rra = calloc_1d (sim_ns, "sun_rra (mc.c)");			// Sun relative azimuth rotation for the sky radiance distribution reference, with dimension [sim_ns]
+   double * sun_btt_l   = calloc_1d (sim_ns, "sun_btt_l (mc.c)");		// Pathlengths from bottom to surface in the direction of Sun, with dimension [sim_ns]
+   double * sun_btt_scl = calloc_1d (sim_ns, "sun_btt_scl (mc.c)");		// Partial scaling for reflectance at bottom to Sun, with dimension [sim_ns]
 
    for (cs = 0; cs < sim_ns; cs++) 
    {

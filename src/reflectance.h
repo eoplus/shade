@@ -14,15 +14,49 @@
  struct reflectance_minn;
  struct reflectance_lamb;
 
- typedef void refl_qtl_fun (struct reflectance const*, double const*, double*, 
-   double const*);
- typedef void refl_cdf_fun (struct reflectance const*, double const*, 
-   double const*, double*);
- typedef void refl_pdf_fun (struct reflectance const*, double const*, 
-   double const*, double*);
- typedef void refl_dhr_fun (struct reflectance const*, double const*, double*);
- typedef void refl_brdf_fun (struct reflectance const*, double const*, 
-   double const*, double*);
+ typedef void
+ refl_qtl_fun
+ (
+   struct reflectance const *,
+   double const *,
+   double *, 
+   double const *
+ );
+
+ typedef void
+ refl_cdf_fun
+ (
+   struct reflectance const *,
+   double const *, 
+   double const *,
+   double *
+ );
+
+ typedef void
+ refl_pdf_fun
+ (
+   struct reflectance const *,
+   double const *, 
+   double const *,
+   double *
+ );
+
+ typedef void 
+ refl_dhr_fun
+ (
+   struct reflectance const *,
+   double const *,
+   double *
+ );
+
+ typedef void
+ refl_brdf_fun
+ (
+   struct reflectance const *,
+   double const *, 
+   double const *,
+   double *
+ );
 
  struct reflectance_fun
  {
@@ -36,8 +70,8 @@
  struct reflectance_minn
  {
    int    nbhr;
-   double *bdr;		// Fixed part of the bi-directional reflectance
-   double *bhr;		// Fixed part of the bi-hemispherical reflectance
+   double * bdr;		// Fixed part of the bi-directional reflectance
+   double * bhr;		// Fixed part of the bi-hemispherical reflectance
    double k;		// Exponential parameter
    double kp1;		// k + 1
    double kp2;		// k + 2
@@ -47,8 +81,8 @@
  struct reflectance_lamb
  {
    int    nbhr;
-   double *bdr;		// Bi-directional reflectance
-   double *bhr;		// Bi-hemispherical reflectance
+   double * bdr;		// Bi-directional reflectance
+   double * bhr;		// Bi-hemispherical reflectance
  };
 
  struct reflectance
@@ -143,67 +177,159 @@
 /* Function prototypes: *******************************************************/
 
  // Setup functions:
- struct reflectance* refl_alloc (void);
 
- void refl_free (struct reflectance** refl);
+ struct reflectance *
+ refl_alloc
+ ( void );
 
- void refl_setup (struct reflectance *refl, char const *tp, int const nbhr,
-   double const *bhr, double const k);
+ void
+ refl_free
+ ( struct reflectance ** refl );
+
+ void
+ refl_setup
+ (
+   struct reflectance * refl,
+   char const * tp,
+   int const nbhr,
+   double const * bhr,
+   double const k
+ );
 
  void
  refl_fprintf
  (
-   FILE *odv,
-   struct reflectance const *refl,
+   FILE * odv,
+   struct reflectance const * refl,
    int const indent
  );
 
+
  // Minnaert:
- struct reflectance_minn* refl_alloc_minn ( void );
 
- void refl_free_minn (struct reflectance_minn **minn);
+ struct reflectance_minn *
+ refl_alloc_minn
+ ( void );
 
- void refl_setup_minn (struct reflectance *refl, int const nbhr, 
-   double const *bhr, double const k);
+ void
+ refl_free_minn
+ ( struct reflectance_minn ** minn );
 
- void refl_qtl_minn (struct reflectance const *refl, double const *s_scat_i,
-   double *s_scat_r, double const *prob);
+ void
+ refl_setup_minn
+ ( 
+   struct reflectance * refl,
+   int const nbhr, 
+   double const * bhr,
+   double const k
+ );
 
- void refl_cdf_minn (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *prob);
+ void
+ refl_qtl_minn
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * s_scat_r,
+   double const * prob
+ );
 
- void refl_pdf_minn (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *dens);
+ void
+ refl_cdf_minn
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * prob
+ );
 
- void refl_dhr_minn (struct reflectance const *refl, double const *s_scat_i,
-   double *dhr);
+ void
+ refl_pdf_minn
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * dens
+ );
 
- void refl_brdf_minn (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *bdr);
+ void
+ refl_dhr_minn
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * dhr
+ );
+
+ void
+ refl_brdf_minn
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * bdr
+ );
 
 
  // Lambert:
- struct reflectance_lamb* refl_alloc_lamb ( void );
 
- void refl_free_lamb (struct reflectance_lamb **lamb);
+ struct reflectance_lamb *
+ refl_alloc_lamb
+ ( void );
 
- void refl_setup_lamb (struct reflectance *refl, int const nbhr, 
-   double const *bhr);
+ void 
+ refl_free_lamb
+ ( struct reflectance_lamb ** lamb );
 
- void refl_qtl_lamb (struct reflectance const *refl, double const *s_scat_i,
-   double *s_scat_r, double const *prob);
+ void
+ refl_setup_lamb
+ (
+   struct reflectance * refl,
+   int const nbhr, 
+   double const * bhr
+ );
 
- void refl_cdf_lamb (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *prob);
+ void
+ refl_qtl_lamb
+ (
+   struct reflectance const * refl, 
+   double const * s_scat_i,
+   double * s_scat_r,
+   double const * prob
+ );
 
- void refl_pdf_lamb (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *dens);
+ void
+ refl_cdf_lamb
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * prob
+ );
 
- void refl_dhr_lamb (struct reflectance const *refl, double const *s_scat_i,
-   double *dhr);
+ void
+ refl_pdf_lamb
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r, 
+   double * dens
+ );
 
- void refl_brdf_lamb (struct reflectance const *refl, double const *s_scat_i,
-   double const *s_scat_r, double *bdr);
+ void 
+ refl_dhr_lamb
+ (
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * dhr
+ );
+
+ void
+ refl_brdf_lamb
+ (
+   struct reflectance const * refl, 
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * bdr
+ );
 
 /* Unidirectional model */
 /*

@@ -544,7 +544,7 @@
        "input, but got '%s'\n", varnm);
      exit (-1);    
    }
-   #ifdef AIRTIGHT
+   #ifdef AIRTIGHT_ALEX
    if ( src_saxs[0] < 0.0 || src_saxs[0] > 45.0 ||
         src_saxs[1] < 0.0 || src_saxs[1] > 360.0 )
    {
@@ -562,7 +562,7 @@
        " angle.\n");
      exit (-1);    
    }
-   #endif // AIRTIGHT
+   #endif // AIRTIGHT_ALEX
    src_saxs[0] *= RAD;
    src_saxs[1] *= RAD;
 
@@ -677,7 +677,7 @@
        "in 'config.h' and recompile.\n");
      exit(-1);
    }
-   #endif // AIRTIGHT
+   #endif // AIRTIGHT_ALEX
 
    if ( (*str_def) )
    {
@@ -989,7 +989,7 @@
      printf("    Bottom:  Undefined, at INFINITE depth\n");
    } // Logic: btt_d
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    if ( !acc_fgeom )
    {
      printf ("\n  Spatially resolved integral:\n");
@@ -1014,7 +1014,7 @@
             "    it will give a gain in performance to comment out the the \n"
             "    definition SPRES in config.h\n");
    } // Logic: acc_fgeom
-   #endif
+   #endif // SPATIALLY_RESOLVED
 
    #ifdef SHADOWING
    printf("\n  Structures:\n");
@@ -1047,7 +1047,7 @@
           "in a specific circunstances for Alex's system and is not general, "
           "even without shadowing! Comment out ALEX in config.h for generic "
           "simulation.\n");
-   #endif
+   #endif // AIRTIGHT_ALEX
 
    printf("\n  Detailed parameters: ***************************************\n");
    printf("\n");

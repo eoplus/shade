@@ -53,10 +53,10 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    int cnfg_spres = 0;
    #ifdef SHADOWING
    cnfg_shdw = 1;
-   #endif
-   #ifdef SPRES
+   #endif // SHADOWING
+   #ifdef SPATIALLY_RESOLVED
    cnfg_spres = 1;
-   #endif
+   #endif // SPATIALLY_RESOLVED
 
    // Variables for setup and reporting:
    char version[] = "1.6";				// Program version
@@ -90,7 +90,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    struct accumulator_bmc *accm_dr_s = accm_b_alloc();	// Accumulator for shadowed diffuse component
    struct accumulator_bmc *accm_df_s = accm_b_alloc();	// Accumulator for shadowed direct component
    char   acc_geom[STRMXLEN];				// Geometry of the accumulator
-   int    acc_fgeom = 0;				// Flag if acc_geom was requested as 0 (not reported) but SPRES is defined.
+   int    acc_fgeom = 0;				// Flag if acc_geom was requested as 0 (not reported) but SPATIALLY_RESOLVED is defined.
    double acc_ext   = 0.0;				// "Radius" of the spatially resolved accumulator
    double acc_resx  = 0.0;				// X axis resolution of the spatially resolved accumulator
    double acc_resy  = 0.0;				// Y axis resolution of the spatially resolved accumulator
@@ -337,7 +337,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    }
    #endif // SHADOWING
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    if (acc_geom > 0 && acc_fgeom == 0)
    {
      accm_b_write_grid(accm_dr_f_mn, sim_ns, ofbn, "_out_dir_f_mn_spr", iop_w0, 
@@ -354,7 +354,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
      }
      #endif // SHADOWING
    }
-   #endif // SPRES
+   #endif // SPATIALLY_RESOLVED
 
    time(&end);
    double total = (double) (end - start) / 60.0;

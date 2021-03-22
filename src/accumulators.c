@@ -75,7 +75,13 @@
  
  accm_b_alloc
 
+ Allocate memory and check allocation for an accumulator_bmc struct.
 
+ INPUT:
+ None.
+
+ OUTPUT:
+ Pointer to accumulator_bmc struct.
 
 *******************************************************************************/
 
@@ -85,6 +91,7 @@
  {
    struct accumulator_bmc * accm = 
      (struct accumulator_bmc*) calloc(1, sizeof(struct accumulator_bmc));
+
    #ifdef CHCK_MEM_ALLOC
    if ( !accm )
    {
@@ -94,6 +101,12 @@
    }
    #endif // CHCK_MEM_ALLOC
 
+   // Those will be allocated and setup as necessary by the setup function:
+   accm->xbrks = NULL;
+   accm->ybrks = NULL;
+   accm->vector = NULL;
+   accm->grid = NULL;
+
    return accm;
  }
 
@@ -101,7 +114,14 @@
  
  accm_b_free
 
+ Release memory of an accumulator_bmc struct.
 
+ INPUT:
+ accm - Accumulator parameters
+        Pointer to pointer to accumulator_bmc struct.
+
+ OUTPUT:
+ None. Releases memory and updates pointer to NULL.
 
 *******************************************************************************/
 
@@ -110,24 +130,54 @@
  ( struct accumulator_bmc ** accm )
  {
    // Free spatial integral array:
-   free_3d((*accm)->ns, (*accm)->nw0, &(*accm)->vector);
+   free_3d( (*accm)->ns, (*accm)->nw0, &(*accm)->vector );
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    // Free spatially resolved integral array:
-   free_1d(&(*accm)->xbrks);
-   free_1d(&(*accm)->ybrks);
-   free_5d((*accm)->ns, (*accm)->nw0, (*accm)->nbr, (*accm)->ny, &(*accm)->grid);
-   #endif // SPRES
+   free_1d( &(*accm)->xbrks );
+   free_1d( &(*accm)->ybrks );
+   free_5d( (*accm)->ns, (*accm)->nw0, (*accm)->nbr, (*accm)->ny, 
+     &(*accm)->grid );
+   #endif // SPATIALLY_RESOLVED
 
    free( *accm );
    *accm = NULL;
  }
 
-/* Setup backward MC accumulator: *****************************************
+/* Setup MC accumulator: *******************************************************
  
  accm_setup
 
+ This is a wrapper function that will call the appropriate setup function for
+ the accumulator type.
 
+ INPUT:
+ acm      - Accumulator parameters
+            Pointer to accumulator_bmc struct;
+ accm_tp  - Accumulator type
+            Values: "sectorial", "grid"
+            Pointer to constant char;
+ sim_ns   - Number of illuminations
+            Integer range: [1,Inf), unitless
+            Constant int;
+ iop_nw0  - Number of single scattering albedos
+            Integer range: [1,Inf), unitless
+            Constant int;
+ btt_nbr  - Number of bottom bi-hemispherical reflectances
+            Integer range: [1,Inf), unitless
+            Constant int;
+ acc_ext  - Spatial extent for the spatially resolved accumulator
+            Range: (0,Inf), meters
+            Constant double;
+ acc_resy - Y-axis resolution
+            Range: (0,Inf), meters
+            Constant double;
+ acc_resx - X-axis resolution
+            Range: (0,Inf), meters
+            Constant double;
+
+ OUTPUT:
+ None. Updates the accumulator pointed by accm.
 
 *******************************************************************************/
 
@@ -147,14 +197,14 @@
    strncpy(accm->type, accm_tp, STRMXLEN);
    if ( strcmp (accm_tp, "sectorial") == 0 )
    {
-/*     // Sectorial:
+     // Sectorial:
      accm_b_setup_sect(accm, sim_ns, iop_nw0, btt_nbr, acc_ext, acc_resy,
        acc_resx);
      return;
-*/   }
+   }
    else if ( strcmp(accm_tp, "grid") == 0 )
    {
-     // Grid:
+     // Regular grid:
      accm_b_setup_grid(accm, sim_ns, iop_nw0, btt_nbr, acc_ext, acc_resy,
        acc_resx);
      return;
@@ -165,29 +215,18 @@
 
  accm_b_setup_sect
 
- Setup the sectorial geometry accumulator.
-
- INPUT:
- sim_ns   - Number of illuminations (sun zeniths or sky radiance distributions);
- iop_nw0  - Number of single scattering albedos;
- btt_nbr  - Number of bottom reflectances;
- acc_ext  - Spatial extent for spatially resolved accumulator, meters, 
-            (0,INFINITY).
- acc_resy - Spatial resolution for the annuli radius in meters, (0, INFINITY);
- acc_resx - Angular resolution of the sectors in radiance, (0, 2PI);
-
- OUTPUT:
- Returns a pointer to a initialized accm_bmc. 
+ Setup the sectorial geometry accumulator. For details on INPUT and OUTPUT, see
+ the function 'accm_setup'.
 
 *******************************************************************************/
 
  void
  accm_b_setup_sect
  (
-   struct accumulator_bmc *accm,
-   int const    sim_ns,
-   int const    iop_nw0,
-   int const    btt_nbr,
+   struct accumulator_bmc * accm,
+   int const sim_ns,
+   int const iop_nw0,
+   int const btt_nbr,
    double const acc_ext,
    double const acc_resy,
    double const acc_resx
@@ -203,7 +242,7 @@
    accm->vector = calloc_3d(accm->ns, accm->nw0, accm->nbr, 
      "accm->vector in accm_b_setup_sect (accumulators.c)");
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    accm->ny    = floor((acc_ext - acc_resy) / acc_resy) + 2;
    accm->nx    = floor(K_2PI / acc_resx);
    accm->ybrks = calloc_1d(accm->ny + 1,
@@ -236,7 +275,7 @@
    accm->ky_inv = accm->ny / accm->ybrks[accm->ny - 1];
    accm->minx = 0.0;
    accm->kx_inv = accm->nx / K_2PI;
-   #endif // SPRES
+   #endif //  SPATIALLY_RESOLVED
  }
 
 /* Add to sectorial accumulator: ***********************************************
@@ -255,35 +294,8 @@
  for the direct component of irradiance, since propagation to sun is 
  calculated exactly.
 
- INPUT:
- acm   - Accumulator parameters
-         Pointer to accumulator_bmc struct;
- skr   - Sky radiance distribution parameters
-         Pointer to constant skyradiance struct;
- p     - Terminal point of the ray
-         Range: (-Inf,Inf), meters
-         [0]X, [1]Y, [2]Z
-         Pointer to constant double;
- s     - Refracted spherical directions of the ray
-         Range: [0,PI], [0,2PI], radians
-         [0]Theta, [1]Phi, [2]Radius (always 1.0 and never used)
-         Pointer to constant double;
- stks  - Diffuse Stokes vector
-         [N w0][N bhr][4]: [][][0]I, [][][1]Q, [][][2]U, [][][3]V
-         Pointer to pointer to pointer to constant double;
- scale - Arbitrary multiplier (e.g., Fresnel transmittance or probability to 
-         Sun)
-         Range: (0,Inf), unitless
-         Constant double;
- dirf  - Flag to indicate if the contribution is for the direct component
-         Values: (0) No, (1) Yes
-         Constant int
- cs    - Index of the accumulator layer for the SZA in case of direct component
-         Values: [0, N SZA]
-         Constant int.
-
- OUTPUT:
- None. Updates the accumulator structure.
+ For details of INPUT and OUTPUT, see the generic 'accm_b_add' in the
+ accumulators.h header file.
 
 *******************************************************************************/
 
@@ -300,7 +312,7 @@
    int const    cs
  )
  {
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    // Find radius and azimuth:
    double azmt = 0.0;
    double radius = sqrt(p[0] * p[0] + p[1] * p[1]);
@@ -317,9 +329,10 @@
      }
    }
 
-   int rid = findBin(radius, accm->miny, accm->ky_inv, accm->ny);
-   int cid = findBin(azmt, accm->minx, accm->kx_inv, accm->nx);
-   #endif // SPRES
+   int rid, cid;
+   FINDBIN(radius, accm->miny, accm->ky_inv, accm->ny, rid);
+   FINDBIN(azmt, accm->minx, accm->kx_inv, accm->nx, cid);
+   #endif // SPATIALLY_RESOLVED
 
    if ( dirf )
    {
@@ -329,16 +342,17 @@
        {
          accm->vector[cs][cw][cb] += (stks[cw][cb][0] * scale);
 
-         #ifdef SPRES
+         #ifdef SPATIALLY_RESOLVED
          accm->grid[cs][cw][cb][rid][cid] += (stks[cw][cb][0] * scale);
-         #endif
+         #endif // SPATIALLY_RESOLVED
        }
      }
    }
    else
    {
-     int rids = findBin(s[0], skr->miny, skr->ky_inv, skr->ny);
-     int cids = findBin(s[1], skr->minx, skr->kx_inv, skr->nx);
+     int rids, cids;
+     FINDBIN(s[0], skr->miny, skr->ky_inv, skr->ny, rids);
+     FINDBIN(s[1], skr->minx, skr->kx_inv, skr->nx, cids);
 
      for (size_t cz = 0; cz < skr->ns; cz++)
      {
@@ -349,9 +363,9 @@
          {
            accm->vector[cz][cw][cb] += (stks[cw][cb][0] * scale * skw);
 
-           #ifdef SPRES
+           #ifdef SPATIALLY_RESOLVED
            accm->grid[cz][cw][cb][rid][cid] += (stks[cw][cb][0] * scale * skw);
-           #endif
+           #endif // SPATIALLY_RESOLVED
          } // Loop: accm->nbr
        } // Loop: accm->nw0
      } // Loop: accm->ns
@@ -363,18 +377,8 @@
 
  accm_b_setup_grid
 
- Setup the grid geometry accumulator.
-
- INPUT:
- sim_ns   - Number of illuminations (sun zeniths or sky radiance distributions);
- iop_nw0  - Number of single scattering albedos;
- btt_nbr  - Number of bottom reflectances;
- acc_ext  - Extent in meters, (0, INFINITY);
- acc_resy - Spatial resolution in the Y axis in meters, (0, INFINITY);
- acc_resx - Spatial resolution in the X axis in meters, (0, INFINITY);
-
- OUTPUT:
- Returns a pointer to a initialized accm_bmc. 
+ Setup the regular grid geometry accumulator. For details on INPUT and OUTPUT,
+ see the function 'accm_setup'.
 
 *******************************************************************************/
 
@@ -400,7 +404,7 @@
    accm->vector = calloc_3d (accm->ns, accm->nw0, accm->nbr, 
      "accm->vector in accm_b_setup_sect (accumulators.c)");
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    accm->ny = 2 * floor(((acc_ext - acc_resy / 2) / acc_resy + 2)) - 1;
    accm->nx = 2 * floor(((acc_ext - acc_resx / 2) / acc_resx + 2)) - 1;
    accm->ybrks = calloc_1d(accm->ny + 1, 
@@ -445,7 +449,7 @@
    accm->minx = accm->xbrks[1] - acc_resx;
    accm->kx_inv = accm->nx / (accm->xbrks[accm->nx - 1] + 
      acc_resx - accm->minx);
-   #endif // SPRES
+   #endif // SPATIALLY_RESOLVED
  }
 
 /* Add to regular grid accumulator: ********************************************
@@ -464,38 +468,10 @@
  for the direct component of irradiance, since propagation to sun is 
  calculated exactly.
 
- INPUT:
- acm   - Accumulator parameters
-         Pointer to accumulator_bmc struct;
- skr   - Sky radiance distribution parameters
-         Pointer to constant skyradiance struct;
- p     - Terminal point of the ray
-         Range: (-Inf,Inf), meters
-         [0]X, [1]Y, [2]Z
-         Pointer to constant double;
- s     - Refracted spherical directions of the ray
-         Range: [0,PI], [0,2PI], radians
-         [0]Theta, [1]Phi, [2]Radius (always 1.0 and never used)
-         Pointer to constant double;
- stks  - Diffuse Stokes vector
-         [N w0][N bhr][4]: [][][0]I, [][][1]Q, [][][2]U, [][][3]V
-         Pointer to pointer to pointer to constant double;
- scale - Arbitrary multiplier (e.g., Fresnel transmittance or probability to 
-         Sun)
-         Range: (0,Inf), unitless
-         Constant double;
- dirf  - Flag to indicate if the contribution is for the direct component
-         Values: (0) No, (1) Yes
-         Constant int
- cs    - Index of the accumulator layer for the SZA in case of direct component
-         Values: [0, N SZA]
-         Constant int.
-
- OUTPUT:
- None. Updates the accumulator structure.
+ For details of INPUT and OUTPUT, see the generic 'accm_b_add' in the
+ accumulators.h header file.
 
 *******************************************************************************/
-
 
  void 
  accm_b_add_grid
@@ -510,13 +486,11 @@
    int const cs
  )
  {
-   #ifdef SPRES
-   // int rid = findBin(p[1], accm->miny, accm->ky_inv, accm->ny);
-   // int cid = findBin(p[0], accm->minx, accm->kx_inv, accm->nx);
+   #ifdef SPATIALLY_RESOLVED
    int rid, cid;
    FINDBIN(p[1], accm->miny, accm->ky_inv, accm->ny, rid);
    FINDBIN(p[0], accm->minx, accm->kx_inv, accm->nx, cid);
-   #endif
+   #endif // SPATIALLY_RESOLVED
 
    if ( dirf )
    {
@@ -526,16 +500,14 @@
        {
          accm->vector[cs][cw][cb] += (stks[cw][cb][0] * scale);
 
-         #ifdef SPRES
+         #ifdef SPATIALLY_RESOLVED
          accm->grid[cs][cw][cb][rid][cid] += (stks[cw][cb][0] * scale);
-         #endif
+         #endif // SPATIALLY_RESOLVED
        }
      }
    } 
    else
    {
-     // int rids = findBin(s[0], skr->miny, skr->ky_inv, skr->ny);
-     // int cids = findBin(s[1], skr->minx, skr->kx_inv, skr->nx);
      int rids, cids;
      FINDBIN(s[0], skr->miny, skr->ky_inv, skr->ny, rids);
      FINDBIN(s[1], skr->minx, skr->kx_inv, skr->nx, cids);
@@ -549,30 +521,31 @@
          {
            accm->vector[cz][cw][cb] += (stks[cw][cb][0] * scale * skw);
 
-           #ifdef SPRES
+           #ifdef SPATIALLY_RESOLVED
            accm->grid[cz][cw][cb][rid][cid] += (stks[cw][cb][0] * scale * skw);
-           #endif
+           #endif // SPATIALLY_RESOLVED
          } // Loop: accm->nbr
        } // Loop: accm->nw0
      } // Loop: accm->ns
    } // Logical: Direct flag on?
  }
 
-/* Normalize accumulator: ******************************************************
+/* Normalize backward accumulator: *********************************************
  
- accm_norm
+ accm_b_norm
 
- Normalize the accumulator. Normalization factors are dependent on simulation 
- conditions and are calculated inside the MC solver.
-
- Note: the normalization factor depends on each sensor type (L, E, E0) and at 
- the curent version are specified directly in the MC code. It will be in the
- source code for sources (src.c) in future versions.
+ Normalize the backward accumulator. Normalization factors are dependent on
+ simulation conditions and are calculated inside the MC solver (function bmc in
+ the mc_backward.c source file).
 
  INPUT:
- accm  - Pointer to accumulator structure.
- f0    - Incident irradiance (normally set to 1 to get reflectance);
- normf - Sensor dependent normalization factor.
+ acm   - Accumulator parameters
+         Pointer to accumulator_bmc struct;
+ f0    - Incident irradiance (normally set to 1.0 to get reflectance)
+         Range: (0,Inf), W/m^2
+         Constant double;
+ normf - Sensor dependent normalization factor
+         Pointer to constant double.
 
  OUTPUT:
  None. Updates the values pointed by accm.
@@ -582,9 +555,9 @@
  void
  accm_b_norm
  (
-   struct accumulator_bmc *accm,
+   struct accumulator_bmc * accm,
    double const f0,
-   double const *normf
+   double const * normf
  )
  {
    for (size_t cz = 0; cz < accm->ns; cz++)
@@ -595,7 +568,7 @@
        {
          accm->vector[cz][cw][cb] *= (f0 * normf[cz]);
 
-         #ifdef SPRES
+         #ifdef SPATIALLY_RESOLVED
          for (size_t cr = 0; cr < accm->ny; cr++)
          {
            for (size_t cc = 0; cc < accm->nx; cc++)
@@ -603,25 +576,34 @@
              accm->grid[cz][cw][cb][cr][cc] *= (f0 * normf[cz]);
            }
          }
-         #endif // SPRES
+         #endif // SPATIALLY_RESOLVED
        }
      }
    }
  }
 
-/* Add value to a single cell: *************************************************
+/* Add value to a single cell of a backward accumulator: ***********************
 
- accm_add_k
+ accm_b_add_k
 
- Add a fixed value to the accumulator. This function is used to add the direct
- transmission contribution when the Sun is in the FOV of the sensor.
+ Add a fixed value to a single cell of the accumulator. This function is used to
+ add the direct transmission contribution when the Sun is in the field-of-view
+ of the sensor.
 
  INPUT:
- accm - Pointer to accumulator structure;
- val  - Value to be added;
- cs   - Index of the sun zenith angle layer;
- cr   - Index of the row for the spatially resolved accumulator;
- cc   - Index of the column for the spatially resolved accumulator.
+ acm  - Accumulator parameters
+        Pointer to accumulator_bmc struct;
+ val  - Value to be added
+        Constant double;
+ cs   - Index of the Sun zenith angle layer
+        Integer range: [0, N SZA], unitless
+        Constant int;
+ cr   - Index of the row for the spatially resolved accumulator
+        Integer range: [0, N Y-axis bin], unitless
+        Constant int;
+ cc   - Index of the column for the spatially resolved accumulator
+        Integer range: [0, N X-axis bin], unitless
+        Constant int;
 
  OUTPUT:
  None. Updates the values pointed by accm.
@@ -631,7 +613,7 @@
  void 
  accm_b_add_k
  (
-   struct accumulator_bmc *accm,
+   struct accumulator_bmc * accm,
    double const val,
    int const cs,
    int const cr,
@@ -644,24 +626,27 @@
      {
        accm->vector[cs][cw][cb] += val;
 
-       #ifdef SPRES
+       #ifdef SPATIALLY_RESOLVED
        accm->grid[cs][cw][cb][cr][cc] += val;
-       #endif
+       #endif // SPATIALLY_RESOLVED
      }
    }
  }
 
-/* Sum accumulators: ***********************************************************
+/* Sum backward accumulators: **************************************************
 
- accm_sum
+ accm_b_sum
 
  Sum accumulators. This function is used to calculate the average by summing 
  over the results of the subsets.
 
  INPUT:
- accm_sum - Pointer to accumulator receiving values;
- accm_in  - Pointer to the accumulator from simulation;
- scale    - Multiplier (1/number of subdivisions).
+ accm_sum - Accumulator receiving values;
+            Pointer to accumulator_bmc struct;
+ accm_in  - Accumulator providing values to be added;
+            Pointer to accumulator_bmc struct;
+ scale    - Multiplier (1/number of subdivisions)
+            Constant double.
 
  OUTPUT:
  None. Updates the values pointed by accm_sum.
@@ -671,8 +656,8 @@
  void
  accm_b_sum
  (
-   struct accumulator_bmc *accm_sum,
-   struct accumulator_bmc const *accm_in,
+   struct accumulator_bmc * accm_sum,
+   struct accumulator_bmc const * accm_in,
    double const scale
  )
  {
@@ -684,7 +669,7 @@
        {
          accm_sum->vector[cz][cw][cb] += accm_in->vector[cz][cw][cb] * scale;
 
-         #ifdef SPRES
+         #ifdef SPATIALLY_RESOLVED
          for (size_t cr = 0; cr < accm_in->ny; cr++)
          {
            for (size_t cc = 0; cc < accm_in->nx; cc++)
@@ -693,20 +678,21 @@
                accm_in->grid[cz][cw][cb][cr][cc] * scale;
            }
          }
-         #endif // SPRES
+         #endif // SPATIALLY_RESOLVED
        }
      }
    }
  }
 
-/* Reset accumulator: **********************************************************
+/* Reset backward accumulator: *************************************************
 
- accm_reset
+ accm_b_reset
 
  Reset accumulator to 0.0.
  
  INPUT:
- accm - Pointer to accumulator.
+ acm - Accumulator parameters
+       Pointer to accumulator_bmc struct;
 
  OUTPUT:
  None. Updates values of the accumulator.
@@ -715,7 +701,7 @@
 
  void
  accm_b_reset
- ( struct accumulator_bmc *accm )
+ ( struct accumulator_bmc * accm )
  {
    for (size_t cz = 0; cz < accm->ns; cz++)
    {
@@ -725,7 +711,7 @@
        {
          accm->vector[cz][cw][cb] = 0.0;
 
-         #ifdef SPRES
+         #ifdef SPATIALLY_RESOLVED
          for (size_t cr = 0; cr < accm->ny; cr++)
          {
            for (size_t cc = 0; cc < accm->nx; cc++)
@@ -733,7 +719,7 @@
              accm->grid[cz][cw][cb][cr][cc] = 0.0;
            }
          }
-         #endif // SPRES
+         #endif // SPATIALLY_RESOLVED
        }
      }
    }
@@ -743,27 +729,48 @@
 
  accm_b_write_grid,  accm_b_write_vec
 
+ Although the accumulators carry the number of illumination layers, the
+ accumulators for the diffuse component has two additional layers by default 
+ (uniform and cardioidal distributions). The number of Sun zenith angle is
+ provided as an argument to make simpler find out the extra layers and set their
+ name.
+
  INPUT:
- accm    - Pointer to accumulator
+ acm     - Accumulator parameters
+           Pointer to accumulator_bmc struct;
  sim_ns  - Number of Sun zenith angles
  ofbn    - Base file name
- sufx    - Suffix
- iop_w0  - Pointer to single scattering albedos
- btt_bhr - Pointer to bottom reflectance
- sim_sza - Pointer to Sun zenith angles
+           Pointer to constant char;
+ sufx    - File name suffix
+           Pointer to constant char;
+ iop_w0  - Single scattering albedos
+           Dimension: [N w0]
+           Range: [0.0,1.0], unitless
+           Pointer to constant double;
+ btt_bhr - Bottom reflectance
+           Dimension: [N BHR]
+           Range: [0.0,1.0], unitless
+           Pointer to constant double;
+ sim_sza - Sun zenith angles
+           Dimension: [N SZA]
+           Range: [0.0,PI/2.0], radians
+           Pointer to constant double;
+
+ OUTPUT:
+ None. Write values to disk.
 
 *******************************************************************************/
 
  void
  accm_b_write_grid
  (
-   struct accumulator_bmc *accm,
-   int const    sim_ns,
-   char const   *ofbn,
-   char const   *sufx,
-   double const *iop_w0,
-   double const *btt_bh,
-   double const *sim_sza
+   struct accumulator_bmc * accm,
+   int const sim_ns,
+   char const * ofbn,
+   char const * sufx,
+   double const * iop_w0,
+   double const * btt_bh,
+   double const * sim_sza
  )
  {
    char wf[12], bf[12], sz[12];
@@ -817,17 +824,16 @@
    }
  }
 
-
  void
  accm_b_write_vec
  (
-   struct accumulator_bmc *accm,	// Pointer to accumulator 
-   int const    sim_ns,		// Number of Sun zenith angles
-   char const   *ofbn,		// Base file name
-   char const   *sufx,		// Suffix
-   double const *iop_w0,	// Pointer to single scattering albedos
-   double const *btt_bhr,	// Pointer to bottom reflectance
-   double const *sim_sza	// Pointer to Sun zenith angles
+   struct accumulator_bmc * accm,
+   int const sim_ns,
+   char const * ofbn,
+   char const * sufx,
+   double const * iop_w0,
+   double const * btt_bhr,
+   double const * sim_sza
  )
  {
    char wf[10], bf[10];

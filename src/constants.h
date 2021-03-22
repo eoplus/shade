@@ -25,11 +25,4 @@
  #define ANSI_BLUE   "\033[34m"
  #define ANSI_RESET  "\033[0m"
 
-
- // TO BE REMOVED WHEN V 1.7 IS COMPLETE:
- #define DM_PI 2.0 * M_PI
-
- #define M_1_DPI 1.0 / (2.0 * M_PI)
-
-
  #endif // CONSTANTS

@@ -98,5 +98,5 @@
    char const   *version
  );
 
- #endif //  #ifndef READINPUT
+ #endif // READINPUT
 

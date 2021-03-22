@@ -48,6 +48,7 @@
  ( void )
  { 
    struct bottom * btt = (struct bottom*) calloc(1, sizeof(struct bottom));
+
    #ifdef CHCK_MEM_ALLOC
    if ( !btt )
    {
@@ -56,6 +57,13 @@
      exit(-1);
    }
    #endif // CHCK_MEM_ALLOC
+
+   // The functions will be setup by the setup function:
+   btt->refl.fun.qtl = NULL;
+   btt->refl.fun.cdf = NULL;
+   btt->refl.fun.pdf = NULL;
+   btt->refl.fun.dhr = NULL;
+   btt->refl.fun.brdf = NULL;
 
    return btt;
  }
@@ -75,7 +83,7 @@
  Setup a bottom struct.
 
  INPUT:
- btt  - Bottom parameters
+ btt   - Bottom parameters
          Pointer to bottom struct;
  depth - Single bottom depth
          Range: (0,Inf), meters
@@ -102,11 +110,11 @@
  btt_setup
  (
    struct bottom * btt,
-   double const depth,	// Depth, meters
-   char const * type,	// Reflectance model
-   int const nbhr,	// Number of bi-hemispherical reflectances
-   double const * bhr,	// bi-hemispherical reflectances
-   double const k	// Minnaert exponent
+   double const depth,
+   char const * type,
+   int const nbhr,
+   double const * bhr,
+   double const k
  )
  {
    btt->depth = depth;

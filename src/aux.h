@@ -2,7 +2,7 @@
  #ifndef AUXILIARY
  #define AUXILIARY
 
- #include <stddef.h>
+ #include <stddef.h>	// size_t
 
  #define ABS(x) \
          (((x) >= 0.0) ? (x) : -(x))
@@ -105,32 +105,15 @@
            I_i = I_n - 1; \
          }
 
- /* Function prototypes: ******************************************************/
+/* Function prototypes: *******************************************************/
 
- int findInterv (double val, 
-                 double *p_brks, 
-                 size_t n);
-/*
- int findBin (double val, 
-              double min,
-              double k,
-              size_t n);
-*/
-
- int update_cdir (double psi, 
-                  double phi, 
-                  double *p_cdir);
-
- int chk_intsct (double *ppos, 
-                 double *cpos, 
-                 double *cdir, 
-                 double s, 
-                 double *ptfm,
-                 double *sspos, 
-                 double radius, 
-                 double sshgt, 
-                 int    virt);
-
+ int
+ findInterv
+ (
+   double const val,
+   double const * brks,
+   size_t const n
+ );
 
  #endif // AUXILIARY
 

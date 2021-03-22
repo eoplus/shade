@@ -3,12 +3,12 @@
  #define CONFIG
 
 // #define SHADOWING
-// #define SPRES
-// #define ALEX
+// #define SPATIALLY_RESOLVED
+// #define AIRTIGHT_ALEX
 
- #ifdef ALEX
-   #ifndef SHDW
-     #error ALEX defined will only calculate shadowing, so SHDW must also be defined. 
+ #ifdef AIRTIGHT_ALEX
+   #ifndef SHADOWING
+     #error AIRTIGHT_ALEX defined will only calculate shadowing, so SHADOWING must also be defined. 
    #endif
  #endif 
 

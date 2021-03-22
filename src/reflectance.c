@@ -113,8 +113,9 @@
  refl_alloc
  ( void )
  {
-   struct reflectance *refl =
-     (struct reflectance*) malloc(sizeof(struct reflectance));
+   struct reflectance * refl =
+     (struct reflectance *) malloc(sizeof(struct reflectance));
+
    #ifdef CHCK_MEM_ALLOC
    if ( !refl )
    {
@@ -133,7 +134,7 @@
 
  void
  refl_free
- ( struct reflectance** refl )
+ ( struct reflectance ** refl )
  {
 //   free( (*refl)->fun );
 //   if ( (*refl)->minn ) refl_free_minn( &(*refl)->minn );
@@ -145,10 +146,10 @@
  void
  refl_setup
  (
-   struct reflectance *refl,
-   char const   *tp,
-   int const    nbhr,
-   double const *bhr,
+   struct reflectance * refl,
+   char const * tp,
+   int const nbhr,
+   double const * bhr,
    double const k
  )
  {
@@ -185,8 +186,8 @@
  void
  refl_fprintf
  (
-   FILE *odv,
-   struct reflectance const *refl,
+   FILE * odv,
+   struct reflectance const * refl,
    int const indent
  )
  {
@@ -291,16 +292,16 @@
 
 *******************************************************************************/
  
- struct reflectance_minn*
+ struct reflectance_minn *
  refl_alloc_minn
  ( void )
  {
-   return (struct reflectance_minn*) malloc(sizeof(struct reflectance_minn));
+   return (struct reflectance_minn *) malloc(sizeof(struct reflectance_minn));
  }
 
  void
  refl_free_minn
- ( struct reflectance_minn **minn )
+ ( struct reflectance_minn ** minn )
  {
    free( *minn );
    *minn = NULL;
@@ -309,9 +310,9 @@
  void
  refl_setup_minn
  (
-   struct reflectance *refl,
-   int const    nbhr,
-   double const *bhr,
+   struct reflectance * refl,
+   int const nbhr,
+   double const * bhr,
    double const k
  )
  {
@@ -342,10 +343,10 @@
  void
  refl_qtl_minn
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double       *s_scat_r,
-   double const *prob
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * s_scat_r,
+   double const * prob
  )
  {
    s_scat_r[0] = pow(1.0 - prob[0], refl->minn.invkp2); // COSINE!
@@ -355,10 +356,10 @@
  void
  refl_cdf_minn
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *prob
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * prob
  )
  {
    prob[0] = 1.0 - pow(s_scat_r[0], refl->minn.kp2);
@@ -368,10 +369,10 @@
  void
  refl_pdf_minn
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *dens
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * dens
  )
  {
    dens[0] = refl->minn.kp2 * pow(s_scat_r[0], refl->minn.kp1) * 
@@ -382,9 +383,9 @@
  void
  refl_dhr_minn
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double       *dhr
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * dhr
  )
  {
    double scl = 2.0 * pow(s_scat_i[0], refl->minn.k) * refl->minn.invkp2;
@@ -397,10 +398,10 @@
  void
  refl_brdf_minn
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *bdr
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * bdr
  )
  {
    double scl = pow((s_scat_i[0] * s_scat_i[1]), refl->minn.k);
@@ -428,16 +429,16 @@
 
 *******************************************************************************/
 
- struct reflectance_lamb*
+ struct reflectance_lamb *
  refl_alloc_lamb
  ( void )
  {
-   return (struct reflectance_lamb*) malloc(sizeof(struct reflectance_lamb));
+   return (struct reflectance_lamb *) malloc(sizeof(struct reflectance_lamb));
  }
 
  void
  refl_free_lamb
- ( struct reflectance_lamb **lamb )
+ ( struct reflectance_lamb ** lamb )
  {
    free( *lamb );
    *lamb = NULL;
@@ -446,9 +447,9 @@
  void
  refl_setup_lamb
  (
-   struct reflectance *refl,
-   int const    nbhr,
-   double const *bhr
+   struct reflectance * refl,
+   int const nbhr,
+   double const * bhr
  )
  {
    refl->lamb.nbhr = nbhr;
@@ -472,10 +473,10 @@
  void
  refl_qtl_lamb
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double       *s_scat_r,
-   double const *prob
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * s_scat_r,
+   double const * prob
  )
  {
    s_scat_r[0] = sqrt(prob[0]); // COSINE!
@@ -485,10 +486,10 @@
  void
  refl_cdf_lamb
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *prob
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * prob
  )
  {
    prob[0] = 1.0 - s_scat_r[0] * s_scat_r[0];
@@ -498,10 +499,10 @@
  void
  refl_pdf_lamb
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *dens
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * dens
  )
  {
    dens[0] = 2.0 * s_scat_r[0] * sqrt(1.0 - s_scat_r[0] * s_scat_r[0]);
@@ -511,9 +512,9 @@
  void
  refl_dhr_lamb
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double       *dhr
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double * dhr
  )
  {
    for (size_t i = 0; i < refl->lamb.nbhr; i++)
@@ -523,16 +524,15 @@
  void
  refl_brdf_lamb
  (
-   struct reflectance const *refl,
-   double const *s_scat_i,
-   double const *s_scat_r,
-   double       *bdr
+   struct reflectance const * refl,
+   double const * s_scat_i,
+   double const * s_scat_r,
+   double * bdr
  )
  {
    for (size_t i = 0; i < refl->lamb.nbhr; i++)
      bdr[i] = refl->lamb.bdr[i];
  }
-
 
 
 /* Unidirectional BRDF model
@@ -623,7 +623,5 @@
  }
 
 */
-
-
 
 

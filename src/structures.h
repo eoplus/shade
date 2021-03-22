@@ -1,6 +1,9 @@
 
- #ifndef STRUCTURE
- #define STRUCTURE
+ #ifndef STRUCTURES
+ #define STRUCTURES
+
+ #include <stdio.h>
+ #include <stddef.h>
 
 /*******************************************************************************
  Rectangle (str_rect)
@@ -568,5 +571,5 @@
 
 /* Function prototypes: *******************************************************/
 
- #endif // STRUCTURE
+ #endif // STRUCTURES
 

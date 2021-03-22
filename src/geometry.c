@@ -110,8 +110,8 @@
  {
    /* Copy matrices to arrays and setup GSL matrix views from array */
    int n = nc * nr;
-   double *Na = (double*) malloc(n * sizeof(double));
-   double *Ma = (double*) malloc(n * sizeof(double));
+   double * Na = (double*) malloc(n * sizeof(double));
+   double * Ma = (double*) malloc(n * sizeof(double));
    for (size_t cr = 0; cr < nr; cr++)
    {
      for (size_t cc = 0; cc < nc; cc++)
@@ -125,9 +125,9 @@
    gsl_matrix_view Mv = gsl_matrix_view_array(Ma, nr, nc);
 
    int s;
-   gsl_matrix *LU = gsl_matrix_alloc( nr, nc );
+   gsl_matrix * LU = gsl_matrix_alloc( nr, nc );
    gsl_matrix_memcpy( LU, &Mv.matrix ) ;
-   gsl_permutation *p  = gsl_permutation_alloc( nc );
+   gsl_permutation * p  = gsl_permutation_alloc( nc );
    gsl_linalg_LU_decomp( LU, p, &s );    
    gsl_linalg_LU_invert( LU, p, &Nv.matrix );
 
@@ -172,7 +172,7 @@
  {
    /* Copy matrices to arrays and setup GSL matrix views from array */
    int n = nc * nr;
-   double *Ma = (double*) malloc(n * sizeof(double));
+   double * Ma = (double*) malloc(n * sizeof(double));
    for (size_t cr = 0; cr < nr; cr++)
    {
      for (size_t cc = 0; cc < nc; cc++)
@@ -183,9 +183,9 @@
    gsl_matrix_view Mv = gsl_matrix_view_array(Ma, nr, nc);
 
    int s;
-   gsl_matrix *LU = gsl_matrix_alloc( nr, nc );
+   gsl_matrix * LU = gsl_matrix_alloc( nr, nc );
    gsl_matrix_memcpy( LU, &Mv.matrix ) ;
-   gsl_permutation *p  = gsl_permutation_alloc( nc );
+   gsl_permutation * p  = gsl_permutation_alloc( nc );
    gsl_linalg_LU_decomp( LU, p, &s );
    
    double det = gsl_linalg_LU_det( LU, s );

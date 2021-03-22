@@ -21,7 +21,7 @@
  #include <stdlib.h>	// Functions:   exit
  #include <math.h>      // Functions:   ceil
 
- #include "config.h"    // Definitions: SPRES, SHDW
+ #include "config.h"    // Definitions: SPATIALLY_RESOLVED, SHADOWING
  #include "constants.h"     // Macros:      DEG
  #include "strc.h"	// Structures:  str_acm
 
@@ -343,7 +343,7 @@
      fprintf(fpo,"  Bottom:  Undefined, at INFINITE depth\n");
    } // Logic: btt_d
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    if (!acc_fgeom)
    {
      fprintf (fpo, "\nSpatially resolved integral:\n");
@@ -367,11 +367,11 @@
      fprintf(fpo, "  Code compiled with spatially resolved integral, but acc_geom was\n"
             "  set to 0. For a simulation without spatially resolved integral,\n"
             "  it will give a gain in performance to comment out the the \n"
-            "  definition SPRES in config.h\n");
+            "  definition SPATIALLY_RESOLVED in config.h\n");
    }
-   #endif
+   #endif // SPATIALLY_RESOLVED
 
-   #ifdef SHDW
+   #ifdef SHADOWING
    fprintf(fpo, "\nStructures:\n");
    if (str_ncl > 0)
    {
@@ -445,18 +445,18 @@
             "  a gain in performance to comment out the the definition\n"
             "  SDHW in config.h\n");
    }
-   #endif
+   #endif // SHADOWING
 
-   #ifdef ALEX
-   fprintf(fpo,"\nCAUTION! Code compiled with ALEX defined in config.h - this results"
+   #ifdef AIRTIGHT_ALEX
+   fprintf(fpo,"\nCAUTION! Code compiled with AIRTIGHT_ALEX defined in config.h - this results"
           "in a specific circunstances for Alex's system and is not general, "
-          "even without shadowing! Comment out ALEX in config.h for generic "
+          "even without shadowing! Comment out AIRTIGHT_ALEX in config.h for generic "
           "simulation.\n");
-   #endif
+   #endif // AIRTIGHT_ALEX
 
    fclose (fpo);
 
-   #ifdef SPRES
+   #ifdef SPATIALLY_RESOLVED
    if (acc_geom > 0 && acc_fgeom == 0)
    {
      strncpy(ofn, ofbn, STRMXLEN);
@@ -484,6 +484,6 @@
      fprintf(fpo, "%.3f\n", acm->p_xbrks[ci]);
      fclose (fpo);
    }
-   #endif
+   #endif // SPATIALLY_RESOLVED
  }
 

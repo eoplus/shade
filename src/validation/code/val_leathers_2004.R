@@ -82,7 +82,7 @@ ex  <- "/home/alexandre/Documents/active_research/owa_shading"
 setwd(ex)
 for(i in 1:length(fls)) {
   print(fls[i])
-  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src_v1.6/validation/code", dir, fls[i]))
+  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src/validation/code", dir, fls[i]))
   system(cmd)
 }
 
@@ -218,30 +218,33 @@ file.remove(paste0(fnm,".aux"), paste0(fnm,".log"))
 # ------------------------------------------------------------------------------
 # Previous validations
 #
+# Note: Because a wind roughned interface is not yet included, the values below
+# will be different from the MC simulations of Leathers et al. (2004), but will
+# match their semi-analytical model. See plot.
 
 # Version 1.6:
 # REF    d_1.0  d_1.5 d_2.0 d_2.5  d_3.0
-# SZA_10 0.575 0.4100 0.235  0.07 0.0650
-# SZA_20 0.080 0.0575 0.035  0.01 0.0100
-# SZA_40 0.005 0.0000 0.000  0.00 0.0075
+# SZA_10 0.575 0.4100 0.235 0.070 0.0650
+# SZA_20 0.080 0.0575 0.035 0.010 0.0100
+# SZA_40 0.005 0.0000 0.000 0.000 0.0075
 #
-# RES    d_1.0  d_1.5 d_2.0 d_2.5  d_3.0 // BOTH BUG AND APPARETLY WRONG, CONSIDERING PREVIOUS
-# SZA_10 0.729 0.3490 0.160    NA 0.0720
-# SZA_20 0.349 0.1490 0.089    NA 0.0500
-# SZA_40 0.010 0.0060 0.006    NA 0.0070
+# RES    d_1.0  d_1.5 d_2.0 d_2.5  d_3.0
+# SZA_10 0.731 0.3466 0.159 0.096 0.0722
+# SZA_20 0.349 0.1493 0.089 0.063 0.0499
+# SZA_40 0.009 0.0066 0.006 0.007 0.0071
 #
-# Benchmark execution time: 6.98, 9.33, 9.66, 11.33, 13.16 min (1E7 rays)
+# Benchmark execution time: 4.00, 4.83, 5.55, 6.21, 6.86 min (1E7 rays)
 
 # Version 1.5:
 # REF    d_1.0  d_1.5 d_2.0 d_2.5  d_3.0
-# SZA_10 0.575 0.4100 0.235  0.07 0.0650
-# SZA_20 0.080 0.0575 0.035  0.01 0.0100
-# SZA_40 0.005 0.0000 0.000  0.00 0.0075
+# SZA_10 0.575 0.4100 0.235 0.070 0.0650
+# SZA_20 0.080 0.0575 0.035 0.010 0.0100
+# SZA_40 0.005 0.0000 0.000 0.000 0.0075
 #
 # RES    d_1.0  d_1.5 d_2.0 d_2.5  d_3.0
-# SZA_10 0.528  0.205 0.098 0.061  0.047
-# SZA_20 0.135  0.062 0.043 0.033  0.028
-# SZA_40 0.007  0.005 0.005 0.005  0.006
+# SZA_10 0.528 0.2050 0.098 0.061 0.0470
+# SZA_20 0.135 0.0620 0.043 0.033 0.0280
+# SZA_40 0.007 0.0050 0.005 0.005 0.0060
 #
 # Benchmark execution time: 0.40, 0.51, 0.60, 0.70, 0.72 min (1E6 rays)
 

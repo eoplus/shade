@@ -9,7 +9,12 @@
  structures work as expected.
 
  Compile instruction:
- gcc val_intersect_3d.c ../../../geometry.c ../../../structures.c ../../../rotation.c ../../../intersect.c ../../../accumulators.c ../../../ray.c ../../../memory.c ../../../aux.c ../../../skyrad.c ../../../sources.c -DSHADOWING -DSPRES -lm -lgsl -O3 -o val_intersect_3d.o
+ gcc val_intersect_3d.c ../../../geometry.c ../../../structures.c \
+ ../../../rotation.c ../../../intersect.c ../../../intersect_cylinder.c \
+ ../../../intersect_cuboid.c ../../../intersect_cone.c ../../../accumulators.c \
+ ../../../ray.c ../../../memory.c ../../../aux.c ../../../skyrad.c \
+ ../../../sources.c -DSHADOWING -DSPATIALLY_RESOLVED -lm -lgsl -O3 \
+ -o val_intersect_3d.o
 
  ./val_intersect_3d.o
 *******************************************************************************/

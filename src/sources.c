@@ -122,6 +122,7 @@
  ( void )
  {
    struct source* src = (struct source*) malloc(sizeof(struct source));
+
    #ifdef CHCK_MEM_ALLOC
    if ( !src )
    {
@@ -313,6 +314,7 @@
      src->u[0], 
      src->u[1],
      src->u[2]);
+
    #ifdef VECTOR_RT
    fprintf(odv, "%sStokes:  % .2e, % .2e, % .2e, % .2e (W m^-2 sr^-1)\n", pre_1, 
      src->stks[0], src->stks[1], src->stks[2], src->stks[3]);

@@ -109,7 +109,7 @@ setwd(ex)
 for(i in 1:length(fls)) {
   print(fls[i])
   if(file.exists(file.path("run/leathers_2001", gsub(".txt", "_out_summary.txt", fls[i])))) next
-  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src_v1.6/validation/code", dir, fls[i]))
+  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src/validation/code", dir, fls[i]))
   system(cmd)
 }
 
@@ -243,16 +243,16 @@ file.remove(paste0(fnm,".aux"), paste0(fnm,".log"))
 # SZA_70  0.007 0.011 0.023 0.053 0.112
 #
 # RES    a_0.05 a_0.1 a_0.2 a_0.5   a_1
-# SZA_0      NA 0.197 0.319 0.507 0.609
-# SZA_10     NA 0.174 0.281 0.448 0.563
-# SZA_20     NA 0.071 0.130 0.263 0.399
-# SZA_30     NA 0.022 0.047 0.130 0.236
-# SZA_40     NA 0.017 0.034 0.087 0.177
-# SZA_50     NA 0.015 0.027 0.069 0.142
-# SZA_60     NA 0.013 0.023 0.062 0.124
-# SZA_70     NA 0.011 0.021 0.058 0.110
+# SZA_0   0.111 0.198 0.329 0.509 0.615
+# SZA_10  0.098 0.173 0.286 0.449 0.571
+# SZA_20  0.038 0.071 0.132 0.261 0.406
+# SZA_30  0.012 0.025 0.050 0.128 0.239
+# SZA_40  0.009 0.018 0.034 0.092 0.171
+# SZA_50  0.006 0.015 0.025 0.078 0.143
+# SZA_60  0.005 0.012 0.023 0.065 0.123
+# SZA_70  0.005 0.011 0.021 0.061 0.117
 #
-# Benchmark execution time: 49.55, 35.20, 31.28, 28.23, 28.85 min (1E7 rays)
+# Benchmark execution time: 27.28, 27.46, 25.71, 25.38, 28.85 min (1E7 rays)
 
 # Version 1.5:
 # REF    a_0.05 a_0.1 a_0.2 a_0.5   a_1

@@ -30,7 +30,7 @@
    struct scattering const * scat,
    struct bottom const * btt,
    struct skyradiance const * skr,
-   str_cyln const ** cylns,
+   struct str_cyln const ** cylns,
    struct str_cone const ** cones,
    str_cubd const ** cubds,
    struct accumulator_bmc * accm_df_f,

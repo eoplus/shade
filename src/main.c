@@ -10,7 +10,7 @@
 
 gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.c sources.c accumulators.c reflectance.c bottom.c read_input.c structures.c rotation.c scattering.c scattering_iso.c scattering_rlg.c scattering_hg.c scattering_ff.c scattering_truncate.c -O3 -lgsl -lgslcblas -lm -o ../mc_solver_free_v1.7.o
 
- ./mc_test.o 0_INPUT_TEMPLATE.txt
+
 *******************************************************************************/
 
  #include <stdio.h>					// Functions:  fprintf, printf,
@@ -37,7 +37,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
  #include "statistics.h"				// Functions: calc_se
  #include "intersect.h"
  #include "accumulators.h"
- #include "read_input.h"
+ #include "read_input.h"		// input_read, input_fprintf
  #include "structures.h"
  #include "scattering.h"
  #include "reflectance.h"
@@ -60,72 +60,66 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
 
    // Variables for setup and reporting:
    char version[] = "1.6";				// Program version
-   FILE* fpi;						// Pointer for input file
    time_t start, end; 					// Timing execution
-   char ofn[STRMXLEN];					// Output file name
-   char varnm[STRMXLEN];				// Testing variables names
-   char hcheck[STRMXLEN];				// String to test presence of header line
-   char gstringa[STRMXLEN], gstringb[STRMXLEN];		// Generic strings
-   long int fppos;					// Store the current position in the file stream
-   int ci, cj, cz, cw, cb, cn, cr, cc;			// Generic counting variables
+   int cj, cz;						// Generic counting variables
  
    // Variables controlling general simulation:
-   int    sim_nr = 0;					// Number of rays to trace, unitless, [SUBDV, Inf)
-   int    sim_ns = 0;					// Number of Sun zenith angles, unitless, [0, 9]
+   int sim_nr = 0;					// Number of rays to trace, unitless, [SUBDV, Inf)
+   int sim_ns = 0;					// Number of Sun zenith angles, unitless, [0, 9]
    double sim_f0 = 0.0;					// External irradiance incident on the medium, W/m^2, (0, Inf)
    double * sim_sza;					// Pointer to sun zenith angles; actual values should be [0, 90], degrees
    double * sim_saa;					// Pointer to sun azimuth angles; actual values should be [0, 360], degrees
 
    // Variables describing the sky radiance:
    struct skyradiance * skr = skr_alloc();		// Sky radiance distribution parameters;
-   int    skr_nx = 0;					// Number of azimuthal bins
-   int    skr_ny = 0;					// Number of zenith bins
+   int skr_nx = 0;					// Number of azimuthal bins
+   int skr_ny = 0;					// Number of zenith bins
    double skr_resx = 0.0;				// Azimuthal angle resolution
    double skr_resy = 0.0;				// Polar angle resolution
-   char   ** skr_fls;					// Pointer to Sky radiance file paths
+   char ** skr_fls;					// Pointer to Sky radiance file paths
 
    // Variables describing the MC accumulator:
    struct accumulator_bmc * accm_dr_f = accm_b_alloc();	// Accumulator for free diffuse component
    struct accumulator_bmc * accm_df_f = accm_b_alloc();	// Accumulator for free direct component
    struct accumulator_bmc * accm_dr_s = accm_b_alloc();	// Accumulator for shadowed diffuse component
    struct accumulator_bmc * accm_df_s = accm_b_alloc();	// Accumulator for shadowed direct component
-   char   acc_geom[STRMXLEN];				// Geometry of the accumulator
-   int    acc_fgeom = 0;				// Flag if acc_geom was requested as 0 (not reported) but SPATIALLY_RESOLVED is defined.
-   double acc_ext   = 0.0;				// "Radius" of the spatially resolved accumulator
-   double acc_resx  = 0.0;				// X axis resolution of the spatially resolved accumulator
-   double acc_resy  = 0.0;				// Y axis resolution of the spatially resolved accumulator
+   char acc_geom[STRMXLEN];				// Geometry of the accumulator
+   int acc_fgeom = 0;					// Flag if acc_geom was requested as 0 (not reported) but SPATIALLY_RESOLVED is defined.
+   double acc_ext = 0.0;				// "Radius" of the spatially resolved accumulator
+   double acc_resx = 0.0;				// X axis resolution of the spatially resolved accumulator
+   double acc_resy = 0.0;				// Y axis resolution of the spatially resolved accumulator
 
    // Variables describing medium:
-   double iop_na  = 0.0;				// Real part of the refractive index of air - [1, ?] - unitless
-   double iop_nw  = 0.0;				// Real part of the refractive index of water relative to air - [1, ?] - unitless
-   double iop_c   = 0.0;				// Beam attenuation coefficient - [0, Inf) - 1/m
-   int    iop_nw0 = 1;					// Number of single scattering albedos - [0, Inf) 
+   double iop_na = 0.0;					// Real part of the refractive index of air - [1, ?] - unitless
+   double iop_nw = 0.0;					// Real part of the refractive index of water relative to air - [1, ?] - unitless
+   double iop_c = 0.0;					// Beam attenuation coefficient - [0, Inf) - 1/m
+   int iop_nw0 = 1;					// Number of single scattering albedos - [0, Inf) 
    double * iop_w0;					// Pointer to single scattering albedos (actual values should be [0, 1] - unitless)
 
    // Variables describing the source:
    struct source * src = src_alloc();			// Source parameters;
-   char   src_tp[STRMXLEN];				// Source type;
+   char src_tp[STRMXLEN];				// Source type;
    double src_ref_o[3] = {0.0};				// Source reference origin
    double src_rel_o[3] = {0.0};				// Source origin relative to reference
    double src_o[3] = {0.0};				// Origin (center) of the source
    double src_s[3] = {0.0};				// Spherical directions of the source axis;
    double src_fov = 0.0;				// Field-of-view of the source; 
-   double src_stks[STKS_N] = {0.0};				// Stokes parameters of the source;
+   double src_stks[STKS_N] = {0.0};			// Stokes parameters of the source;
 
    // Variables for scattering functions:
    struct scattering * scat = scat_alloc();		// Scattering parameters;
-   char   scat_tp[STRMXLEN];				// Scattering type - ff, hg, isotropic, petzold
-   int    scat_trc = 0;					// Logical; should the Phase Function difraction peak be truncated?
-   char   scat_mtd[STRMXLEN];				// Method to retrieve scattering values: "lut", "itp", "min"
+   char scat_tp[STRMXLEN];				// Scattering type - ff, hg, isotropic, petzold
+   int scat_trc = 0;					// Logical; should the Phase Function difraction peak be truncated?
+   char scat_mtd[STRMXLEN];				// Method to retrieve scattering values: "lut", "itp", "min"
    double scat_depolr;					// Depolarization ratio for Rayleigh scattering
    double scat_g = 0;					// Henyey-Greestein anisotropy parameter - [-1, 1] - unitless
    double scat_fbb = 0.0;				// Backscattering fraction (only used if Phase Function if "ff")
 
    // Variables describing the bottom:
    struct bottom * btt = btt_alloc();			// Bottom parameters;
-   char   btt_tp[STRMXLEN];				// Type of bottom reflectance BRDF
+   char btt_tp[STRMXLEN];				// Type of bottom reflectance BRDF
    double btt_d = INFINITY;				// Bottom depth - (0, Inf) - meters
-   int    btt_nbr = 0;					// The number of bottom reflectances
+   int btt_nbr = 0;					// The number of bottom reflectances
    double * btt_bhr;					// Pointer to bottom hemispherical-directional (or bi-hemispherical) reflectance (actual values should be [0, 1] - unitless)
    double btt_rho; 
    double btt_k;
@@ -133,27 +127,14 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    double btt_phif;
 
    // Variables describing shadowing structures:
-   int    str_def = 0;					// Flag to indicate if structures are defined
-   int    str_ncl = 0;					// Number of cylinders
-   struct str_cylnd *p_str_cls;				// Pointer to cylinders internal representation
-   double str_cl_base[3];				// Variable for reading input of cylinder base
-   double str_cl_axis[2];				// Variable for reading input of cylinder axis polar angles
-   double str_cl_radius;				// Variable for reading input of cylinder radius
-   double str_cl_height;				// Variable for reading input of cylinder heights
-   int    str_cl_closed[2];				// Variable for reading input of cylinder indicator if is open, semi-closed or closed
-   int    str_ncn = 0;					// Number of cones
-   double str_cn_vertex[3];				// Variable for reading input of cone vertex
-   double str_cn_axis[2];				// Variable for reading input of cone axis polar angles
-   double str_cn_height[2];				// Variable for reading input of cone heights
-   double str_cn_theta;					// Variable for reading input of cone half angle
-   int    str_cn_closed[2];				// Variable for reading input of cone indicator if cone is open, semi-closed or closed
-   int    str_nbx = 0;					// Number of boxes
-   int    expand_str_ncb;				// Logical: expand str_nbx with a encopassing bounding box of all the boxes?
-   double **str_bxs;					// Pointer of pointers for bounding boxes. Each has length 6: [0]XMN [1]XMX [2]YMN [3]YMX [4]ZMN [5]ZMX, (-Inf, Inf) - meters
-   str_cyln **cylns;					// Pointer to pointers of cylinders
+   int str_def = 0;					// Flag to indicate if structures are defined
+   int str_ncl = 0;					// Number of cylinders
+   int str_ncn = 0;					// Number of cones
+   int str_ncb = 0;					// Number of cuboids
+   int expand_str_ncb = 0;				// Logical: expand str_nbx with a encopassing bounding box of all the boxes?
+   struct str_cyln **cylns;					// Pointer to pointers of cylinders
    struct str_cone ** cones;				// Pointer to pointers of cones
    str_cubd **cubds;					// Pointer to pointers of cuboids
-   int str_ncb = 0;
 
    // Read input and setup: ****************************************************
    time(&start);
@@ -182,10 +163,11 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
 
    btt_setup(btt, btt_d, btt_tp, btt_nbr, btt_bhr, btt_k);
 
-   input_printf(sim_nr, src_tp, src_fov, src->o, sim_ns, sim_sza, sim_f0, iop_na,
-     iop_nw, iop_c, iop_nw0, iop_w0, scat_tp, scat_g, scat_fbb, btt_d, btt_tp,
-     btt_nbr, btt_bhr, acc_fgeom, acc_geom, acc_ext, acc_resx, acc_resy,  
-     str_ncl, cylns, str_ncn, cones, str_ncb, cubds, src, scat, btt, version);
+   input_fprintf(stdout, sim_nr, src_tp, src_fov, src->o, sim_ns, sim_sza, 
+     sim_f0, iop_na, iop_nw, iop_c, iop_nw0, iop_w0, scat_tp, scat_g, scat_fbb,
+     btt_d, btt_tp, btt_nbr, btt_bhr, acc_fgeom, acc_geom, acc_ext, acc_resx, 
+     acc_resy, str_ncl, cylns, str_ncn, cones, str_ncb, cubds, src, scat, btt,
+     version);
 
    accm_setup(accm_df_f, acc_geom, sim_ns + 2, iop_nw0, btt_nbr, acc_ext,
      acc_resy, acc_resx);
@@ -201,6 +183,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
 
    // Prepare output: **********************************************************
    FILE * fpo;									// Pointer for output file
+   char ofn[STRMXLEN];								// Output file name
    char ofbn[STRMXLEN];								// Output base filename
    char sufx[STRMXLEN];								// Output filename suffix
 
@@ -237,13 +220,19 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
      acc_resy, acc_resx);
    #endif // SHADOWING
 
-/*
-   print_sim(ofbn, version, sim_nr, sim_ns, iop_nw0, btt_nbr, str_ncl, str_ncn, 
-     str_nbx, STRMXLEN, src_tp, src_fov, src_ref_o, sim_sza, sim_f0, iop_na, 
-     iop_nw, iop_c, iop_w0, btt_d, btt_tp, btt_bhr, scat_tp, scat_g, scat_fbb, 
-     acc_geom, acc_fgeom, acc_ext, acc_resx, acc_resy, p_str_cls, p_str_cns, 
-     str_bxs, accm_df_f);
-*/
+   strncpy(ofn, ofbn, STRMXLEN);
+   strcat(ofn, "_out_summary.txt");
+   fpo = fopen (ofn, "w");
+   if ( !fpo )
+   {
+     printf("\nERROR: Failed to create output file %s\n", ofn);
+     exit(-1);
+   }
+   input_fprintf(fpo, sim_nr, src_tp, src_fov, src->o, sim_ns, sim_sza, 
+     sim_f0, iop_na, iop_nw, iop_c, iop_nw0, iop_w0, scat_tp, scat_g, scat_fbb,
+     btt_d, btt_tp, btt_nbr, btt_bhr, acc_fgeom, acc_geom, acc_ext, acc_resx, 
+     acc_resy, str_ncl, cylns, str_ncn, cones, str_ncb, cubds, src, scat, btt,
+     version);
 
    // Run simulations: *********************************************************
 
@@ -254,7 +243,8 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    {
      bmc(sim_nr / SUBDV, sim_ns, iop_nw0, btt_nbr, sim_sza, sim_saa, sim_f0,
        iop_na, iop_nw, iop_c, iop_w0, str_ncl, str_ncn, str_ncb, src, scat,
-       btt, skr, (str_cyln const **) cylns, (struct str_cone const **) cones,
+       btt, skr, (struct str_cyln const **) cylns, 
+       (struct str_cone const **) cones,
        (str_cubd const **) cubds, accm_df_f, accm_df_s, accm_dr_f, accm_dr_s);
 
      sprintf(sufx, "_S%02d", cj);
@@ -360,10 +350,17 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    printf("Execution time: %lf min\n\n", total);
 
    // Deallocate memory: *******************************************************
+   free_1d( &sim_sza );
+   free_1d( &sim_saa );
+   for (size_t i = 0; i < (sim_ns + 2); i++)
+     free( skr_fls[i] );
+   free( skr_fls );
+   skr_free ( &skr );
+   free_1d( &iop_w0 );
+   free_1d( &btt_bhr );
+   btt_free( &btt );
    src_free ( &src );
    scat_free( &scat );
-   btt_free( &btt );
-   skr_free ( &skr );
    accm_b_free( &accm_dr_f );
    accm_b_free( &accm_df_f );
    accm_b_free( &accm_dr_s );
@@ -378,8 +375,17 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    accm_b_free( &accm_df_s_mn );
    accm_b_free( &accm_df_s_se );
    #endif // SHADOWING
+   for (size_t i = 0; i < str_ncl; i++)
+     str_cyln_free( &cylns[i] );
+   free( cylns );   
+   for (size_t i = 0; i < str_ncn; i++)
+     str_cone_free( &cones[i] );
+   free( cones );
+   for (size_t i = 0; i < str_ncb; i++)
+     str_cubd_free( &cubds[i] );
+   free( cubds );   
 
- return 0;
-}
+   return 0;
+ }
 
 

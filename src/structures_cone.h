@@ -77,13 +77,13 @@
             Pointer to str_ellp;
  top      - Ellipse of the top opening
             Pointer to str_ellp;
- s        - Spherical directions of the axis in the system's reference frame
-            Dimensions: [3]: [0]Theta, [1]Phi, [2]Radius (always 1.0)
-            Range: [0,PI], [0,2PI], radians
-            Array of double;
  u        - Cartesian directions of the axis in the system's reference frame
             Dimensions: [3]: [0]X, [1]Y, [2]Z
             Range: [-1,1], unitless
+            Array of double;
+ s        - Spherical directions of the axis in the system's reference frame
+            Dimensions: [3]: [0]Theta, [1]Phi, [2]Radius (always 1.0)
+            Range: [0,PI], [0,2PI], radians
             Array of double;
  psi      - Cone half-angle
             Range: (0,PI), radians
@@ -140,7 +140,6 @@
    double s_top[2];
  };
 
-
 /* Function prototypes: *******************************************************/
 
  struct str_cone *
@@ -189,10 +188,12 @@
  );
 
  void
- str_cones_printf
+ str_cones_fprintf
  (
-   struct str_cone const ** cones, 
-   size_t n
+   FILE * odv,
+   struct str_cone const ** cones,
+   size_t n,
+   int const indent
  );
 
  #endif // STRUCTURES_CONE

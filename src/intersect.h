@@ -18,7 +18,7 @@
    double const * u,
    double const l_i,
    int const NCL,
-   str_cyln const ** cylns,
+   struct str_cyln const ** cylns,
    int const NCN,
    struct str_cone const ** cones,
    int const NCB,

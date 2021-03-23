@@ -185,7 +185,7 @@
    double const * b, 
    double const * u, 
    double const l, 
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  )
  {
    double a_cr[3];	// Ray's initial point, centered and rotated
@@ -224,7 +224,7 @@
    double const * b, 
    double const * u, 
    double const l, 
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  )
  {
    double intrs_p[3];		// Position of intersection
@@ -319,7 +319,7 @@
    double const * b, 
    double const * u, 
    double const l, 
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  )
  {
    double dh[2];		// Delta H, change in height due to cap inclination

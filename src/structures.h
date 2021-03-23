@@ -384,166 +384,19 @@
    int const indent 
  );
 
- void str_cubds_printf (str_cubd const **cubds, size_t n);
-
-/******************************************************************************* 
- Cylinder (str_cyln)
-
- This structure implements a general positive (in)finite cylinder (right 
- circular or oblique) with arbitrary orientation axis of the cylinder's normal 
- and rotation around the normal. The cylinder is defined by its origin, radius, 
- height along its axis, azimuth rotation in its own reference frame (alpha), and
- orientation of the Z-axis (normal) in the system's reference frame.
-
- Additionally, the cylinder may be open or closed in the top and bottom sides. 
- Those "caps" are represented by ellipses. The inclination with regard to the
- cuboid axis can be any value between 0 and 60º. Therefore it is possible to 
- have an oblique-circular cylinder. The other limit of the caps is that they 
- must have the same alpha as the cylinder.
-
- With the convention used for intersections in this code, the cylinder 
- information is retained in its own reference frame and the ray is centered and
- rotated if necessary. Therefore, all the relevant information becomes the
- origin, the radius, the height, rotation flag and the rotation matrix. 
- Additionally, the properties of the caps are stored as ellipses and 
- transformations are relative to the cylinder axis. Those are all calculated
- with a setup function.
-
-          Radius
-          ____
-
-         Origin
-      ___.___
-     /      /   / Cylinder axis
-    /      /   /
-   /      /   /
-  /      /   /
- /______/   /_Height[1]
- 
-
- COMPONENTS:
- o        - Pointer to double (vector) containing the origin, the position of 
-            the center of the cylinder's base, meters, (-INFINITY,INFINITY), 
-            [0] X, [1] Y, [2] Z;
- rsq      - Pointer to double (vector) with the square of the radius of the
-            cylinder, meters^2, (INFINITY, 0).
- h        - Height of the cylinder along its axis, meters, (0,INFINITY);
- dhmx     - Maximum change in height, relative to the center of the cap, due to 
-            cap's inclination, meters, (0,sin(60º));
- rotate_f - Pointer to int (vector) containing flags to indicate if ray needs to
-            be rotated before intersection check.
-            [0]Cylinder, [1]Base, [2]Top, [3]Base to top;
- M        - Pointer to pointer to double (matrix) with the rotation matrix from 
-            the system's reference frame to the cylinder's reference frame.
-            [3][3];
- closed_f - Pointer to int (vector) containing flags to indicate if cylinder's
-            base and top are open (0) or closed (1),
-            [0]Base, [1]Top;
- r        - Pointer to double (vector) with the radius of the cylinder, meters,
-            (0, INFINITY);
- u        - Pointer to double (vector) containing the Cartesian coordinates of 
-            the normal (Z-axis), unitless, [-1, 1],
-            [0] X, [1] Y, [2] Z;
- s        - Pointer to double (vector) containing the spherical coordinates of 
-            the normal (Z-axis), radians, [0,PI] or [0,2PI],
-            [0] Theta [1] Phi [2] Radius (always 1.0 and never used);
- alp      - The azimuthal angle in the cylinder's reference frame.
- s_base   - Pointer to double (vector) containing the spherical coordinates of 
-            the normal (Z-axis) of the base opening, radians, [0,60º] and 0º or
-            180º,
-            [0]Theta [1]Phi;
- s_top    - Pointer to double (vector) containing the spherical coordinates of 
-            the normal (Z-axis) of the base opening, radians, [0,60º] and 0º or
-            180º,
-            [0]Theta [1]Phi;
-
- The cylinder is setup by the str_cyln_setup function with values that can be
- read from the standard input file with the function str_cyln_read.
-
- STANDARD INPUT FILE SPECIFICATION:
- O[X] O[Y] O[Z] S[t] S[p] Alpha Radius Height S_base[t] S_base[p] S_top[t] 
-   S_top[p] Closed[Base] Closed[Top]
-
- The function str_cyln_setup describes the parameters that must be passed to 
- create a cylinder structure.
-
-*******************************************************************************/
-
- typedef struct
- {
-   double o[3];
-   double rsq;
-   double h;
-   double dhmx[2];
-   int    rotate_f[4];
-   double **M;
-   int    closed_f[2];
-   str_ellp *base;
-   str_ellp *top;
-   double r;
-   double u[3];
-   double s[2];
-   double alp;
-   double s_base[2];
-   double s_top[2];
- } str_cyln;
-
-/* Function prototypes: *******************************************************/
-
- str_cyln *
- str_cyln_alloc
- ( void );
-
  void
- str_cyln_free
- ( str_cyln ** cyln );
-
- void
- str_cyln_read
- (
-   FILE * fi,
-   long int * fpos,
-   double * origin,
-   double * axis,
-   double * alpha,
-   double * radius,
-   double * height,
-   double * base_s,
-   double * top_s,
-   int * closed
- );
-
- void
- str_cyln_setup
- (
-   str_cyln * cyln,
-   double * origin,
-   double const * axis,
-   double const alpha,
-   double const radius,
-   double const height,
-   double const * s_base,
-   double const * s_top,
-   int const * closed
- );
-
- void
- str_cyln_fprintf 
+ str_cubds_fprintf
  (
    FILE * odv,
-   str_cyln const * cyln,
-   int const indent
+   str_cubd const ** cubds,
+   size_t n,
+   int const indent 
  );
 
- void
- str_cylns_printf
- (
-   str_cyln const ** cylns, 
-   size_t n
- );
 
 /* Header for three-dimensional types: ****************************************/
 
+ #include "structures_cylinder.h"
  #include "structures_cone.h"
 
  #endif // STRUCTURES

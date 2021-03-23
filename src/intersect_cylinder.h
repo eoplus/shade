@@ -13,7 +13,7 @@
    double const * b,
    double const * u,
    double const l,
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  );
 
  int
@@ -23,7 +23,7 @@
    double const * b,
    double const * u,
    double const l,
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  );
 
  int
@@ -33,7 +33,7 @@
    double const * b,
    double const * u,
    double const l,
-   str_cyln const * cyln
+   struct str_cyln const * cyln
  );
 
  #endif // INTERSECT_CYLINDER

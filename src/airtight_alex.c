@@ -70,7 +70,7 @@
  (
    struct light_ray * ray,
    double const l,
-   str_cyln const * cyln,
+   struct str_cyln const * cyln,
    struct source const * src,
    double const muc, 
    double const *n_rat_wa,
@@ -257,7 +257,7 @@
  (
    struct light_ray * ray,
    double const l,
-   str_cyln const * cyln,
+   struct str_cyln const * cyln,
    struct source const * src,
    double const muc, 
    double const *n_rat_aw,

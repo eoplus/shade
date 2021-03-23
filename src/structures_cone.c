@@ -14,8 +14,8 @@
  str_cone_free    - Release memory of structure;
  str_cone_read    - Read parameters from input file;
  str_cone_setup   - Initialize structure with parameter values;
- str_cone_printf  - Formatted detailed print of a structure;
- str_cones_printf - Formatted summary print of an array of structures;
+ str_cone_fprintf  - Formatted detailed print of a structure;
+ str_cones_fprintf - Formatted summary print of an array of structures;
 
 *******************************************************************************/
 
@@ -377,20 +377,29 @@
  }
 
  void
- str_cones_printf
+ str_cones_fprintf
  (
-  struct str_cone const ** cones,
-  size_t n
+   FILE * odv,
+   struct str_cone const ** cones,
+   size_t n,
+   int const indent
  )
  {
-   printf("  Number of cones: %d\n", n);
-   printf("                  type                     origin (m)       axis (º) "
-     " alpha (º)  Psi (º)           Height (m)  Closed      Rotate\n");
-   for(size_t i = 0; i < n; i++)
+   char pre_0[STRMXLEN] = "";
+   for (size_t i = 0; i < indent; i++)
+     strcat(pre_0, "  ");
+
+   fprintf(odv, "%sNumber of cones: %d\n", pre_0, n);
+   fprintf(odv, "%s                type                     origin (m)       "
+     "axis (º)  alpha (º)  Psi (º)           Height (m)  Closed      Rotate\n", 
+     pre_0);
+
+   for (size_t i = 0; i < n; i++)
    {
-     printf("  %02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf   "
+     fprintf(odv, "%s%02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf   "
        "%6.2lf  % .2e,% .2e    %d, %d  %d, %d, %d, %d\n",
-       i+1,
+       pre_0,
+       i + 1,
        (cones[i]->rotate_f[1] || cones[i]->rotate_f[2]) ? 
          "Oblique-Circular" : "  Right-Circular",
        cones[i]->o[0], 

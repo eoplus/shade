@@ -50,7 +50,7 @@
    double const * u,
    double const l_i,
    int const NCL,
-   str_cyln const ** cylns,
+   struct str_cyln const ** cylns,
    int const NCN,
    struct str_cone const ** cones,
    int const NCB,
@@ -109,9 +109,9 @@
    // Loop over cones:
    for (i = 0; i < NCN; i++)
    {
-//     res = intrs_cone (ppos, cpos, cdir, s, &cns[i], segment);
-//     if ( res )
-//       return 1;
+     res = intrs_cone (a, b, u, l, cones[i]);
+     if ( res )
+       return 1;
    }
 
    return 0;

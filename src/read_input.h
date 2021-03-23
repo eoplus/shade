@@ -58,7 +58,7 @@
    int * str_ncn,
    struct str_cone *** cones,
    int * str_ncb,
-   str_cubd *** cubds,
+   struct str_cubd *** cubds,
    int * expand_str_ncb,
    int const cnfg_spres,
    int const cnfg_shdw
@@ -97,7 +97,7 @@
    int const str_ncn,
    struct str_cone ** cones,
    int const str_ncb,
-   str_cubd ** cubds,
+   struct str_cubd ** cubds,
    struct source const * src,
    struct scattering const * scat,
    struct bottom const * btt,

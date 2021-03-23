@@ -54,7 +54,7 @@
    int const NCN,
    struct str_cone const ** cones,
    int const NCB,
-   str_cubd const ** cubds
+   struct str_cubd const ** cubds
  )
  {
    int i;			// Counting variable

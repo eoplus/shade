@@ -62,7 +62,7 @@
    int * str_ncn,
    struct str_cone *** cones,
    int * str_ncb,
-   str_cubd *** cubds,
+   struct str_cubd *** cubds,
    int * expand_str_ncb,
    int const cnfg_spres,
    int const cnfg_shdw
@@ -755,7 +755,7 @@
          (*expand_str_ncb) = 0;
          if ( (*str_ncb) > 1 ) *expand_str_ncb = 1;
          (*str_ncb) += (*expand_str_ncb);
-         *cubds = (str_cubd**) calloc ((*str_ncb), sizeof(str_cubd*));
+         *cubds = (struct str_cubd **) calloc ((*str_ncb), sizeof(struct str_cubd *));
          if ( (*cubds ) == NULL )
          {
            printf("\nERROR: Failed to allocate memory for cubds in input_read"
@@ -880,7 +880,7 @@
    int const str_ncn,
    struct str_cone ** cones,
    int const str_ncb,
-   str_cubd ** cubds,
+   struct str_cubd ** cubds,
    struct source const * src,
    struct scattering const * scat,
    struct bottom const * btt,
@@ -1011,7 +1011,7 @@
    }
    if ( str_ncb > 0 )
    {
-     str_cubds_fprintf(fo, (str_cubd const **) cubds, str_ncb, 1);
+     str_cubds_fprintf(fo, (struct str_cubd const **) cubds, str_ncb, 1);
      fprintf(fo, "\n");
    }
    if (str_ncl == 0 && str_ncn == 0 && str_ncb == 0) 
@@ -1060,7 +1060,7 @@
    {
      for (size_t i = 0; i < str_ncb; i++)
      {
-       str_cubd_fprintf(fo, (str_cubd const *) cubds[i], 2);
+       str_cubd_fprintf(fo, (struct str_cubd const *) cubds[i], 2);
        fprintf(fo, "\n");
      }
    }

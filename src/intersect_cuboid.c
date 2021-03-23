@@ -62,7 +62,7 @@
    double const * a,
    double const * b,
    double const * u,
-   str_cubd const * cubd
+   struct str_cubd const * cubd
  )
  {
    double a_cr[3];	// Ray's initial point, centered and rotated
@@ -97,7 +97,7 @@
    double const * a,
    double const * b,
    double const * u,
-   str_cubd const * cubd
+   struct str_cubd const * cubd
  )
  {
    double u_inv[3];

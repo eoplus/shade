@@ -132,9 +132,9 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    int str_ncn = 0;					// Number of cones
    int str_ncb = 0;					// Number of cuboids
    int expand_str_ncb = 0;				// Logical: expand str_nbx with a encopassing bounding box of all the boxes?
-   struct str_cyln **cylns;					// Pointer to pointers of cylinders
+   struct str_cyln ** cylns;				// Pointer to pointers of cylinders
    struct str_cone ** cones;				// Pointer to pointers of cones
-   str_cubd **cubds;					// Pointer to pointers of cuboids
+   struct str_cubd ** cubds;				// Pointer to pointers of cuboids
 
    // Read input and setup: ****************************************************
    time(&start);
@@ -245,7 +245,8 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
        iop_na, iop_nw, iop_c, iop_w0, str_ncl, str_ncn, str_ncb, src, scat,
        btt, skr, (struct str_cyln const **) cylns, 
        (struct str_cone const **) cones,
-       (str_cubd const **) cubds, accm_df_f, accm_df_s, accm_dr_f, accm_dr_s);
+       (struct str_cubd const **) cubds, 
+       accm_df_f, accm_df_s, accm_dr_f, accm_dr_s);
 
      sprintf(sufx, "_S%02d", cj);
      strcat(sufx, "_dir_f_spi_temp");

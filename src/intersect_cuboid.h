@@ -12,7 +12,7 @@
    double const * a,
    double const * b,
    double const * u,
-   str_cubd const * cubd
+   struct str_cubd const * cubd
  );
 
  int
@@ -21,7 +21,7 @@
    double const * a,
    double const * b,
    double const * u,
-   str_cubd const * cubd
+   struct str_cubd const * cubd
  );
 
  #endif // INTERSECT_CUBOID

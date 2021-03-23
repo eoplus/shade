@@ -48,7 +48,7 @@
    struct skyradiance const * skr,
    struct str_cyln const ** cylns,
    struct str_cone const ** cones,
-   str_cubd const ** cubds,
+   struct str_cubd const ** cubds,
    struct accumulator_bmc * accm_df_f,
    struct accumulator_bmc * accm_df_s,
    struct accumulator_bmc * accm_dr_f,

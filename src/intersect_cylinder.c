@@ -38,7 +38,7 @@
  ||P - O||^2 - ((P - O) · N)^2 = r^2,                                        (3)
 
  where O is the center of the base of the cylinder, N is the orientation axis of
- the cylinder, || || is the l2 norm and · is the dot (scalar) product.
+ the cylinder, || || is the Euclidean norm and · is the dot (scalar) product.
 
  Intersections with the lateral surface of the cylinder have a P satisfying
  Eq. 1 and Eq. 3. Substituting Eq. 1 into Eq. 3 we have: 

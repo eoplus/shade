@@ -73,22 +73,22 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    int    sim_nr = 0;					// Number of rays to trace, unitless, [SUBDV, Inf)
    int    sim_ns = 0;					// Number of Sun zenith angles, unitless, [0, 9]
    double sim_f0 = 0.0;					// External irradiance incident on the medium, W/m^2, (0, Inf)
-   double *sim_sza;					// Pointer to sun zenith angles; actual values should be [0, 90], degrees
-   double *sim_saa;					// Pointer to sun azimuth angles; actual values should be [0, 360], degrees
+   double * sim_sza;					// Pointer to sun zenith angles; actual values should be [0, 90], degrees
+   double * sim_saa;					// Pointer to sun azimuth angles; actual values should be [0, 360], degrees
 
    // Variables describing the sky radiance:
-   struct skyradiance *skr = skr_alloc();		// Sky radiance distribution parameters;
+   struct skyradiance * skr = skr_alloc();		// Sky radiance distribution parameters;
    int    skr_nx = 0;					// Number of azimuthal bins
    int    skr_ny = 0;					// Number of zenith bins
    double skr_resx = 0.0;				// Azimuthal angle resolution
    double skr_resy = 0.0;				// Polar angle resolution
-   char   **skr_fls;					// Pointer to Sky radiance file paths
+   char   ** skr_fls;					// Pointer to Sky radiance file paths
 
    // Variables describing the MC accumulator:
-   struct accumulator_bmc *accm_dr_f = accm_b_alloc();	// Accumulator for free diffuse component
-   struct accumulator_bmc *accm_df_f = accm_b_alloc();	// Accumulator for free direct component
-   struct accumulator_bmc *accm_dr_s = accm_b_alloc();	// Accumulator for shadowed diffuse component
-   struct accumulator_bmc *accm_df_s = accm_b_alloc();	// Accumulator for shadowed direct component
+   struct accumulator_bmc * accm_dr_f = accm_b_alloc();	// Accumulator for free diffuse component
+   struct accumulator_bmc * accm_df_f = accm_b_alloc();	// Accumulator for free direct component
+   struct accumulator_bmc * accm_dr_s = accm_b_alloc();	// Accumulator for shadowed diffuse component
+   struct accumulator_bmc * accm_df_s = accm_b_alloc();	// Accumulator for shadowed direct component
    char   acc_geom[STRMXLEN];				// Geometry of the accumulator
    int    acc_fgeom = 0;				// Flag if acc_geom was requested as 0 (not reported) but SPATIALLY_RESOLVED is defined.
    double acc_ext   = 0.0;				// "Radius" of the spatially resolved accumulator
@@ -100,10 +100,10 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    double iop_nw  = 0.0;				// Real part of the refractive index of water relative to air - [1, ?] - unitless
    double iop_c   = 0.0;				// Beam attenuation coefficient - [0, Inf) - 1/m
    int    iop_nw0 = 1;					// Number of single scattering albedos - [0, Inf) 
-   double *iop_w0;					// Pointer to single scattering albedos (actual values should be [0, 1] - unitless)
+   double * iop_w0;					// Pointer to single scattering albedos (actual values should be [0, 1] - unitless)
 
    // Variables describing the source:
-   struct source *src = src_alloc();			// Source parameters;
+   struct source * src = src_alloc();			// Source parameters;
    char   src_tp[STRMXLEN];				// Source type;
    double src_ref_o[3] = {0.0};				// Source reference origin
    double src_rel_o[3] = {0.0};				// Source origin relative to reference
@@ -113,7 +113,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    double src_stks[STKS_N] = {0.0};				// Stokes parameters of the source;
 
    // Variables for scattering functions:
-   struct scattering *scat = scat_alloc();		// Scattering parameters;
+   struct scattering * scat = scat_alloc();		// Scattering parameters;
    char   scat_tp[STRMXLEN];				// Scattering type - ff, hg, isotropic, petzold
    int    scat_trc = 0;					// Logical; should the Phase Function difraction peak be truncated?
    char   scat_mtd[STRMXLEN];				// Method to retrieve scattering values: "lut", "itp", "min"
@@ -122,15 +122,15 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    double scat_fbb = 0.0;				// Backscattering fraction (only used if Phase Function if "ff")
 
    // Variables describing the bottom:
-   struct bottom *btt = btt_alloc();			// Bottom parameters;
-   char    btt_tp[STRMXLEN];				// Type of bottom reflectance BRDF
-   double  btt_d = INFINITY;				// Bottom depth - (0, Inf) - meters
-   int     btt_nbr = 0;					// The number of bottom reflectances
-   double *btt_bhr;					// Pointer to bottom hemispherical-directional (or bi-hemispherical) reflectance (actual values should be [0, 1] - unitless)
-   double  btt_rho; 
-   double  btt_k;
-   double  btt_thetaf; 
-   double  btt_phif;
+   struct bottom * btt = btt_alloc();			// Bottom parameters;
+   char   btt_tp[STRMXLEN];				// Type of bottom reflectance BRDF
+   double btt_d = INFINITY;				// Bottom depth - (0, Inf) - meters
+   int    btt_nbr = 0;					// The number of bottom reflectances
+   double * btt_bhr;					// Pointer to bottom hemispherical-directional (or bi-hemispherical) reflectance (actual values should be [0, 1] - unitless)
+   double btt_rho; 
+   double btt_k;
+   double btt_thetaf; 
+   double btt_phif;
 
    // Variables describing shadowing structures:
    int    str_def = 0;					// Flag to indicate if structures are defined
@@ -142,7 +142,6 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    double str_cl_height;				// Variable for reading input of cylinder heights
    int    str_cl_closed[2];				// Variable for reading input of cylinder indicator if is open, semi-closed or closed
    int    str_ncn = 0;					// Number of cones
-   struct str_cone *p_str_cns;				// Pointer to cones internal representation
    double str_cn_vertex[3];				// Variable for reading input of cone vertex
    double str_cn_axis[2];				// Variable for reading input of cone axis polar angles
    double str_cn_height[2];				// Variable for reading input of cone heights
@@ -152,7 +151,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    int    expand_str_ncb;				// Logical: expand str_nbx with a encopassing bounding box of all the boxes?
    double **str_bxs;					// Pointer of pointers for bounding boxes. Each has length 6: [0]XMN [1]XMX [2]YMN [3]YMX [4]ZMN [5]ZMX, (-Inf, Inf) - meters
    str_cyln **cylns;					// Pointer to pointers of cylinders
-   str_cone **cones;					// Pointer to pointers of cones
+   struct str_cone ** cones;				// Pointer to pointers of cones
    str_cubd **cubds;					// Pointer to pointers of cuboids
    int str_ncb = 0;
 
@@ -174,7 +173,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
      cnfg_shdw);
 
    skr_setup(skr, sim_ns, skr_ny, skr_nx, skr_resy, skr_resx,
-     (char const**) skr_fls, sim_sza);
+     (char const **) skr_fls, sim_sza);
 
    src_stks[0] = 1.0;
    src_setup(src, src_fov, src_s, src_ref_o, src_rel_o, src_stks, src_tp);
@@ -201,17 +200,17 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    #endif // SHADOWING
 
    // Prepare output: **********************************************************
-   FILE *fpo;									// Pointer for output file
+   FILE * fpo;									// Pointer for output file
    char ofbn[STRMXLEN];								// Output base filename
    char sufx[STRMXLEN];								// Output filename suffix
 
    strncpy (ofbn, argv[1], strlen(argv[1]) - (sizeof (char) * 4));
    ofbn[strlen(argv[1]) - (sizeof (char) * 4)] = '\0';
 
-   struct accumulator_bmc *accm_df_f_mn = accm_b_alloc();			// Mean of the free diffuse component
-   struct accumulator_bmc *accm_dr_f_mn = accm_b_alloc();			// Mean of the free direct component
-   struct accumulator_bmc *accm_df_f_se = accm_b_alloc();			// Standard error of the free diffuse component
-   struct accumulator_bmc *accm_dr_f_se = accm_b_alloc();			// Standard error of the free direct component
+   struct accumulator_bmc * accm_df_f_mn = accm_b_alloc();			// Mean of the free diffuse component
+   struct accumulator_bmc * accm_dr_f_mn = accm_b_alloc();			// Mean of the free direct component
+   struct accumulator_bmc * accm_df_f_se = accm_b_alloc();			// Standard error of the free diffuse component
+   struct accumulator_bmc * accm_dr_f_se = accm_b_alloc();			// Standard error of the free direct component
 
    accm_setup(accm_df_f_mn, acc_geom, sim_ns + 2, iop_nw0, btt_nbr, acc_ext,
      acc_resy, acc_resx);
@@ -223,10 +222,10 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
      acc_resy, acc_resx);
 
    #ifdef SHADOWING
-   struct accumulator_bmc *accm_df_s_mn = accm_b_alloc();			// Mean of the shadowed diffuse component
-   struct accumulator_bmc *accm_dr_s_mn = accm_b_alloc();			// Mean of the shadowed direct component
-   struct accumulator_bmc *accm_df_s_se = accm_b_alloc();			// Standard error of the shadowed diffuse component
-   struct accumulator_bmc *accm_dr_s_se = accm_b_alloc();			// Standard error of the shadowed direct component
+   struct accumulator_bmc * accm_df_s_mn = accm_b_alloc();			// Mean of the shadowed diffuse component
+   struct accumulator_bmc * accm_dr_s_mn = accm_b_alloc();			// Mean of the shadowed direct component
+   struct accumulator_bmc * accm_df_s_se = accm_b_alloc();			// Standard error of the shadowed diffuse component
+   struct accumulator_bmc * accm_dr_s_se = accm_b_alloc();			// Standard error of the shadowed direct component
 
    accm_setup(accm_df_s_mn, acc_geom, sim_ns + 2, iop_nw0, btt_nbr, acc_ext,
      acc_resy, acc_resx);
@@ -255,7 +254,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    {
      bmc(sim_nr / SUBDV, sim_ns, iop_nw0, btt_nbr, sim_sza, sim_saa, sim_f0,
        iop_na, iop_nw, iop_c, iop_w0, str_ncl, str_ncn, str_ncb, src, scat,
-       btt, skr, (str_cyln const **) cylns, (str_cone const **) cones,
+       btt, skr, (str_cyln const **) cylns, (struct str_cone const **) cones,
        (str_cubd const **) cubds, accm_df_f, accm_df_s, accm_dr_f, accm_dr_s);
 
      sprintf(sufx, "_S%02d", cj);

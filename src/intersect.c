@@ -52,7 +52,7 @@
    int const NCL,
    str_cyln const ** cylns,
    int const NCN,
-   str_cone const ** cones,
+   struct str_cone const ** cones,
    int const NCB,
    str_cubd const ** cubds
  )

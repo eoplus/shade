@@ -490,86 +490,61 @@
 
 /* Function prototypes: *******************************************************/
 
- str_cyln* str_cyln_alloc (void);
+ str_cyln *
+ str_cyln_alloc
+ ( void );
 
- void str_cyln_free (str_cyln **cyln);
+ void
+ str_cyln_free
+ ( str_cyln ** cyln );
 
- void str_cyln_read (FILE *fi, long int *fpos, double *origin, double *axis,
-   double *alpha, double *radius, double *height, double *base_s, double *top_s,
-   int *closed);
+ void
+ str_cyln_read
+ (
+   FILE * fi,
+   long int * fpos,
+   double * origin,
+   double * axis,
+   double * alpha,
+   double * radius,
+   double * height,
+   double * base_s,
+   double * top_s,
+   int * closed
+ );
 
- void str_cyln_setup (str_cyln *cyln, double *origin, double const *axis,
-   double const alpha, double const radius, double const height,
-   double const *s_base, double const *s_top, int const *closed);
+ void
+ str_cyln_setup
+ (
+   str_cyln * cyln,
+   double * origin,
+   double const * axis,
+   double const alpha,
+   double const radius,
+   double const height,
+   double const * s_base,
+   double const * s_top,
+   int const * closed
+ );
 
  void
  str_cyln_fprintf 
  (
-   FILE *odv,
-   str_cyln const *cyln,
+   FILE * odv,
+   str_cyln const * cyln,
    int const indent
  );
 
- void str_cylns_printf (str_cyln const **cylns, size_t n);
+ void
+ str_cylns_printf
+ (
+   str_cyln const ** cylns, 
+   size_t n
+ );
 
-/*******************************************************************************
- Cone  (str_cone)
+/* Header for three-dimensional types: ****************************************/
 
-         
-         . Origin    
-                    | Cone axis
-                    |
-      _______       |_Height[0]
-     /       \      |             
-    /         \     |
-   /           \    |
-  /             \   |
- /_______________\  |_Height[1]
-  
-         |\                    
-         | \ Theta
-
- The function setup_cone describes the parameters that must be passed to 
- create a cone structure.
-
- Cone
- *
- * The structure below implements a positive (in)finite cone. The cone is 
- * described by the position of its vertex, the orientation of its axis, the 
- * positive heights, relative to vertex, along the axis and by the cosine of it
- * half angle (i.e., the angle between the axis and the surface.
- *
- * For example, an infinite positive cone has height[0] = 0 and 
- * height[1] = INFINITY. A truncated infinite cone has height[0] > 0 and a 
- * truncated finite cone has height[0] > 0 and height[1] < INFINITY.
- *
- * Two additional descriptions are necessary to caracterize (and describe) if 
- * the cone is open, semi-closed (one end) or closed (both ends).
- * 
- 
-
-*******************************************************************************/
-
- struct str_cone
- {
-   double vertex[3];	// Position of the vertex. [0] X, [1] Y, [2] Z
-   double paxis[2];	// Polar directions of the axis. [0] theta [1] phi
-   double caxis[3];     // Direction cosines of the axis. [0] X, [1] Y, [2] Z
-   double psi;          // Cone's half angle;
-   double mu;           // Cosine of the cone's half angle (angle between axis and side)
-   double mu_sq;        // Square of mu. 
-   double height[2];    // Height along the axis, from the vertex. [0] min, [1] max
-   double radius[2];    // Radius at the minimum height [0] and at the maximum height [1].
-   int    closed[2];    // Logical flag to indicate if its closed in the minimum height [0] and maximum height [1].
-   int    rotate_f;	// Logical: Should the ray direction be rotated?
- };
-
- typedef struct
- {
-   int a;
- } str_cone;
-
-/* Function prototypes: *******************************************************/
+ #include "structures_cone.h"
 
  #endif // STRUCTURES
 

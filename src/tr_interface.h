@@ -2,7 +2,7 @@
  #ifndef TR_INTERFACE
  #define TR_INTERFACE
 
- #include "config.h"
+ #include "config.h"	// CMPLX_T, CMPLX_P, CMPLX_F
 
  struct Fm
  {
@@ -71,9 +71,7 @@
    double const si,
    double CMPLX_T const *n_rat
  )
- {
-   return CMPLX_P(asin) ( sin(si) * n_rat[0] );
- }
+ { return CMPLX_P( asin )( sin(si) * n_rat[0] ); }
 
  #define SNELL_S(I_si, I_sr, I_n_rat) \
          (I_sr) = CMPLX_P( asin )( sin( (I_si) ) * (I_n_rat)[0] );

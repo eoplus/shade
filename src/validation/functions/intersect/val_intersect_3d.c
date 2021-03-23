@@ -13,8 +13,8 @@
  ../../../rotation.c ../../../intersect.c ../../../intersect_cylinder.c \
  ../../../intersect_cuboid.c ../../../intersect_cone.c ../../../accumulators.c \
  ../../../ray.c ../../../memory.c ../../../aux.c ../../../skyrad.c \
- ../../../sources.c -DSHADOWING -DSPATIALLY_RESOLVED -lm -lgsl -O3 \
- -o val_intersect_3d.o
+ ../../../sources.c ../../../structures_cone.c -DSHADOWING -DSPATIALLY_RESOLVED \
+ -lm -lgsl -O3 -o val_intersect_3d.o
 
  ./val_intersect_3d.o
 *******************************************************************************/
@@ -1038,6 +1038,296 @@
    &btt_bh, &s[0]);
    printf ("Result: %sCheck image in plots after R script%s\n\n", 
      ANSI_YELLOW, ANSI_RESET);
+
+  /* Tests for right-circular cone ********************************************/
+   printf("\n%s", ANSI_BOLD);
+   printf("Right-circular cones ==========================================\n%s",
+     ANSI_RESET);
+
+   struct str_cone **cones;
+   int str_ncn = 4;
+   cones = (struct str_cone **) calloc(str_ncn, sizeof(struct str_cone *));
+
+   fi = fopen("input_cone_r.txt", "r");
+   if(fi == NULL)
+   {
+     printf("\nERROR: Failed to open input file input_cone_r.txt\n\n");
+     exit(-1);
+   }
+   fpos = ftell(fi);
+
+   double psi;
+   double heights[2];
+   for (size_t i = 0; i < str_ncn; i++)
+   {
+     cones[i] = str_cone_alloc();
+     str_cone_read(fi, &fpos, origin, axis, &alpha, &psi, heights, base_s, 
+       top_s, closed);
+     str_cone_setup(cones[i], origin, axis, alpha, psi, heights, base_s, 
+       top_s, closed);
+   }
+
+   printf("\n");
+   str_cones_printf( (struct str_cone const **) cones, str_ncn);
+   printf("\n");
+   for (size_t i = 0; i < str_ncn; i++)
+   {
+     str_cone_fprintf(stdout, cones[i], 1);
+     printf("\n");
+   }
+
+  /* Right-circular cone 01 */
+   ci = 0;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 0.0 * RAD;
+   s[1] = 0.0 * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[1] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       src_pos[2] = -1.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_01_0top", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+   ci = 0;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 90.0 * RAD;
+   s[1] = 0.0  * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = -1.0;
+       src_pos[1] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[2] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         ray.a[0] = ray.a[1];
+         ray.a[1] = ray.a[2];
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_01_1side", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+  /* Right-circular cone 02 */
+   ci = 1;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 0.0 * RAD;
+   s[1] = 0.0 * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[1] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       src_pos[2] = -1.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_02_0top", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+   ci = 1;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 90.0 * RAD;
+   s[1] = 0.0  * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = -1.0;
+       src_pos[1] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[2] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         ray.a[0] = ray.a[1];
+         ray.a[1] = ray.a[2];
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_02_1side", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+  /* Right-circular cone 03 */
+   ci = 2;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 0.0 * RAD;
+   s[1] = 0.0 * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[1] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       src_pos[2] = -1.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_03_0top", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+   ci = 2;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 90.0 * RAD;
+   s[1] = 0.0  * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = -1.0;
+       src_pos[1] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[2] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         ray.a[0] = ray.a[1];
+         ray.a[1] = ray.a[2];
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_03_1side", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+  /* Right-circular cone 04 */
+   ci = 3;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 0.0 * RAD;
+   s[1] = 0.0 * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[1] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       src_pos[2] = -1.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_04_0top", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
+   ci = 3;
+   l = 2.0;
+   sclw = 1.0;
+   s[0] = 90.0 * RAD;
+   s[1] = 0.0  * RAD;
+   s[2] = 1.0;
+
+   accm_b_reset(accm);
+   for (size_t cx = 1; cx < (accm->nx - 1); cx++)
+   {
+     for (size_t cy = 1; cy < (accm->ny - 1); cy++)
+     {
+       src_pos[0] = -1.0;
+       src_pos[1] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
+       src_pos[2] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
+       ray_ini_s(src_pos, s, stks, &ray);
+       ray_mov(l, &ray);
+       res = !intrs_cone(ray.a, ray.b, ray.u, l, cones[ci]);
+       if ( res )
+       {
+         ray.a[0] = ray.a[1];
+         ray.a[1] = ray.a[2];
+         accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
+       }
+     }
+   }
+
+   accm_b_write_grid (accm, 1, "plots/cone_r_04_1side", "_out_spr", &iop_w0, 
+   &btt_bh, &s[0]);
+   printf ("Result: %sCheck image in plots after R script%s\n\n", 
+     ANSI_YELLOW, ANSI_RESET);
+
 
    printf("\nRunning R script val_intersect_3d.R:\n");
    system("Rscript val_intersect_3d.R");

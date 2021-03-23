@@ -40,7 +40,7 @@
  /_______________\  |_Height[1]
   
          |\                    
-         | \ Theta
+         | \ Psi
 
  The function setup_cone describes the parameters that must be passed to 
  create a cone structure.
@@ -94,10 +94,6 @@
  musq     - Square of the cosine of the cone's half-angle
             Range: (0,1), unitless
             Double;
- r        - Radius of the cone openings
-            Dimensions: [2]: [0]Base, [1]Top
-            Range: (0,Inf), meters
-            Array of double;
  alp      - The azimuthal angle in the cones's reference frame
             Range: [0,2PI], radians
             Double;
@@ -136,7 +132,6 @@
    str_ellp * top;
    double mu;
    double musq;
-   double r[2];
    double psi;
    double u[3];
    double s[2];

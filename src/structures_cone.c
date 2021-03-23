@@ -341,13 +341,10 @@
      cone->o[0], 
      cone->o[1], 
      cone->o[2]);
-   fprintf(odv, "%sPsi:  %6.2lfº\n", pre_1, cone->psi);
+   fprintf(odv, "%sPsi:      %6.2lfº\n", pre_1, cone->psi * DEG);
    fprintf(odv, "%sHeight:  % .2e, % .2e (m)\n", pre_1,
      cone->h[0],
      cone->h[1]);
-   fprintf(odv, "%sRadius:  % .2e, % .2e (m)\n", pre_1,
-     cone->r[0],
-     cone->r[1]);
    fprintf(odv, "%sAxis:      %6.2lfº, %6.2lfº (% .2e, % .2e, % .2e)\n", pre_1, 
      cone->s[0] * DEG, 
      cone->s[1] * DEG, 
@@ -388,11 +385,11 @@
  {
    printf("  Number of cones: %d\n", n);
    printf("                  type                     origin (m)       axis (º) "
-     " alpha (º)  Radius (m)  Height (m)  Closed      Rotate\n");
+     " alpha (º)  Psi (º)           Height (m)  Closed      Rotate\n");
    for(size_t i = 0; i < n; i++)
    {
      printf("  %02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf   "
-       "% .2e   % .2e    %d, %d  %d, %d, %d, %d\n",
+       "%6.2lf  % .2e,% .2e    %d, %d  %d, %d, %d, %d\n",
        i+1,
        (cones[i]->rotate_f[1] || cones[i]->rotate_f[2]) ? 
          "Oblique-Circular" : "  Right-Circular",
@@ -401,9 +398,10 @@
        cones[i]->o[2], 
        cones[i]->s[0] * DEG, 
        cones[i]->s[1] * DEG, 
-       cones[i]->alp  * DEG,
-       cones[i]->r,
-       cones[i]->h,
+       cones[i]->alp * DEG,
+       cones[i]->psi * DEG,
+       cones[i]->h[0],
+       cones[i]->h[1],
        cones[i]->closed_f[0],
        cones[i]->closed_f[1],
        cones[i]->rotate_f[0],

@@ -35,8 +35,8 @@
 
  where O is the vertex of the cone, N is the orientation axis of the cone, G is
  the generatrix direction relative to the axis, · is the dot (scalar) product
- and (G · N) * h gives the slant height. Any point on this cone's surface must 
- satisfy:
+ and (G · N) * h = cos(psi) * h gives the slant height. Any point on this cone's
+ surface must satisfy:
  (P - O) · N = ||P - O|| * cos(psi),			                     (3)
 
  where || || is the Euclidean norm and psi is the half-angle of the cone
@@ -45,7 +45,7 @@
  have:
  ((U * l + (A - O)) · N)^2 = ||U * l + (A - O)||^2 * mu^2,                   (4)
   
- where we are using "mu" to represent cos(theta). Expanding the left hand side
+ where we are using "mu" to represent cos(psi). Expanding the left-hand side
  we have:
  ((U * l + (A - O)) · N)^2 ->
  (l * U · N + (A - O) · N)^2 ->
@@ -59,7 +59,7 @@
  l^2 * mu^2 + 2 * l * (U · (A - O)) * mu^2 + ((A - O) · (A - O))^2 * mu^2,   (6)
  
  where since U is a unit vector, U · U = 1.0 and the term is removed. We can
- rearrange the expansions for the righ and left-hand side of Eq. 4 by combining
+ rearrange the expansions for the right and left-hand side of Eq. 4 by combining
  Eq. 5 and 6:
  l^2 * (U · N)^2 + 2 * l * (U · N) * ((A - O) · N) + ((A - O) · N)^2 = 
    l^2 * mu^2 + 2 * l * (U · (A - O)) * mu^2 + ((A - O) · (A - O))^2 * mu^2 ->
@@ -85,17 +85,17 @@
  l = - c / b.                                                                (9)
  
  If A == 0 and B == 0, the ray passes through the vertex. If A != 0, and if
- delta < 0, no intersection occours. If delta = 0, the ray intersects the cone
+ delta < 0, no intersection occurs. If delta = 0, the ray intersects the cone
  at one point and if delta > 0, the ray intersects the cone in two points (or
  many points if it lies on the surface of the cone). For a finite and optionally
- truncated cone, it is necessary to test it the point of intersecton is in the
+ truncated cone, it is necessary to test it the point of intersection is in the
  range of the cone height relative to vertex.
 
  If it is a hollow cone, those tests are sufficient. If it is a closed or 
  semi-closed cone, it is also necessary to check for intersection at the caps.
 
- If the axis of the cone is alligned with the axis of teh system (conversely,
- if the ray was cenetered and rotated to the cone reference frame, Eq. 7
+ If the axis of the cone is aligned with the axis of the system (conversely,
+ if the ray was centered and rotated to the cone reference frame), Eq. 7
  simplifies to:
  l^2 * (U[Z]^2 - mu^2) + 
    2 * l * (U[Z] * (A - O)[Z] - (U · (A - O)) * mu^2) +
@@ -107,7 +107,7 @@
  c = (A - O)[Z]^2 - ((A - O) · (A - O))^2 * mu^2.
 
  For an oblique-circular or oblique in only one side, the function has to be 
- more general and therefore a bite less efficient than the simple test for the 
+ more general and therefore a bit less efficient than the simple test for the 
  right-circular cone, and separate functions were written.
 
  In an arbitrary oblique cone, the base and top have arbitrary orientation
@@ -129,7 +129,7 @@
                   ____
                   Radius
 
- The gain in height is maximum at and azimuth of 0.0º and minimum (loss) at an
+ The gain in height is maximum at an azimuth of 0.0º and minimum (loss) at an
  azimuth of 180.0º. The same is true for the top cap. The change is 0 at 90.0º.
  The height change is +- r_x * sin(theta) so:
 
@@ -271,7 +271,7 @@
      } else {
        // If B is not zero, the root (= -C / B) gives the single point of 
        // intersection. If this root is positive and lower than the panthlength 
-       // l of the ray, intersection is possible. However, we whant only the 
+       // l of the ray, intersection is possible. However, we want only the 
        // positive part of the cone, so we can project the vertex centered 
        // vector of the intersection point into the cone axis and this 
        // projection has to be positive.  
@@ -334,14 +334,14 @@
    if ( cone->closed_f[0] )
    {
      double a_base[3] = {a[0], a[1], a[2] - cone->h[0]};
-     if ( intrs_ellp(a_base, u, intrs_l, cone->base) )
+     if ( intrs_ellp(a_base, u, l, cone->base) )
        return 1;
    }
 
    if ( cone->closed_f[1] )
    {
      double a_top[3] = {a[0], a[1], a[2] - cone->h[1]};
-     return intrs_ellp(a_top, u, intrs_l, cone->top);
+     return intrs_ellp(a_top, u, l, cone->top);
    }
 
    return 0;

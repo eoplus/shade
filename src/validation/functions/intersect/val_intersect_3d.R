@@ -127,14 +127,14 @@ for(i in 1:length(fls)) {
 }
 
 
-dir <- "plots"
-fls <- list.files(dir, "out_spr", full.names = F)
-fls <- grep("PONDER", fls, value = T)
-library(raster)
-i = 1
-  tmp1  <- as.matrix(read.table(file.path(dir, fls[i]), header = FALSE))
-  tmpr1 <- raster(tmp1[-c(1, nrow(tmp1)), -c(1, ncol(tmp1))])
-  extent(tmpr1) <- extent(-0.995, 0.995, -0.995, 0.995)
-  tmpr1 = flip(tmpr1, "y")
-plot(tmpr1)
+#dir <- "plots"
+#fls <- list.files(dir, "out_spr", full.names = F)
+#fls <- grep("PONDER", fls, value = T)
+#library(raster)
+#i = 1
+#  tmp1  <- as.matrix(read.table(file.path(dir, fls[i]), header = FALSE))
+#  tmpr1 <- raster(tmp1[-c(1, nrow(tmp1)), -c(1, ncol(tmp1))])
+#  extent(tmpr1) <- extent(-0.995, 0.995, -0.995, 0.995)
+#  tmpr1 = flip(tmpr1, "y")
+#plot(tmpr1)
 

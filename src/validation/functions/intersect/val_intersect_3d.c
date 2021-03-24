@@ -13,7 +13,8 @@
  ../../../rotation.c ../../../intersect.c ../../../intersect_cylinder.c \
  ../../../intersect_cuboid.c ../../../intersect_cone.c ../../../accumulators.c \
  ../../../ray.c ../../../memory.c ../../../aux.c ../../../skyrad.c \
- ../../../sources.c ../../../structures_cone.c -DSHADOWING -DSPATIALLY_RESOLVED \
+ ../../../sources.c ../../../structures_cone.c ../../../structures_cylinder.c \
+ ../../../structures_cuboid.c -DSHADOWING -DSPATIALLY_RESOLVED \
  -lm -lgsl -O3 -o val_intersect_3d.o
 
  ./val_intersect_3d.o
@@ -90,9 +91,9 @@
    printf("Cuboids =======================================================\n%s",
      ANSI_RESET);
 
-   str_cubd **cubds;
+   struct str_cubd ** cubds;
    int str_ncb = 4;
-   cubds = (str_cubd**) calloc(str_ncb, sizeof(str_cubd*));
+   cubds = (struct str_cubd **) calloc(str_ncb, sizeof(struct str_cubd *));
 
    fi = fopen("input_cuboid.txt", "r");
    if(fi == NULL)
@@ -111,7 +112,7 @@
        closed);   
    }
    printf("\n");
-   str_cubds_printf((str_cubd const **) cubds, str_ncb);
+   str_cubds_fprintf(stdout, (struct str_cubd const **) cubds, str_ncb, 1);
    printf("\n");
    for (size_t i = 0; i < str_ncb; i++)
    {
@@ -131,33 +132,25 @@
    printf("%d %d %lf %lf\n", accm->nx, accm->ny, accm->xbrks[1], accm->ybrks[1]);
 
    accm_b_reset(accm);
-//printf("GOT HERE 01\n");
    for (size_t cx = 1; cx < (accm->nx - 1); cx++)
    {
      for (size_t cy = 1; cy < (accm->ny - 1); cy++)
      {
-//printf("GOT HERE 02\n");
        src_pos[0] = (accm->xbrks[cx] + accm->xbrks[cx+1]) / 2.0;
        src_pos[1] = (accm->ybrks[cy] + accm->ybrks[cy+1]) / 2.0;
        src_pos[2] = -1.0;
-//printf("GOT HERE 03\n");
        ray_ini_s(src_pos, s, stks, &ray);
-//printf("GOT HERE 04\n");
        ray_mov(l, &ray);
-//printf("GOT HERE 05\n");
        res = !intrs_cubd(ray.a, ray.b, ray.u, cubds[ci]);
-//printf("GOT HERE 06\n");
        if ( res )
        {
          accm_b_add(accm, skr, ray.a, s, (double const ***) ray.stks, sclw, 1, 0);
-//printf("GOT HERE 07\n");
        }
      }
    }
 
    accm_b_write_grid (accm, 1, "plots/cuboid_01_0top", "_out_spr", &iop_w0, 
      &btt_bh, &s[0]);
-//printf("GOT HERE 08\n");
    printf ("Result: %sCheck image in plots after R script%s\n\n", 
      ANSI_YELLOW, ANSI_RESET);
 
@@ -388,9 +381,9 @@
    printf("Right-Cylinders ===============================================\n%s",
      ANSI_RESET);
 
-   str_cyln **cylns;
+   struct str_cyln **cylns;
    int str_ncl = 4;
-   cylns = (str_cyln**) calloc(str_ncl, sizeof(str_cyln*));
+   cylns = (struct str_cyln**) calloc(str_ncl, sizeof(struct str_cyln*));
 
    fi = fopen("input_cylinder_r.txt", "r");
    if(fi == NULL)
@@ -410,7 +403,7 @@
    }
 
    printf("\n");
-   str_cylns_printf( (str_cyln const **) cylns, str_ncl);
+   str_cylns_fprintf(stdout, (struct str_cyln const **) cylns, str_ncl, 1);
    printf("\n");
    for (size_t i = 0; i < str_ncl; i++)
    {
@@ -675,9 +668,6 @@
    printf("Oblique-Cylinders ==============================================\n%s",
      ANSI_RESET);
 
-//   str_cyln **cylns;
-//   int str_ncl = 4;
-//   cylns = (str_cyln**) calloc(str_ncl, sizeof(str_cyln*));
 
    fi = fopen("input_cylinder_o.txt", "r");
    if(fi == NULL)
@@ -689,14 +679,13 @@
 
    for (size_t i = 0; i < str_ncl; i++)
    {
-//     cylns[i] = str_cyln_alloc();
      str_cyln_read(fi, &fpos, origin, axis, &alpha, &radius, &height, base_s, 
        top_s, closed);
      str_cyln_setup(cylns[i], origin, axis, alpha, radius, height, base_s, 
        top_s, closed);   
    }
    printf("\n");
-   str_cylns_printf( (str_cyln const **) cylns, str_ncl);
+   str_cylns_fprintf(stdout, (struct str_cyln const **) cylns, str_ncl, 1);
    printf("\n");
    for (size_t i = 0; i < str_ncl; i++)
    {
@@ -1068,7 +1057,7 @@
    }
 
    printf("\n");
-   str_cones_printf( (struct str_cone const **) cones, str_ncn);
+   str_cones_fprintf(stdout, (struct str_cone const **) cones, str_ncn, 1);
    printf("\n");
    for (size_t i = 0; i < str_ncn; i++)
    {

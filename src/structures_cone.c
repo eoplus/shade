@@ -286,7 +286,7 @@
    {
      origin[i] += cone->u[i] * height[0];
    }
-   open_r[0] = sin(psi) * height[0];
+   open_r[0] = tan(psi) * height[0];
    open_r[1] = open_r[0];
    open_r[0] /= cos(s_base[0]);
    cone->dhmx[0] = -sin(s_base[0]);
@@ -298,7 +298,7 @@
    {
      origin[i] += cone->u[i] * (height[1] - height[0]);
    }
-   open_r[0] = sin(psi) * height[1];
+   open_r[0] = tan(psi) * height[1];
    open_r[1] = open_r[0];
    open_r[0] /= cos(s_top[0]);
    cone->dhmx[1] = -sin(s_top[0]);

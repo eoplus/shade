@@ -282,7 +282,7 @@
 
        The steps are presented in detail in the airtight_alex.c source file.
        */
-       check_interface_up_airtight_alex(&ray, INFINITY, cylns[0], src, muc, 
+       check_interface_up_airtight_alex(&ray, l, cylns[0], src, muc, 
          n_rat_wa, iop_na, iop_nw, Fmat, btt_nbr, iop_nw0, ref_o_1, ref_o_2,
          (double const **) M_open, random);
        #endif // AIRTIGHT_ALEX
@@ -564,7 +564,7 @@
            For Alex's airtight system, check if in the path up it reached 
            air-water interface on the tip.
            */
-           check_interface_up_airtight_alex(&ray, INFINITY, cylns[0], src, muc, 
+           check_interface_up_airtight_alex(&ray, l, cylns[0], src, muc, 
              n_rat_wa, iop_na, iop_nw, Fmat, btt_nbr, iop_nw0, ref_o_1,
              ref_o_2, (double const **) M_open, random);
            #endif // AIRTIGHT_ALEX

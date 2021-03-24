@@ -133,8 +133,8 @@
  azimuth of 180.0º. The same is true for the top cap. The change is 0 at 90.0º.
  The height change is +- r_x * sin(theta) so:
 
- DeltaH = r_x * -sin(theta) * P[x] / r_x ->
- DeltaH = -sin(theta) * P[x]                                                (11)
+ DeltaH = r_x * tan(theta) * P[x] / r_x ->
+ DeltaH = tan(theta) * P[x]                                                (11)
 
  where r_x is the major axis (here equal to radius in X) of the ellipse formed 
  by the opening, theta is the angle of the cap's normal relative to the cone

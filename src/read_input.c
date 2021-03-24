@@ -675,8 +675,8 @@
    {
      printf("\nERROR: str_def (define structures flag) == 0 but code was "
        "compiled with special airtight definition that requires a structure. "
-       "Set str_def to 1 and add a structure or uncomment the definition ALEX "
-       "in 'config.h' and recompile.\n");
+       "Set str_def to 1 and add a cylinder or comment out the definition "
+       "AIRTIGHT_ALEX in 'config.h' and recompile.\n");
      exit(-1);
    }
    #endif // AIRTIGHT_ALEX
@@ -890,9 +890,20 @@
    int ci;
 
    // Terminal printout:
-   fprintf(fo, "\n  Backward Monte Carlo radiative transfer code\n"); 
+   fprintf(fo, "\n  Backward Monte Carlo radiative transfer code\n");
    fprintf(fo, "  Version: %s\n", version);
    fprintf(fo, "  Author: Alexandre Castagna\n\n");
+
+   #ifdef SHADOWING
+   fprintf(fo, "  Tracking: Shadow\n");
+   #endif // SHADOWING
+   #ifdef AIRTIGHT_ALEX
+   fprintf(fo, "  Tracking: Airtight foreoptics\n");
+   #endif // AIRTIGHT_ALEX
+   #ifdef SPATIALLY_RESOLVED
+   fprintf(fo, "  Tracking: Spatially resolved integration\n");
+   #endif // SPATIALLY_RESOLVED
+
 
    fprintf(fo, "\n  Summary: ***************************************************\n");
    fprintf(fo, "\n");
@@ -1023,13 +1034,6 @@
    }
    #endif // SHADOWING
 
-   #ifdef AIRTIGHT_ALEX
-   fprintf(fo, "\nCAUTION! Code compiled with ALEX defined in config.h - this results"
-          "in a specific circunstances for Alex's system and is not general, "
-          "even without shadowing! Comment out ALEX in config.h for generic "
-          "simulation.\n");
-   #endif // AIRTIGHT_ALEX
-
    fprintf(fo, "\n  Detailed parameters: ***************************************\n");
    fprintf(fo, "\n");
    src_fprintf(fo, src, 2);
@@ -1046,9 +1050,9 @@
      {
        str_cyln_fprintf(fo, (struct str_cyln const *) cylns[i], 2);
        fprintf(fo, "      Base opening:\n");
-       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->base, 4);
+       str_ellp_fprintf(fo, (str_ellp const *) cylns[i]->base, 4);
        fprintf(fo, "      Top opening:\n");
-       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->top, 4);
+       str_ellp_fprintf(fo, (str_ellp const *) cylns[i]->top, 4);
        fprintf(fo, "\n");
      }
    }

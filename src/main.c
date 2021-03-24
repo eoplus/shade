@@ -376,16 +376,28 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    accm_b_free( &accm_df_s_mn );
    accm_b_free( &accm_df_s_se );
    #endif // SHADOWING
-   for (size_t i = 0; i < str_ncl; i++)
-     str_cyln_free( &cylns[i] );
-   free( cylns );   
-   for (size_t i = 0; i < str_ncn; i++)
-     str_cone_free( &cones[i] );
-   free( cones );
-   for (size_t i = 0; i < str_ncb; i++)
-     str_cubd_free( &cubds[i] );
-   free( cubds );   
-
+printf("GOT HERE 04\n");
+   if ( cylns )
+   {
+     for (size_t i = 0; i < str_ncl; i++)
+       str_cyln_free( &cylns[i] );
+     free( cylns );
+   }
+printf("GOT HERE 05\n");
+   if ( cones )
+   {
+     for (size_t i = 0; i < str_ncn; i++)
+       str_cone_free( &cones[i] );
+     free( cones );
+   }
+printf("GOT HERE 06\n");
+   if ( cubds )
+   {
+     for (size_t i = 0; i < str_ncb; i++)
+       str_cubd_free( &cubds[i] );
+     free( cubds );   
+   }
+printf("GOT HERE 07\n");
    return 0;
  }
 

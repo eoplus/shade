@@ -1045,6 +1045,10 @@
      for (size_t i = 0; i < str_ncl; i++)
      {
        str_cyln_fprintf(fo, (struct str_cyln const *) cylns[i], 2);
+       fprintf(fo, "      Base opening:\n");
+       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->base, 4);
+       fprintf(fo, "      Top opening:\n");
+       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->top, 4);
        fprintf(fo, "\n");
      }
    }
@@ -1053,6 +1057,10 @@
      for (size_t i = 0; i < str_ncn; i++)
      {
        str_cone_fprintf(fo, (struct str_cone const *) cones[i], 2);
+       fprintf(fo, "      Base opening:\n");
+       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->base, 4);
+       fprintf(fo, "      Top opening:\n");
+       str_ellp_fprintf(fo, (str_ellp const *) cones[i]->top, 4);
        fprintf(fo, "\n");
      }
    }

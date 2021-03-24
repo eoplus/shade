@@ -1,0 +1,488 @@
+
+  Number of cylinders: 4
+                  type                     origin (m)       axis (º)  alpha (º)  Radius (m)  Height (m)  Closed      Rotate
+  01    Right-Circular   0.00e+00, 0.00e+00,-9.00e-02    0.00,  0.00       0.00    1.25e-02    1.10e-01    1, 0  0, 0, 0, 0
+  02    Right-Circular   0.00e+00, 0.00e+00,-7.53e-02   30.00,  0.00       0.00    1.25e-02    1.10e-01    1, 0  1, 0, 0, 0
+  03  Oblique-Circular   0.00e+00, 0.00e+00,-9.00e-02    0.00,  0.00       0.00    1.25e-02    1.10e-01    1, 0  0, 0, 1, 1
+  04  Oblique-Circular   0.00e+00, 0.00e+00,-7.53e-02   30.00,  0.00       0.00    1.25e-02    1.10e-01    1, 0  1, 0, 1, 1
+
+
+
+[1m  Right-circular cylinder (aligned) =============================
+
+[0m  Cylinder parameters:
+    Origin:    0.00e+00,  0.00e+00, -9.00e-02 (m)
+    Radius:   1.25e-02 (m)
+    Height:   1.10e-01 (m)
+    Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Base axis:   0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Top axis:    0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Alpha:       0.00º
+    Rotate:    0, 0, 0, 0
+    Closed:    1, 0
+    Rotation matrix:
+      Dimension: 3, 3
+      Data:  1.000e+00  0.000e+00  0.000e+00 
+             0.000e+00  1.000e+00  0.000e+00 
+             0.000e+00  0.000e+00  1.000e+00 
+    Base opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00, -9.00e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+    Top opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00,  2.00e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+
+  Source parameters:
+    Type:     Radiance sensor (as source)
+    FOV:      7.50º
+    Origin:   0.00e+00,  0.00e+00,  1.05e-01 (m)
+    Axis:      180.00º, 180.00º ( 0.00e+00,  0.00e+00, -1.00e+00)
+    Stokes:   1.00e+00 (W m^-2 sr^-1)
+    Rotate:   1
+      Rotation matrix:
+      Dimension: 3, 3
+      Data: -1.000e+00  0.000e+00  0.000e+00 
+             0.000e+00 -1.000e+00  0.000e+00 
+             0.000e+00  0.000e+00 -1.000e+00 
+
+ Emission at 0.0º, 0.0º --------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Position:    0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   180.00º,   0.00º ( 0.00e+00,  0.00e+00, -1.00e+00)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      0.00e+00,  0.00e+00,  2.00e-02 (m)
+      Position:    0.00e+00,  0.00e+00,  2.50e-02 (m)
+      Pathlength:  5.00e-03 (m)
+      Direction:     0.00º, 183.60º ( 0.00e+00,  0.00e+00,  1.00e+00)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.111e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+ Emission at random ------------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Position:    0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   177.52º, 336.42º ( 3.97e-02, -1.73e-02, -9.99e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      3.38e-03, -1.48e-03,  2.00e-02 (m)
+      Position:    3.58e-03, -1.56e-03,  2.49e-02 (m)
+      Pathlength:  4.92e-03 (m)
+      Direction:     2.48º, 336.42º ( 3.97e-02, -1.73e-02,  9.99e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.111e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+
+[1m  Right-circular cylinder (inclined) ============================
+
+[0m  Cylinder parameters:
+    Origin:    0.00e+00,  0.00e+00, -7.53e-02 (m)
+    Radius:   1.25e-02 (m)
+    Height:   1.10e-01 (m)
+    Axis:       30.00º,   0.00º ( 5.00e-01,  0.00e+00,  8.66e-01)
+    Base axis:   0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Top axis:    0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Alpha:       0.00º
+    Rotate:    1, 0, 0, 0
+    Closed:    1, 0
+    Rotation matrix:
+      Dimension: 3, 3
+      Data:  8.660e-01  0.000e+00 -5.000e-01 
+            -0.000e+00  1.000e+00  0.000e+00 
+             5.000e-01  0.000e+00  8.660e-01 
+    Base opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00, -7.53e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+    Top opening:
+      Ellipse parameters:
+        Origin:    5.50e-02,  0.00e+00,  2.00e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+
+  Source parameters:
+    Type:     Radiance sensor (as source)
+    FOV:      7.50º
+    Origin:   9.75e-02, -1.19e-17,  9.36e-02 (m)
+    Axis:      150.00º, 180.00º (-5.00e-01,  6.12e-17, -8.66e-01)
+    Stokes:   1.00e+00 (W m^-2 sr^-1)
+    Rotate:   1
+      Rotation matrix:
+      Dimension: 3, 3
+      Data:  8.660e-01 -1.225e-16 -5.000e-01 
+            -1.061e-16 -1.000e+00  6.123e-17 
+            -5.000e-01  0.000e+00 -8.660e-01 
+
+ Emission at 0.0º, 0.0º --------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Position:    9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   150.00º, 180.00º (-5.00e-01,  6.12e-17, -8.66e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      5.50e-02, -6.74e-18,  2.00e-02 (m)
+      Position:    5.75e-02, -6.43e-18,  2.43e-02 (m)
+      Pathlength:  5.00e-03 (m)
+      Direction:    30.00º,   0.00º ( 5.00e-01,  6.12e-17,  8.66e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.111e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+ Emission at random ------------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Position:    9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   151.86º, 174.31º (-4.69e-01,  4.68e-02, -8.82e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      5.75e-02,  3.98e-03,  1.85e-02 (m)
+      Position:    6.01e-02,  4.21e-03,  2.26e-02 (m)
+      Pathlength:  4.86e-03 (m)
+      Direction:    32.08º,   5.05º ( 5.29e-01,  4.68e-02,  8.47e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.111e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+
+[1m  Oblique-circular cylinder (aligned) ===========================
+
+[0m  Cylinder parameters:
+    Origin:    0.00e+00,  0.00e+00, -9.00e-02 (m)
+    Radius:   1.25e-02 (m)
+    Height:   1.10e-01 (m)
+    Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Base axis:   0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Top axis:   30.00º, 180.00º (-5.00e-01,  6.12e-17,  8.66e-01)
+    Alpha:       0.00º
+    Rotate:    0, 0, 1, 1
+    Closed:    1, 0
+    Rotation matrix:
+      Dimension: 3, 3
+      Data:  1.000e+00  0.000e+00  0.000e+00 
+             0.000e+00  1.000e+00  0.000e+00 
+             0.000e+00  0.000e+00  1.000e+00 
+    Base opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00, -9.00e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+    Top opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00,  2.00e-02 (m)
+        Radius:   1.44e-02,  1.25e-02  (m)
+        Axis:       30.00º, 180.00º (-5.00e-01,  6.12e-17,  8.66e-01)
+        Alpha:       0.00º
+        Rotate:    1
+        Rotation matrix:
+          Dimension: 3, 3
+          Data: -8.660e-01  1.061e-16 -5.000e-01 
+                -1.225e-16 -1.000e+00  0.000e+00 
+                -5.000e-01  6.123e-17  8.660e-01 
+
+  Source parameters:
+    Type:     Radiance sensor (as source)
+    FOV:      7.50º
+    Origin:   0.00e+00,  0.00e+00,  1.05e-01 (m)
+    Axis:      180.00º, 180.00º ( 0.00e+00,  0.00e+00, -1.00e+00)
+    Stokes:   1.00e+00 (W m^-2 sr^-1)
+    Rotate:   1
+      Rotation matrix:
+      Dimension: 3, 3
+      Data: -1.000e+00  0.000e+00  0.000e+00 
+             0.000e+00 -1.000e+00  0.000e+00 
+             0.000e+00  0.000e+00 -1.000e+00 
+
+ Emission at 0.0º, 0.0º --------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Position:    0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   180.00º,   0.00º ( 0.00e+00,  0.00e+00, -1.00e+00)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      6.94e-18, -7.70e-34,  2.00e-02 (m)
+      Position:   -4.33e-03,  5.30e-19,  2.25e-02 (m)
+      Pathlength:  5.00e-03 (m)
+      Direction:    60.00º, 180.00º (-8.66e-01,  1.06e-16,  5.00e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.220e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+ Emission at random ------------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Position:    0.00e+00,  0.00e+00,  1.05e-01 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   176.70º, 101.13º (-1.11e-02,  5.65e-02, -9.98e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:     -9.52e-04,  4.84e-03,  1.95e-02 (m)
+      Position:   -4.70e-03,  5.08e-03,  2.16e-02 (m)
+      Pathlength:  4.31e-03 (m)
+      Direction:    60.69º, 176.29º (-8.70e-01,  5.65e-02,  4.90e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.233e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+
+[1m  Oblique-circular cylinder (inclined) ==========================
+
+[0m  Cylinder parameters:
+    Origin:    0.00e+00,  0.00e+00, -7.53e-02 (m)
+    Radius:   1.25e-02 (m)
+    Height:   1.10e-01 (m)
+    Axis:       30.00º,   0.00º ( 5.00e-01,  0.00e+00,  8.66e-01)
+    Base axis:   0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+    Top axis:   30.00º, 180.00º (-5.00e-01,  6.12e-17,  8.66e-01)
+    Alpha:       0.00º
+    Rotate:    1, 0, 1, 1
+    Closed:    1, 0
+    Rotation matrix:
+      Dimension: 3, 3
+      Data:  8.660e-01  0.000e+00 -5.000e-01 
+            -0.000e+00  1.000e+00  0.000e+00 
+             5.000e-01  0.000e+00  8.660e-01 
+    Base opening:
+      Ellipse parameters:
+        Origin:    0.00e+00,  0.00e+00, -7.53e-02 (m)
+        Radius:   1.25e-02,  1.25e-02  (m)
+        Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+        Alpha:       0.00º
+        Rotate:    0
+        Rotation matrix:
+          Dimension: 3, 3
+          Data:  1.000e+00  0.000e+00  0.000e+00 
+                 0.000e+00  1.000e+00  0.000e+00 
+                 0.000e+00  0.000e+00  1.000e+00 
+    Top opening:
+      Ellipse parameters:
+        Origin:    5.50e-02,  0.00e+00,  2.00e-02 (m)
+        Radius:   1.44e-02,  1.25e-02  (m)
+        Axis:       30.00º, 180.00º (-5.00e-01,  6.12e-17,  8.66e-01)
+        Alpha:       0.00º
+        Rotate:    1
+        Rotation matrix:
+          Dimension: 3, 3
+          Data: -8.660e-01  1.061e-16 -5.000e-01 
+                -1.225e-16 -1.000e+00  0.000e+00 
+                -5.000e-01  6.123e-17  8.660e-01 
+
+  Source parameters:
+    Type:     Radiance sensor (as source)
+    FOV:      7.50º
+    Origin:   9.75e-02, -1.19e-17,  9.36e-02 (m)
+    Axis:      150.00º, 180.00º (-5.00e-01,  6.12e-17, -8.66e-01)
+    Stokes:   1.00e+00 (W m^-2 sr^-1)
+    Rotate:   1
+      Rotation matrix:
+      Dimension: 3, 3
+      Data:  8.660e-01 -1.225e-16 -5.000e-01 
+            -1.061e-16 -1.000e+00  6.123e-17 
+            -5.000e-01  0.000e+00 -8.660e-01 
+
+ Emission at 0.0º, 0.0º --------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Position:    9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   150.00º, 180.00º (-5.00e-01,  6.12e-17, -8.66e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      5.50e-02, -6.74e-18,  2.00e-02 (m)
+      Position:    5.25e-02, -5.90e-18,  2.43e-02 (m)
+      Pathlength:  5.00e-03 (m)
+      Direction:    30.00º, 180.00º (-5.00e-01,  1.67e-16,  8.66e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.220e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+ Emission at random ------------------------------------------
+
+  As emitted:
+    Ray parameters:
+      Origin:      9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Position:    9.75e-02, -1.19e-17,  9.36e-02 (m)
+      Pathlength:  0.00e+00 (m)
+      Direction:   152.54º, 176.13º (-4.60e-01,  3.11e-02, -8.87e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  1.000e+00
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+
+
+  Reflected:
+    Ray parameters:
+      Origin:      5.93e-02,  2.58e-03,  2.00e-02 (m)
+      Position:    5.61e-02,  2.80e-03,  2.62e-02 (m)
+      Pathlength:  7.04e-03 (m)
+      Direction:    27.46º, 176.13º (-4.60e-01,  3.11e-02,  8.87e-01)
+      Active:  1
+      Virtual: 1
+      Stokes (only first vector is shown):
+      | I |  2.184e-02
+      | Q |  0.000e+00
+      | U |  0.000e+00
+      | V |  0.000e+00
+

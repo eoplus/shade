@@ -279,7 +279,7 @@
    double open_r[2];
    open_r[0] = radius / cos(s_base[0]);
    open_r[1] = radius;
-   cyln->dhmx[0] = -sin(s_base[0]);
+   cyln->dhmx[0] = tan(s_base[0]); //-sin(s_base[0]);
    str_ellp_setup(cyln->base, origin, s_base, 0.0, open_r);
    cyln->rotate_f[1] = (s_base[0] < TOLERANCE)? 0 : 1;
    for (size_t i = 0; i < 3; i++)
@@ -287,7 +287,7 @@
      origin[i] += cyln->u[i] * height;
    }
    open_r[0] = radius / cos(s_top[0]);
-   cyln->dhmx[1] = -sin(s_top[0]);
+   cyln->dhmx[1] = tan(s_top[0]); // -sin(s_top[0]);
    str_ellp_setup(cyln->top, origin, s_top, 0.0, open_r);
    cyln->rotate_f[2] = (s_top[0] < TOLERANCE)? 0 : 1;
    cyln->rotate_f[3] = (ABS(s_base[0] - s_top[0]) < TOLERANCE)? 0 : 1;
@@ -374,7 +374,7 @@
    for (size_t i = 0; i < indent; i++)
      strcat(pre_0, "  ");
 
-   fprintf(odv, "%sNumber of cylinders: %d\n", n);
+   fprintf(odv, "%sNumber of cylinders: %d\n", pre_0, n);
    fprintf(odv, "%s                type                     origin (m)       "
      "axis (º)  alpha (º)  Radius (m)  Height (m)  Closed      Rotate\n", 
      pre_0);

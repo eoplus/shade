@@ -34,6 +34,21 @@
 
  check_interface_up_airtight_alex
 
+ The pseudo-code is:
+ (1) Center ray's initial point to the cylinder's origin and if necessary, 
+     rotate point and direction to its reference frame;
+ (2) Center ray's initial position to cylinder's top origin and if necessary, 
+     rotate point and direction to its reference frame;
+ (3) Get intersection point on the supporting plane of the opening (cylinder's
+     top);
+ (4) Calculate Snell refraction and Fresnel transmittance;
+ (5) If incidence angle lower than the critical angle for total internal
+     reflection, update the Stokes vector of the reflected ray;
+ (6) Back-center (and back-rotate if necessary) from the cylinder's top
+     reference frame to the cylinder's reference frame;
+ (7) Back-center (and back-rotate if necessary) from the cylinder's reference 
+     frame to the system's reference frame;
+
  INPUT:
  ray      - Light ray parameters
  l        - Pathlength to transverse (= Inf since is in air and air RTE is not 
@@ -166,21 +181,44 @@
        }
 
        // Update ray's position:
-       a_rot_2[0] = intrs_p[0];
-       a_rot_2[1] = intrs_p[1];
-       a_rot_2[2] = intrs_p[2];
-       b_rot_2[0] = a_rot_2[0] + u_rot_2[0] * (l - intrs_l);
-       b_rot_2[1] = a_rot_2[1] + u_rot_2[1] * (l - intrs_l);
-       b_rot_2[2] = a_rot_2[2] + u_rot_2[2] * (l - intrs_l);
+       for (size_t i = 0; i < 3; i++)
+       {
+         a_rot_2[i] = intrs_p[i];
+         b_rot_2[i] = a_rot_2[i] + u_rot_2[i] * (l - intrs_l);
+       }
 
        // Rotate back:
-       ROT_VEC(a_rot_1, a_rot_2, ref_o_2, M_open, c_vec);
-       ROT_VEC(b_rot_1, b_rot_2, ref_o_2, M_open, c_vec);
-       ROT_VEC_UNIT(u_rot_1, u_rot_2, M_open);
+       if ( cyln->rotate_f[2] )
+       {
+         ROT_VEC(a_rot_1, a_rot_2, ref_o_2, M_open, c_vec);
+         ROT_VEC(b_rot_1, b_rot_2, ref_o_2, M_open, c_vec);
+         ROT_VEC_UNIT(u_rot_1, u_rot_2, M_open);
+       }
+       else 
+       {
+         for (size_t ci = 0; ci < 3; ci++)
+         {
+           a_rot_1[ci] = a_rot_2[ci] - ref_o_2[ci];
+           b_rot_1[ci] = b_rot_2[ci] - ref_o_2[ci];
+           u_rot_1[ci] = u_rot_2[ci];
+         }
+       }
 
-       ROT_VEC(ray->a, a_rot_1, ref_o_1, src->M, c_vec);
-       ROT_VEC(ray->b, b_rot_1, ref_o_1, src->M, c_vec);
-       ROT_VEC_UNIT(ray->u, u_rot_1, src->M);
+       if ( cyln->rotate_f[0] )
+       {
+         ROT_VEC(ray->a, a_rot_1, ref_o_1, src->M, c_vec);
+         ROT_VEC(ray->b, b_rot_1, ref_o_1, src->M, c_vec);
+         ROT_VEC_UNIT(ray->u, u_rot_1, src->M);
+       }
+       else 
+       {
+         for (size_t ci = 0; ci < 3; ci++)
+         {
+           ray->a[ci] = a_rot_1[ci] - ref_o_1[ci];
+           ray->b[ci] = b_rot_1[ci] - ref_o_1[ci];
+           ray->u[ci] = u_rot_1[ci];
+         }
+       }
 
        COS_TO_SPH_UNIT(ray->s, ray->u, random);
      }
@@ -260,9 +298,9 @@
    struct str_cyln const * cyln,
    struct source const * src,
    double const muc, 
-   double const *n_rat_aw,
-   double const iop_na,
-   double const iop_nw,
+   double CMPLX_T const *n_rat_aw,
+   double CMPLX_T const iop_na,
+   double CMPLX_T const iop_nw,
    struct Fm Fmat,
    int const btt_nbr,
    int const iop_nw0,
@@ -272,36 +310,60 @@
    gsl_rng * random
  )
  {
-   double a_rot_1[3], a_rot_2[3];
-   double b_rot_1[3], b_rot_2[3];
-   double u_rot[3], v_rot[3];
-   double c_vec[3], u_refrac[3], s_refrac[3];
-   double s_sin, sin_t;
+   double a_rot_1[3], a_rot_2[3], b_rot_1[3];
+   double u_rot_1[3], u_rot_2[3];
+   double c_vec[3], s_refrac[3];
+   double CMPLX_T u_refrac[3];
+   double CMPLX_T s_sin;
+   double sin_t;
    int intrs_f;
    double intrs_l;
    double intrs_p[3];
    FRESNEL_MC_VAR
 
-   if ( cyln->rotate_f[2] )
+   if ( cyln->rotate_f[0] )
    {
-     ROT_VEC(u_rot, ray->a, cyln->o, cyln->M, c_vec); // NOW ALSO ROTATE FROM SYSTEM TO CYLINDER FIRST!
-     u_rot[2] -= cyln->h;
-     ROT_VEC_UNIT(v_rot, u_rot, cyln->top->M);
-     ROT_VEC_UNIT(u_rot, ray->u, cyln->top->M);
+     ROT_VEC(a_rot_1, ray->a, cyln->o, cyln->M, c_vec);
+     ROT_VEC_UNIT(u_rot_1, ray->u, cyln->M);
    }
    else
    {
-     for (size_t ci = 0; ci < 3; ci++)
-       u_rot[ci] = ray->u[ci];
-     ROT_VEC(v_rot, ray->a, cyln->top->o, cyln->M, c_vec);
+     for (size_t i = 0; i < 3; i++)
+     {
+       a_rot_1[i] = ray->a[i] - cyln->o[i];
+       u_rot_1[i] = ray->u[i];
+     }
    }
 
-   intrs_plane(&intrs_f, &intrs_l, intrs_p, v_rot, u_rot, INFINITY);
-   intrs_f = ( (intrs_p[0] * intrs_p[0]) * cyln->top->rsq_inv[0] + 
-               (intrs_p[1] * intrs_p[1]) * cyln->top->rsq_inv[1] - 1.0 ) < 
-             TOLERANCE;
-   SNELL_U(u_rot[2], u_refrac[2], n_rat_aw, s_sin);
-   FRESNEL_MC_U(u_rot[2], u_refrac[2], iop_na, iop_nw, Fmat);
+   /*
+   Center to cylinder top and rotate if necessary
+   */
+   a_rot_1[2] -= cyln->h;
+   if ( cyln->rotate_f[2] )
+   {
+     ROT_VEC_UNIT(a_rot_2, a_rot_1, cyln->top->M);
+     ROT_VEC_UNIT(u_rot_2, u_rot_1, cyln->top->M);
+   }
+   else
+   {
+     for (size_t i = 0; i < 3; i++)
+     {
+       a_rot_2[i] = a_rot_1[i];
+       u_rot_2[i] = u_rot_1[i];
+     }
+   }
+
+   // Check intersection with plane and the ellipse
+   intrs_plane(&intrs_f, &intrs_l, intrs_p, a_rot_2, u_rot_2, l);
+   if ( intrs_f )
+   {
+     intrs_f = ( (intrs_p[0] * intrs_p[0]) * cyln->top->rsq_inv[0] + 
+                 (intrs_p[1] * intrs_p[1]) * cyln->top->rsq_inv[1] - 1.0 ) < 
+               TOLERANCE;
+   }
+
+   SNELL_U(u_rot_2[2], u_refrac[2], n_rat_aw, s_sin);
+   FRESNEL_MC_U(u_rot_2[2], u_refrac[2], iop_na, iop_nw, Fmat);
 
    for (size_t cw = 0; cw < iop_nw0; cw++)
    {
@@ -315,23 +377,38 @@
        #endif // VECTOR_RT
      }
    }
+   COS_TO_SPH_UNIT(s_refrac, u_rot_2, random);
    s_refrac[0] = CMPLX_F(creal)(CMPLX_P(acos)(u_refrac[2]));
-   s_refrac[1] = ray->s[1];
-   SPH_TO_COS_UNIT(u_rot, s_refrac, sin_t);
+   SPH_TO_COS_UNIT(u_rot_2, s_refrac, sin_t);
 
    if ( cyln->rotate_f[2] )
    {
-     ROT_VEC(v_rot, intrs_p, ref_o_2, M_open, c_vec);
-     ROT_VEC(ray->b, v_rot, ref_o_1, src->M, c_vec);
-     ROT_VEC_UNIT(v_rot, u_rot, M_open);
-     ROT_VEC_UNIT(ray->u, v_rot, src->M);
+     ROT_VEC(b_rot_1, intrs_p, ref_o_2, M_open, c_vec);
+     ROT_VEC_UNIT(u_rot_1, u_rot_2, M_open);
    }
    else 
    {
      for (size_t ci = 0; ci < 3; ci++)
-       ray->b[ci] = intrs_p[ci] + cyln->top->o[ci];
-     ROT_VEC_UNIT(ray->u, u_rot, src->M);
+     {
+       b_rot_1[ci] = intrs_p[ci] - ref_o_2[ci];
+       u_rot_1[ci] = u_rot_2[ci];
+     }
    }
+
+   if ( cyln->rotate_f[0] )
+   {
+     ROT_VEC(ray->b, b_rot_1, ref_o_1, src->M, c_vec);
+     ROT_VEC_UNIT(ray->u, u_rot_1, src->M);
+   }
+   else 
+   {
+     for (size_t ci = 0; ci < 3; ci++)
+     {
+       ray->b[ci] = b_rot_1[ci] - ref_o_1[ci];
+       ray->u[ci] = u_rot_1[ci];
+     }
+   }
+
    COS_TO_SPH_UNIT(ray->s, ray->u, random);
 
    if ( !intrs_f )

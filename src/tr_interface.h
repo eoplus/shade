@@ -183,61 +183,6 @@
 *******************************************************************************/
 
  static inline __attribute__((always_inline)) void
- fresnel
- ( 
-   double const mui,
-   double CMPLX_T const mur,
-   double CMPLX_T const ni,
-   double CMPLX_T const nr,
-   double CMPLX_T const *n_rat,
-   struct Fm *Fmat
- )
- {
-   double CMPLX_T const nimi = ni * mui;
-   double CMPLX_T const nimr = ni * mur;
-   double CMPLX_T const nrmi = nr * mui;
-   double CMPLX_T const nrmr = nr * mur;
-
-   Fmat->rp = ( nrmi - nimr ) / ( nrmi + nimr );
-   Fmat->tp = ( 2.0 * nimi  ) / ( nrmi + nimr );
-   Fmat->rs = ( nimi - nrmr ) / ( nimi + nrmr );
-   Fmat->ts = ( 2.0 * nimi  ) / ( nimi + nrmr );
-
-   double CMPLX_T xpcxp = Fmat->rp * CMPLX_F( conj )( Fmat->rp );
-   double CMPLX_T xscxs = Fmat->rs * CMPLX_F( conj )( Fmat->rs );
-
-   #ifdef VECTOR_RT
-   double CMPLX_T xpcxs = Fmat->rp * CMPLX_F( conj )( Fmat->rs );
-   Fmat->R[0] =  0.5 * ( xpcxp + xscxs );
-   Fmat->R[1] =  0.5 * ( xpcxp - xscxs );
-   Fmat->R[2] =  CMPLX_F( creal )( xpcxs );
-   Fmat->R[3] =  CMPLX_0( cimag( xpcxs ) );
-
-   if ( CMPLX_F(creal)(mur) > TOLERANCE ) // SEEMS IT SHOULD BE MU CRITICAL AND NOT TOLERANCE... CHECK!
-   {
-     xpcxp = Fmat->tp * CMPLX_F( conj )( Fmat->tp );
-     xscxs = Fmat->ts * CMPLX_F( conj )( Fmat->ts );
-     xpcxs = Fmat->tp * CMPLX_F( conj )( Fmat->ts );
-
-     const double kt2 = CMPLX_F( creal )(n_rat[2] * mur / mui);
-
-     Fmat->T[0] =  kt2 * 0.5 * ( xpcxp + xscxs );
-     Fmat->T[1] =  kt2 * 0.5 * ( xpcxp - xscxs );
-     Fmat->T[2] =  kt2 * CMPLX_F( creal )( xpcxs );
-     Fmat->T[3] =  kt2 * CMPLX_0( cimag )( xpcxs );
-   } else {
-     Fmat->T[0] =  0.0;
-     Fmat->T[1] =  0.0;
-     Fmat->T[2] =  0.0;
-     Fmat->T[3] =  0.0;
-   }
-   #else
-   Fmat->R[0] = 0.5 * ( xpcxp + xscxs );
-   Fmat->T[0] = 1.0 - Fmat->R[0];
-   #endif // VETOR_RT
- }
-
- static inline __attribute__((always_inline)) void
  fresnel_mc
  ( 
    double const mui,

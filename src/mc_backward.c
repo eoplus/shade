@@ -1,8 +1,21 @@
 
+/*******************************************************************************
+ mc_backward.c
+
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+ Implements a backward Monte Carlo radiative transfer solver for a plane 
+ parallel where the only horizontal heterogeneity is the presence of shadowing
+ structures.
+
+*******************************************************************************/
 
  #include <stdlib.h>		// calloc, free, exit
  #include <string.h>		// strcmp
- #include <math.h>		// M_PI, M_1_PI, INFINITY, sqrt, asin, sin, log
+ #include <math.h>		// INFINITY, sqrt, asin, sin, log
  #include <complex.h>		// creal, csqrt, cacos
  #include <sys/time.h>     	// timeval, gettimeofday
  #include <gsl/gsl_rng.h>  	// gsl_rng, gsl_rng_alloc, gsl_rng_free, gsl_rng_set, gsl_rng_uniform, gsl_rng_uniform_pos
@@ -64,8 +77,8 @@
    double rttaz  = 0.0;								// Rotated azimuth (needed for the current sky radiance definition)
    double sclw   = 0.0;								// Scaling vector for ray power
    double sclwdr = 0.0;								// Temporary scaling for direct component stokes
-   double psi = 0.0; 								// Polar scattering angle
-   double phi = 0.0;								// Azimuthal scattering angle
+//   double psi = 0.0; 								// Polar scattering angle
+//   double phi = 0.0;								// Azimuthal scattering angle
    double * dif_n = calloc_1d (sim_ns + 2, "dif_n (mc.c)");			// Pointer to normalization multiplier for diffuse component
    double * dir_n = calloc_1d (sim_ns, "dir_n (mc.c)");				// Pointer to normalization multiplier vector for the direct component
 
@@ -135,19 +148,19 @@
 
    for (cs = 0; cs < sim_ns; cs++) 
    {
-     sun_sa[cs][0] = M_PI - sim_sza[cs];
+     sun_sa[cs][0] = K_PI - sim_sza[cs];
      sun_sa[cs][1] = sim_saa[cs];
      SPH_TO_COS_UNIT(sun_ua[cs], sun_sa[cs], sin_t)
 
      SNELL_U(cos(sim_sza[cs]), ra_mu, n_rat_aw, s_sin);
-     sun_sw[cs][0] = M_PI - CMPLX_F(creal)(CMPLX_P(acos)(ra_mu));
+     sun_sw[cs][0] = K_PI - CMPLX_F(creal)(CMPLX_P(acos)(ra_mu));
      sun_sw[cs][1] = sim_saa[cs];
 
-     // M_PI is used since the sky rad used here has the sun at M_PI...
-     sun_rra[cs] = M_PI - sim_saa[cs];
+     // K_PI is used since the sky rad used here has the sun at K_PI...
+     sun_rra[cs] = K_PI - sim_saa[cs];
      SPH_TO_COS_UNIT(sun_uw[cs], sun_sw[cs], sin_t);
 
-     FRESNEL_MC_U(cos(M_PI - sun_sw[cs][0]), cos(sim_sza[cs]), iop_na, iop_nw,
+     FRESNEL_MC_U(cos(K_PI - sun_sw[cs][0]), cos(sim_sza[cs]), iop_na, iop_nw,
        sun_Fmat[cs]);
 
      sun_btt_l[cs]   = btt->depth / -sun_uw[cs][2];
@@ -329,7 +342,7 @@
            ray.a[2] = ray_vrt.b[2];
            ray.b[2] = -ray.b[2];
            ray.u[2] = -ray.u[2];
-           ray.s[0] = M_PI - ray.s[0];
+           ray.s[0] = K_PI - ray.s[0];
            ray.s[2] = 1.0;
 
            /*
@@ -367,9 +380,9 @@
              */
              if ( ray.nsdw_f ) 
              {
-               u_refrac[0] = sin(M_PI - s_refrac[0]) * cos(ray.s[1]); 
-               u_refrac[1] = sin(M_PI - s_refrac[0]) * sin(ray.s[1]);
-               u_refrac[2] = cos(M_PI - s_refrac[0]);
+               u_refrac[0] = sin(K_PI - s_refrac[0]) * cos(ray.s[1]); 
+               u_refrac[1] = sin(K_PI - s_refrac[0]) * sin(ray.s[1]);
+               u_refrac[2] = cos(K_PI - s_refrac[0]);
                if ( !chk_intrs (ray_vrt.b, ray_vrt.b, u_refrac, 1000.0,  
                       str_ncl, cylns, str_ncn, cones, str_ncb, cubds) )
                {
@@ -744,10 +757,10 @@
    {
      for (cs = 0; cs < (sim_ns + 2); cs++) 
      {
-       dif_n[cs] = M_PI * n_rat_wa[1] / sim_nr;
+       dif_n[cs] = K_PI * n_rat_wa[1] / sim_nr;
        if (cs < sim_ns)
        {
-         dir_n[cs] = M_PI / (sim_nr * -sun_uw[cs][2] * SUN_OMG_W);
+         dir_n[cs] = K_PI / (sim_nr * -sun_uw[cs][2] * SUN_OMG_W);
        }
      }
    }

@@ -3,7 +3,9 @@
  bottom.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Provides functions describing the bottom.
 
@@ -47,7 +49,7 @@
  btt_alloc
  ( void )
  { 
-   struct bottom * btt = (struct bottom*) calloc(1, sizeof(struct bottom));
+   struct bottom * btt = (struct bottom *) calloc(1, sizeof(struct bottom));
 
    #ifdef CHCK_MEM_ALLOC
    if ( !btt )
@@ -148,7 +150,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");

@@ -3,7 +3,6 @@
  #define STRUCTURES_CUBOID
 
  #include <stdio.h>		// FILE
- #include <stddef.h>		// size_t
 
 /*******************************************************************************
  cuboid (str_cubd)
@@ -114,7 +113,7 @@
    double y[2];
    double z[2];
    double u[3];
-   double s[2];
+   double s[3];
    double alp;
    double s_base[2];
    double s_top[2];
@@ -170,7 +169,7 @@
  (
    FILE * odv,
    struct str_cubd const ** cubds,
-   size_t n,
+   int n,
    int const indent 
  );
 

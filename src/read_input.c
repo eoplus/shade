@@ -1,4 +1,17 @@
 
+/*******************************************************************************
+ read_input.c
+
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+ Functions to read a standard input file and to write a summary of the
+ simulation to an specified device.
+
+*******************************************************************************/
+
  #include <stdio.h>
  #include <stddef.h>
  #include <string.h>
@@ -140,16 +153,16 @@
        "but got '%s'\n", varnm);
      exit (-1);    
    }
-   for(size_t cs = 0; cs < (*sim_ns); cs++)
+   for(int cs = 0; cs < (*sim_ns); cs++)
    {
      fscanf(fip, "%lf", &(*sim_sza)[cs]);
      (*sim_sza)[cs] *= RAD;
-   }
-   if ( (*sim_sza)[ci] < 0.0 || (*sim_sza)[ci] > M_PI_2 )
-   {
-     printf ("\nERROR: sim_sza (Sun zenith angles) must be in the range "
-       "[0º,90º]\n");
-     exit (-1);
+     if ( (*sim_sza)[cs] < 0.0 || (*sim_sza)[cs] > K_PI_2 )
+     {
+       printf ("\nERROR: sim_sza (Sun zenith angles) must be in the range "
+         "[0º,90º]\n");
+       exit (-1);
+     }
    }
    fscanf(fip, "%s", varnm);
    if ( strcmp (varnm, "sim_saa(s):") )
@@ -158,16 +171,16 @@
        "but got '%s'\n", varnm);
      exit (-1);    
    }
-   for(size_t cs = 0; cs < (*sim_ns); cs++)
+   for(int cs = 0; cs < (*sim_ns); cs++)
    {
      fscanf(fip, "%lf", &(*sim_saa)[cs]);
-     (*sim_saa)[ci] *= RAD;
-   }
-   if ( (*sim_saa)[ci] < 0.0 || (*sim_saa)[ci] > K_2PI )
-   {
-     printf ("\nERROR: sim_saa(s) (Sun azimuth angles) must be in the range "
-       "[0º,360º]\n");
-     exit (-1);
+     (*sim_saa)[cs] *= RAD;
+     if ( (*sim_saa)[cs] < 0.0 || (*sim_saa)[cs] > K_2PI )
+     {
+       printf ("\nERROR: sim_saa(s) (Sun azimuth angles) must be in the range "
+         "[0º,360º]\n");
+       exit (-1);
+     }
    }
 
    // Incident irradiance:
@@ -229,7 +242,7 @@
      exit (-1);    
    }
    *skr_fls = (char**) calloc((*sim_ns) + 2, sizeof(char*));
-   for (size_t cs = 0; cs < (*sim_ns); cs++)
+   for (int cs = 0; cs < (*sim_ns); cs++)
    {
      (*skr_fls)[cs] = (char*) calloc(STRMXLEN, sizeof(char));
      fscanf(fip, "%s", (*skr_fls)[cs]);
@@ -536,7 +549,7 @@
      }
      *src_fov *= RAD;
    } else {
-     *src_fov = M_PI;
+     *src_fov = K_PI;
    } 
 
    fscanf(fip, "%s %lf %lf", varnm, &src_saxs[0], &src_saxs[1]);
@@ -791,11 +804,11 @@
            {
              mat_transpose(Mt, (double const**) (*cubds)[ci]->M, 3, 3);
              // Test all vertices:
-             for (size_t cx = 0; cx < 2; cx++)             
+             for (int cx = 0; cx < 2; cx++)             
              {
-               for (size_t cy = 0; cy < 2; cy++)             
+               for (int cy = 0; cy < 2; cy++)             
                {
-                 for (size_t cz = 0; cz < 2; cz++)             
+                 for (int cz = 0; cz < 2; cz++)             
                  {
                    v[0] = (*cubds)[ci]->x[cx];
                    v[1] = (*cubds)[ci]->y[cy];
@@ -803,7 +816,7 @@
 
                    rot_vec_unit(v_rot, v, (double const**) Mt);
 
-                   for (size_t cg = 0; cg < 3; cg++)
+                   for (int cg = 0; cg < 3; cg++)
                    {
                      v_rot[cg] += (*cubds)[ci]->o[cg];
                      if (v_rot[cg] < bbx_mn[cg])
@@ -821,7 +834,7 @@
            } // ci
            free_2d(3, &Mt);
            (*cubds)[0] = str_cubd_alloc();
-           for (size_t cg = 0; cg < 3; cg++)
+           for (int cg = 0; cg < 3; cg++)
            {
              lengths[cg] = bbx_mx[cg] - bbx_mn[cg];
              origin[cg]  = bbx_mn[cg] + lengths[cg] / 2.0;
@@ -1046,7 +1059,7 @@
    #ifdef SHADOWING
    if ( str_ncl > 0 )
    {
-     for (size_t i = 0; i < str_ncl; i++)
+     for (int i = 0; i < str_ncl; i++)
      {
        str_cyln_fprintf(fo, (struct str_cyln const *) cylns[i], 2);
        fprintf(fo, "      Base opening:\n");
@@ -1058,7 +1071,7 @@
    }
    if ( str_ncn > 0 )
    {
-     for (size_t i = 0; i < str_ncn; i++)
+     for (int i = 0; i < str_ncn; i++)
      {
        str_cone_fprintf(fo, (struct str_cone const *) cones[i], 2);
        fprintf(fo, "      Base opening:\n");
@@ -1070,7 +1083,7 @@
    }
    if ( str_ncb > 0 )
    {
-     for (size_t i = 0; i < str_ncb; i++)
+     for (int i = 0; i < str_ncb; i++)
      {
        str_cubd_fprintf(fo, (struct str_cubd const *) cubds[i], 2);
        fprintf(fo, "\n");

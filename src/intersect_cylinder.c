@@ -3,7 +3,9 @@
  intersect_cylinder.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- Version: 2021-03-12
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  intrs_cyln, intrs_cyln_right, intrs_cyln_oblique
 
@@ -169,7 +171,6 @@
 
 *******************************************************************************/
 
- #include <stddef.h>		// size_t
  #include <math.h>		// sqrt
 
  #include "config.h"		// TOLERANCE
@@ -201,7 +202,7 @@
    }
    else
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_cr[i]  = a[i] - cyln->o[i];
        b_cr[i]  = b[i] - cyln->o[i];
@@ -407,7 +408,7 @@
 
    if ( cyln->closed_f[0] )
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_rot[i] = a[i];
        u_rot[i] = u[i];
@@ -425,7 +426,7 @@
 
    if ( cyln->closed_f[1] )
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_rot[i] = a[i];
        u_rot[i] = u[i];

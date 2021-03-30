@@ -236,6 +236,7 @@
    #endif // VETOR_RT
  }
 
+ #ifdef VECTOR_RT
  #define FRESNEL_MC_VAR \
          double CMPLX_T V_nimi;  \
          double CMPLX_T V_nimr;  \
@@ -244,6 +245,15 @@
          double CMPLX_T V_xpcxp; \
          double CMPLX_T V_xscxs; \
          double CMPLX_T V_xpcxs;
+ #else
+ #define FRESNEL_MC_VAR \
+         double CMPLX_T V_nimi;  \
+         double CMPLX_T V_nimr;  \
+         double CMPLX_T V_nrmi;  \
+         double CMPLX_T V_nrmr;  \
+         double CMPLX_T V_xpcxp; \
+         double CMPLX_T V_xscxs;
+ #endif // VECTOR_RT
 
  #ifdef VECTOR_RT
  #define FRESNEL_MC_U(I_mui, I_mur, I_ni, I_nr, I_Fmat) \
@@ -264,14 +274,14 @@
          (I_Fmat).R[3] =  CMPLX_0( cimag( V_xpcxs ) ); \
          if ( CMPLX_F(creal)( I_mur ) > TOLERANCE ) \
          { \
-           for(size_t i = 0; i < STKS_N; i++) \
+           for(int i = 0; i < STKS_N; i++) \
            { \
              (I_Fmat).T[i] = 1.0 - (I_Fmat).R[i]; \
            } \
         } \
         else \
         { \
-           for(size_t i = 0; i < STKS_N; i++) \
+           for(int i = 0; i < STKS_N; i++) \
            { \
              (I_Fmat).T[i] = 0.0; \
            } \

@@ -3,7 +3,9 @@
  intersect_cuboid.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- Version: 2021-03-12
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  intrs_cubd, intrs_cubd_closed
 
@@ -49,7 +51,6 @@
 
 *******************************************************************************/
 
- #include <stddef.h>		// size_t
  #include <math.h>		// sqrt
 
  #include "rotation.h"		// ROT_VEC, ROT_VEC_UNIT
@@ -78,7 +79,7 @@
    }
    else
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_cr[i]  = a[i] - cubd->o[i];
        b_cr[i]  = b[i] - cubd->o[i];
@@ -104,7 +105,7 @@
    double dmin[3];
    double dmax[3];
 
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      u_inv[i] = 1.0 / u[i];
      if (u_inv[i] >= 0)

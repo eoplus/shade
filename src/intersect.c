@@ -1,4 +1,22 @@
 
+/*******************************************************************************
+ intersect.c
+
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+ This source file provides functions to evaluate intersections of a ray with 
+ two-dimensional structures. Intersections with three-dimensional structures are 
+ provided in separate source files with the naming convention "intersect_x.c",
+ where "x" is the three-dimensional object type.
+
+ A wrapper function is provided that will evaluate intersection against all
+ structures defined in the standard input file.
+
+*******************************************************************************/
+
  #include <stdio.h>
  #include <stddef.h>
  #include <math.h>
@@ -20,7 +38,8 @@
 
  chk_intrs
 
- This is the main function controling ray-structure intersection. It 
+ This is the main function controling ray-structure intersection. It is a
+ wrapper to call the specific intersection functions of wach structure type.
 
  Because of refraction, the intresection check is made in each refractive index 
  layer. In version 1.6 the system has only two layers, homogenous air and 
@@ -29,16 +48,42 @@
  portion. To check in air, the initial point of the ray must be set at 0.0.
 
  INPUT:
- a,		// Pointer to previous ray position
- b_i,		// Pointer to current ray position
- u,		// Pointer to ray directional cosines
- l_i, 	        // Ray pathlength.
- NCL,		// Number of cylinders
- cylns,		// Pointer to cylinders
- NCN,		// Number of cones
- cones,		// Pointer to cones
- NCB,
- cubds
+ a      - Initial point of the ray
+          Dimensions: [3]: [0]X, [1]Y, [2]Z
+          Range: (-Inf,Inf), meters
+          Pointer to constant double;
+ b_i    - Terminal point of the ray
+          Dimensions: [3]: [0]X, [1]Y, [2]Z
+          Range: (-Inf,Inf), meters
+          Pointer to constant double;
+ u      - Cartesian directions of the ray
+          Dimensions: [3]: [0]X, [1]Y, [2]Z
+          Range: (-1,1), unitless
+          Pointer to constant double;
+ l_i    - Pathlength of the ray (||B-A||)
+          Range: (0,Inf), meters
+          Constant double;
+ NCL    - Number of cylinders
+          Integer range: [0,Inf], unitless
+          Constant int;
+ cylns  - Array of cylinder parameters
+          Dimensions: [NCL]
+          Pointer to pointer to str_cyln struct;
+ NCN    - Number of cones
+          Integer range: [0,Inf], unitless
+          Constant int;
+ cones  - Array of cone parameters
+          Dimensions: [NCN]
+          Pointer to pointer to str_cone struct;
+ NCB    - Number of cuboids
+          Integer range: [0,Inf], unitless
+          Constant int;
+ cubds  - Array of cuboid parameters
+          Dimensions: [NCB]
+          Pointer to pointer to str_cubd struct;
+
+ OUTPUT:
+ Flag indicating if an intersection occured: 0 (FALSE), 1 (TRUE).
 
 *******************************************************************************/
 
@@ -208,7 +253,7 @@
        // Ray's direction is parallel to the plane: intersection at the start
        *intrs_f = 1;
        *intrs_l = 0.0;
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          intrs_p[i] = v[i];
        return;
      }
@@ -220,7 +265,7 @@
    if ( (*intrs_l) > 0.0 && (*intrs_l) <= l )
    {
      *intrs_f = 1;
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
        intrs_p[i] = v[i] + (*intrs_l) * u[i];
      return;
    }

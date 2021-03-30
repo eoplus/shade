@@ -2,13 +2,14 @@
  #ifndef CONSTANTS
  #define CONSTANTS
 
- #include <math.h>
-
  // Geometry:
- #define RAD (M_PI / 180.0)							// Degree to radian conversion factor
+ #define K_PI 3.14159265358979323846						// PI
+ #define K_1_PI 1.0 / K_PI							// 1 / PI
+ #define K_2PI 2.0 * K_PI							// 2 PI
+ #define K_PI_2 0.5 * K_PI							// PI / 2
+ #define K_1_2PI 1.0 / (2.0 * K_PI)						// 1 / (2 PI)
+ #define RAD (K_PI / 180.0)							// Degree to radian conversion factor
  #define DEG (1 / RAD)								// Radian to degree conversion factor
- #define K_2PI 2.0 * M_PI							// 2 PI
- #define K_1_2PI 1.0 / (2.0 * M_PI)						// 1 / (2 PI)
 
  // Rayleigh scattering:
  #define WATER_DEPOLR 0.039							// Water linear depolarization ratio

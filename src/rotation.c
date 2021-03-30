@@ -3,7 +3,9 @@
  rotation.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  General function to compute rotation matrices and apply then to ray direction
  and Stokes vector.

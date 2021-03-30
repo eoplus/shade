@@ -86,10 +86,10 @@ write.table(tmp, file = "cardioidal_sky.txt", col.names = FALSE,
 
 fls   <- list.files("skyrad_original", pattern = "sky.txt", full.names = TRUE)
 fls_i <- list.files("skyrad_original", pattern = "diffuse.txt", full.names = TRUE)
- 
-wave    = 550                 # any in seq(from = 350, to = 1000, by = 10)
-aerosol = "maritime_clean" # any of "continental_clean", "continental_polluted", "maritime_clean", "maritime_polluted"
-relumid = 95                  # any of 50, 80, 95
+
+wave    = 850                 # any in seq(from = 350, to = 1000, by = 10)
+aerosol = "continental_clean" # any of "continental_clean", "continental_polluted", "maritime_clean", "maritime_polluted"
+relumid = 80                  # any of 50, 80, 95
 aot     = "02"                # any of "01", "02"
 
 base    <- paste(aerosol, relumid, aot, sep = "_")

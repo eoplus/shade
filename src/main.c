@@ -16,7 +16,6 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
  #include <stdio.h>					// Functions:  fprintf, printf,
  #include <stdlib.h>					// Functions:  calloc
  #include <string.h>					// Functions:  strcmp, strcpy
- #include <math.h>					// Constants:  M_PI
  #include <time.h>
  #include <gsl/gsl_rng.h>  				// Functions:  gsl_rng_alloc, gsl_rng_set, gsl_rng_uniform_pos
                           				// Data Type:  gsl_rng
@@ -101,7 +100,6 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    char src_tp[STRMXLEN];				// Source type;
    double src_ref_o[3] = {0.0};				// Source reference origin
    double src_rel_o[3] = {0.0};				// Source origin relative to reference
-   double src_o[3] = {0.0};				// Origin (center) of the source
    double src_s[3] = {0.0};				// Spherical directions of the source axis;
    double src_fov = 0.0;				// Field-of-view of the source; 
    double src_stks[STKS_N] = {0.0};			// Stokes parameters of the source;
@@ -137,12 +135,21 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    struct str_cubd ** cubds;				// Pointer to pointers of cuboids
 
    // Read input and setup: ****************************************************
+   int ipfnl = 0;
    time(&start);
-   if (argc != 2)
+   if ( argc != 2 )
    {
-     printf ("Usage: %s path/to/inputfile.txt\n", argv[0]);
-     exit (-1);
+     printf("Usage: %s path/to/inputfile.txt\n", argv[0]);
+     exit(-1);
    }
+   if ( strlen(argv[1]) > (STRMXLEN - 1) )
+   {
+     printf("\nERROR: Input filename longer than %d characters.\n", STRMXLEN - 1);
+     exit(-1);
+   } else {
+     ipfnl = strlen(argv[1]) - (sizeof (char) * 4);
+   }
+
 
    input_read(argv[1], &sim_nr, &sim_ns, &sim_sza, &sim_saa, &sim_f0, &skr_resx,
      &skr_resy, &skr_nx, &skr_ny, &skr_fls, &iop_na, &iop_nw, &iop_c, &iop_nw0,
@@ -154,7 +161,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
      cnfg_shdw);
 
    skr_setup(skr, sim_ns, skr_ny, skr_nx, skr_resy, skr_resx,
-     (char const **) skr_fls, sim_sza);
+     (char const **) skr_fls);
 
    src_stks[0] = 1.0;
    src_setup(src, src_fov, src_s, src_ref_o, src_rel_o, src_stks, src_tp);
@@ -187,8 +194,8 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    char ofbn[STRMXLEN];								// Output base filename
    char sufx[STRMXLEN];								// Output filename suffix
 
-   strncpy (ofbn, argv[1], strlen(argv[1]) - (sizeof (char) * 4));
-   ofbn[strlen(argv[1]) - (sizeof (char) * 4)] = '\0';
+   strncpy (ofbn, argv[1], ipfnl);
+   ofbn[ipfnl] = '\0';
 
    struct accumulator_bmc * accm_df_f_mn = accm_b_alloc();			// Mean of the free diffuse component
    struct accumulator_bmc * accm_dr_f_mn = accm_b_alloc();			// Mean of the free direct component
@@ -353,7 +360,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    // Deallocate memory: *******************************************************
    free_1d( &sim_sza );
    free_1d( &sim_saa );
-   for (size_t i = 0; i < (sim_ns + 2); i++)
+   for (int i = 0; i < (sim_ns + 2); i++)
      free( skr_fls[i] );
    free( skr_fls );
    skr_free ( &skr );
@@ -379,21 +386,21 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
 printf("GOT HERE 04\n");
    if ( cylns )
    {
-     for (size_t i = 0; i < str_ncl; i++)
+     for (int i = 0; i < str_ncl; i++)
        str_cyln_free( &cylns[i] );
      free( cylns );
    }
 printf("GOT HERE 05\n");
    if ( cones )
    {
-     for (size_t i = 0; i < str_ncn; i++)
+     for (int i = 0; i < str_ncn; i++)
        str_cone_free( &cones[i] );
      free( cones );
    }
 printf("GOT HERE 06\n");
    if ( cubds )
    {
-     for (size_t i = 0; i < str_ncb; i++)
+     for (int i = 0; i < str_ncb; i++)
        str_cubd_free( &cubds[i] );
      free( cubds );   
    }

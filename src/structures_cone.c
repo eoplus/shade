@@ -3,7 +3,9 @@
  structures_cone.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Functions to read, write and setup the internal representation of a positive
  finite (truncated) cone. The definition of the cone struct is detailed in the
@@ -20,10 +22,9 @@
 *******************************************************************************/
 
  #include <stdio.h>		// FILE
- #include <stddef.h>		// size_t
  #include <stdlib.h>		// exit, malloc, free
  #include <string.h>		// strcat, strncpy
- #include <math.h>		// M_PI, M_PI_2, cos, sin
+ #include <math.h>		// cos, sin
 
  #include "config.h"		// STRMXLEN, TOLERANCE
  #include "aux.h"		// ABS, SIGN
@@ -163,7 +164,7 @@
    s_top[0] *= RAD;
    s_top[1] *= RAD;
 
-   if ( (axis[0] < 0.0) || (axis[0] > M_PI) || 
+   if ( (axis[0] < 0.0) || (axis[0] > K_PI) || 
         (axis[1] < 0.0) || (axis[1] > K_2PI) )
    {
      printf("\nERROR: The orientation axis of the cone must be between "
@@ -186,14 +187,14 @@
      exit(-1);
    }
    if ( (s_top[0] < 0.0) || (s_top[0] > (60.0 * RAD)) || 
-        ( (s_top[1] > TOLERANCE) && (ABS(s_top[1] - M_PI) > TOLERANCE) ) )
+        ( (s_top[1] > TOLERANCE) && (ABS(s_top[1] - K_PI) > TOLERANCE) ) )
    {
      printf("\nERROR: The orientation axis of the cone's top must be "
        "between 0º and 60º for the polar angle and 0º or 180º for the "
        "azimuthal angle.\n\n");
      exit(-1);
    }
-   if ( (*psi) <= 0.0 || (*psi) >= M_PI_2 )
+   if ( (*psi) <= 0.0 || (*psi) >= K_PI_2 )
    {
      printf("\nERROR: The half-angle of the cone must be > 0º and < 90º.\n\n");
      exit(-1);
@@ -246,7 +247,7 @@
    int const * closed
  )
  {
-   for (size_t i = 0; i < 2; i++)
+   for (int i = 0; i < 2; i++)
    {
      cone->o[i] = origin[i];
      cone->s[i] = axis[i];
@@ -282,7 +283,7 @@
 
    // Set base opening:
    double open_r[2];
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      origin[i] += cone->u[i] * height[0];
    }
@@ -294,7 +295,7 @@
    cone->rotate_f[1] = (s_base[0] < TOLERANCE)? 0 : 1;
 
    // Set top opening:
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      origin[i] += cone->u[i] * (height[1] - height[0]);
    }
@@ -331,7 +332,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -381,12 +382,12 @@
  (
    FILE * odv,
    struct str_cone const ** cones,
-   size_t n,
+   int n,
    int const indent
  )
  {
    char pre_0[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
 
    fprintf(odv, "%sNumber of cones: %d\n", pre_0, n);
@@ -394,7 +395,7 @@
      "axis (º)  alpha (º)  Psi (º)           Height (m)  Closed      Rotate\n", 
      pre_0);
 
-   for (size_t i = 0; i < n; i++)
+   for (int i = 0; i < n; i++)
    {
      fprintf(odv, "%s%02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf   "
        "%6.2lf  % .2e,% .2e    %d, %d  %d, %d, %d, %d\n",

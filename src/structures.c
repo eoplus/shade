@@ -3,7 +3,9 @@
  structures.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  General functions to read, write and setup the internal representation of bi- 
  and three-dimensional geometrical structures. The datatype definitions of those
@@ -127,7 +129,7 @@
    axis[0] *= RAD;
    axis[1] *= RAD;
    *alpha  *= RAD;
-   if ( (axis[0] < 0.0) || (axis[0] > M_PI) || 
+   if ( (axis[0] < 0.0) || (axis[0] > K_PI) || 
         (axis[1] < 0.0) || (axis[1] > K_2PI) )
    {
      printf("\nERROR: The orientation axis of the rectangle must be between "
@@ -175,7 +177,7 @@
    double const *lengths
  )
  {
-   for (size_t i = 0; i < 2; i++)
+   for (int i = 0; i < 2; i++)
    {
      rect->o[i]  = origin[i];
      rect->s[i]  = axis[i];
@@ -232,7 +234,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -265,13 +267,13 @@
  str_rects_printf
  (
   str_rect const **rects,
-  size_t n
+  int n
  )
  {
    printf("  Number of rectangles: %d\n", n);
    printf("           type                     origin (m)       axis (º) "
      " alpha (º)           Length (m)\n");
-   for(size_t i = 0; i < n; i++)
+   for(int i = 0; i < n; i++)
    {
      printf("  %02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf  "
        "% .2e,% .2e\n",
@@ -377,7 +379,7 @@
    axis[1] *= RAD;
    *alpha  *= RAD;
 
-   if ( (axis[0] < 0.0) || (axis[0] > M_PI) || 
+   if ( (axis[0] < 0.0) || (axis[0] > K_PI) || 
         (axis[1] < 0.0) || (axis[1] > K_2PI) )
    {
      printf("\nERROR: The orientation axis of the ellipse must be between "
@@ -427,7 +429,7 @@
    double const *radius
  )
  {
-   for (size_t i = 0; i < 2; i++)
+   for (int i = 0; i < 2; i++)
    {
      ellp->o[i] = origin[i];
      ellp->s[i] = axis[i];
@@ -481,7 +483,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -509,13 +511,13 @@
  str_ellps_printf
  (
   str_ellp const **ellps,
-  size_t n
+  int n
  )
  {
    printf("  Number of ellipses: %d\n", n);
    printf("           type                     origin (m)       axis (º) "
      " alpha (º)           Radius (m)\n");
-   for(size_t i = 0; i < n; i++)
+   for(int i = 0; i < n; i++)
    {
      printf("  %02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf  "
        "% .2e,% .2e\n",

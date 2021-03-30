@@ -3,7 +3,9 @@
  scattering_ff.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Implements the analytical phase function of Fournier & Forand (1994),
  with the modifications of Fournier & Miroslaw (1999). Note that neither
@@ -78,7 +80,7 @@
    scat->pfn = NAN;
    scat->fbb = scat_fbb;
    scat->truncate = truncate;
-   strncpy(scat->method, method, STRMXLEN);
+   strncpy(scat->method, method, STRMXLEN - 1);
 
 //   scat->ff  = (struct scattering_ff*) malloc(sizeof(struct scattering_ff));
    scat->lut.npsi = SCAT_NPSI;
@@ -119,7 +121,7 @@
      double tmp_psi[2] = {0.0};
      double tmp_pf[1]  = {0.0};
      double tmp_cdf[2] = {0.0};
-     for (size_t i = 1; i < scat->lut.npsi; i++)
+     for (int i = 1; i < scat->lut.npsi; i++)
      {
        scat->lut.psi[i] = scat->lut.psi[i - 1] + step_ff;
        tmp_psi[0] = scat->lut.psi[i];
@@ -141,7 +143,7 @@
        scat_trunc_ff (scat);
      }
 
-     for (size_t i = 0; i < scat->lut.npsi; i++)
+     for (int i = 0; i < scat->lut.npsi; i++)
      {
        fprintf(fi, "%.12e\t%.12e\t%.12e\n", scat->lut.psi[i],
          scat->lut.pf[i], scat->lut.cdf[i]);
@@ -150,7 +152,7 @@
    else
    {
      // If scattering file exists, read from disk:
-     for (size_t i = 0; i < scat->lut.npsi; i++) 
+     for (int i = 0; i < scat->lut.npsi; i++) 
      {
        fscanf(fi, "%lf\t%lf\t%lf\n", &scat->lut.psi[i], &scat->lut.pf[i], 
          &scat->lut.cdf[i]);

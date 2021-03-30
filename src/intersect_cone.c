@@ -3,7 +3,9 @@
  intersect_cone.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- Version: 2021-03-12
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  intrs_cone, intrs_cone_right, intrs_cone_oblique
 
@@ -167,7 +169,6 @@
 
 *******************************************************************************/
 
- #include <stddef.h>		// size_t
  #include <math.h>		// sqrt
 
  #include "config.h"		// TOLERANCE
@@ -199,7 +200,7 @@
    }
    else
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_cr[i]  = a[i] - cone->o[i];
        b_cr[i]  = b[i] - cone->o[i];
@@ -278,7 +279,7 @@
        intrs_l = -C / B;
        if ( (intrs_l > 0.0) && (intrs_l <= l) )
        {
-         for (size_t i = 0; i < 3; i++)
+         for (int i = 0; i < 3; i++)
            intrs_p[i] = a[i] + u[i] * intrs_l;
          intrs_mu = intrs_p[0] * cone->u[0] + 
                     intrs_p[1] * cone->u[1] +
@@ -300,7 +301,7 @@
        intrs_l = (-B - sdelta) * k_1_2A;
        if ( (intrs_l > 0.0) && (intrs_l <= l) )
        {
-         for (size_t i = 0; i < 3; i++)
+         for (int i = 0; i < 3; i++)
            intrs_p[i] = a[i] + u[i] * intrs_l;
          intrs_mu = intrs_p[0] * cone->u[0] + 
                     intrs_p[1] * cone->u[1] +
@@ -313,7 +314,7 @@
        intrs_l = (-B + sdelta) * k_1_2A;
        if ( (intrs_l > 0.0) && (intrs_l <= l) )
        {
-         for (size_t i = 0; i < 3; i++)
+         for (int i = 0; i < 3; i++)
            intrs_p[i] = a[i] + u[i] * intrs_l;
          intrs_mu = intrs_p[0] * cone->u[0] + 
                     intrs_p[1] * cone->u[1] +

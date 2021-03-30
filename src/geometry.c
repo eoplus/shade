@@ -3,7 +3,9 @@
  geometry.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Provides basic function for vectors and matrices. Small functions that are used
  many times in the code are declared as static inline and defined in the header
@@ -112,9 +114,9 @@
    int n = nc * nr;
    double * Na = (double*) malloc(n * sizeof(double));
    double * Ma = (double*) malloc(n * sizeof(double));
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      { 
        Na[cr * nc + cc] = N[cr][cc];
        Ma[cr * nc + cc] = M[cr][cc];
@@ -131,9 +133,9 @@
    gsl_linalg_LU_decomp( LU, p, &s );    
    gsl_linalg_LU_invert( LU, p, &Nv.matrix );
 
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      { 
        N[cr][cc] = gsl_matrix_get(&Nv.matrix, cr, cc);
      }
@@ -173,9 +175,9 @@
    /* Copy matrices to arrays and setup GSL matrix views from array */
    int n = nc * nr;
    double * Ma = (double*) malloc(n * sizeof(double));
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      { 
        Ma[cr * nc + cc] = M[cr][cc];
      }
@@ -220,9 +222,9 @@
    int const nc
  )
  {
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      {
        N[cc][cr] = M[cr][cc];
      }
@@ -259,9 +261,9 @@
    double const TOL
  )
  {
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      {
        if ( ABS(M[cr][cc] - N[cr][cc]) > TOL ) 
        {
@@ -308,7 +310,7 @@
    // Set indentation:
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -321,7 +323,7 @@
    }
    fprintf(odv, "%sDimension: %d\n", pre_1, n);
    fprintf(odv, "%sData: ", pre_1);
-   for (size_t i = 0; i < n; i++)
+   for (int i = 0; i < n; i++)
    {
     if ( i && !(i % 5) )
       fprintf(odv, "\n%s      ", pre_1);
@@ -367,7 +369,7 @@
    // Set indentation:
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");

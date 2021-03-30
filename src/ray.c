@@ -3,7 +3,9 @@
  ray.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Functions to allocate, free, set initial conditions, update position, update 
  direction and print a light_ray datatype.
@@ -120,7 +122,7 @@
    // Set indentation:
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -128,8 +130,7 @@
    double l = sqrt(
      pow(ray->b[0] - ray->a[0], 2.0) + 
      pow(ray->b[1] - ray->a[1], 2.0) + 
-     pow(ray->b[2] - ray->a[2], 2.0)
-   );
+     pow(ray->b[2] - ray->a[2], 2.0) );
 
    fprintf(odv, "%sRay parameters:\n", pre_0);
    fprintf(odv, "%sOrigin:     % .2e, % .2e, % .2e (m)\n",
@@ -151,7 +152,7 @@
      ray->u[1], 
      ray->u[2]);
    fprintf(odv, "%sActive:  %d\n", pre_1, ray->nsdw_f);
-   fprintf(odv, "%sVirtual: %d\n", pre_1, ray->real_f);
+   fprintf(odv, "%sVirtual: %d\n", pre_1, !ray->real_f);
 
    if ( ray->real_f )
    {

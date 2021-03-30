@@ -3,7 +3,9 @@
  scattering_rlg.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  The rlgleigh phase function describes molecular scattering as proportional to 
  1 + f cos(psi)^2 (Zhang et al., 2019), where the value of f is given by 

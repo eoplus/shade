@@ -25,7 +25,7 @@
    struct reflectance refl;
  };
 
- // Function prototypes: *******************************************************
+/* Function prototypes: *******************************************************/
 
  struct bottom *
  btt_alloc

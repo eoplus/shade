@@ -3,7 +3,6 @@
  #define STRUCTURES_CYLINDER
 
  #include <stdio.h>		// FILE
- #include <stddef.h>		// size_t
 
  #include "structures.h"	// str_ellp
 
@@ -185,7 +184,7 @@
  (
    FILE * odv,
    struct str_cyln const ** cylns, 
-   size_t n,
+   int n,
    int const indent
  );
 

@@ -3,7 +3,6 @@
  #define STRUCTURES_CONE
 
  #include <stdio.h>		// FILE
- #include <stddef.h>		// size_t
 
  #include "structures.h"	// str_ellp
 
@@ -192,7 +191,7 @@
  (
    FILE * odv,
    struct str_cone const ** cones,
-   size_t n,
+   int n,
    int const indent
  );
 

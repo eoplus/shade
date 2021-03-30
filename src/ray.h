@@ -54,11 +54,11 @@
    double b[3];
    double u[3];
    double s[3];
-   int    nsdw_f;
-   int    real_f;
-   size_t nw0;
-   size_t nbr;
-   double ***stks;
+   int nsdw_f;
+   int real_f;
+   int nw0;
+   int nbr;
+   double *** stks;
  };
 
 /* Initiate ray: ***************************************************************
@@ -87,7 +87,7 @@
    struct light_ray * ray
  )
  {
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ray->a[i] = o[i];
      ray->b[i] = o[i];
@@ -97,11 +97,11 @@
 
    if ( ray->real_f )
    {
-     for (size_t cw = 0; cw < ray->nw0; cw++)
+     for (int cw = 0; cw < ray->nw0; cw++)
      {
-       for (size_t cb = 0; cb < ray->nbr; cb++)
+       for (int cb = 0; cb < ray->nbr; cb++)
        {
-         for (size_t ci = 0; ci < STKS_N; ci++)
+         for (int ci = 0; ci < STKS_N; ci++)
          {
            ray->stks[cw][cb][ci] = stks[ci];
          }
@@ -112,7 +112,7 @@
  }
 
  #define RAY_INI_S(I_o, I_s, I_skts, I_ray, I_sin_t) \
-         for (size_t i = 0; i < 3; i++) \
+         for (int i = 0; i < 3; i++) \
          { \
            (I_ray).a[i] = (I_o)[i]; \
            (I_ray).b[i] = (I_o)[i]; \
@@ -121,11 +121,11 @@
          SPH_TO_COS_UNIT( (I_ray).u, (I_ray).s, (I_sin_t) ); \
          if ( (I_ray).real_f ) \
          { \
-           for (size_t cw = 0; cw < (I_ray).nw0; cw++) \
+           for (int cw = 0; cw < (I_ray).nw0; cw++) \
            { \
-             for (size_t cb = 0; cb < (I_ray).nbr; cb++) \
+             for (int cb = 0; cb < (I_ray).nbr; cb++) \
              { \
-               for (size_t ci = 0; ci < STKS_N; ci++) \
+               for (int ci = 0; ci < STKS_N; ci++) \
                { \
                  (I_ray).stks[cw][cb][ci] = (I_skts)[ci]; \
                } \
@@ -144,7 +144,7 @@
    struct light_ray * ray
  )
  {
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ray->a[i] = o[i];
      ray->b[i] = o[i];
@@ -154,11 +154,11 @@
 
    if ( ray->real_f )
    {
-     for (size_t cw = 0; cw < ray->nw0; cw++)
+     for (int cw = 0; cw < ray->nw0; cw++)
      {
-       for (size_t cb = 0; cb < ray->nbr; cb++)
+       for (int cb = 0; cb < ray->nbr; cb++)
        {
-         for (size_t ci = 0; ci < STKS_N; ci++)
+         for (int ci = 0; ci < STKS_N; ci++)
          {
            ray->stks[cw][cb][ci] = stks[ci];
          }
@@ -169,7 +169,7 @@
  }
 
  #define RAY_INI_U(I_o, I_u, I_skts, I_ray, I_random) \
-         for (size_t i = 0; i < 3; i++) \
+         for (int i = 0; i < 3; i++) \
          { \
            (I_ray).a[i] = (I_o)[i]; \
            (I_ray).b[i] = (I_o)[i]; \
@@ -178,11 +178,11 @@
          COS_TO_SPH_UNIT( (I_ray).s, (I_ray).u, (I_random) ); \
          if ( (I_ray).real_f ) \
          { \
-           for (size_t cw = 0; cw < (I_ray).nw0; cw++) \
+           for (int cw = 0; cw < (I_ray).nw0; cw++) \
            { \
-             for (size_t cb = 0; cb < (I_ray).nbr; cb++) \
+             for (int cb = 0; cb < (I_ray).nbr; cb++) \
              { \
-               for (size_t ci = 0; ci < STKS_N; ci++) \
+               for (int ci = 0; ci < STKS_N; ci++) \
                { \
                  (I_ray).stks[cw][cb][ci] = (I_skts)[ci]; \
                } \
@@ -213,7 +213,7 @@
    struct light_ray * ray
  )
  {
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ray->a[i]  = ray->b[i];
      ray->b[i] += ray->u[i] * l;
@@ -221,7 +221,7 @@
  }
 
  #define RAY_MOV(I_l, I_ray) \
-         for (size_t i = 0; i < 3; i++) \
+         for (int i = 0; i < 3; i++) \
          { \
            (I_ray).a[i]  = (I_ray).b[i]; \
            (I_ray).b[i] += (I_ray).u[i] * (I_l); \
@@ -266,7 +266,7 @@
      case we keep the scattering directions (reflected if necessary, in the 
      case that the ray was travelling -Z-axis). 
      */
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        ray->u[i] = SIGN(ray->u[2]) * u_scat[i];     
      }
@@ -294,7 +294,7 @@
          SPH_TO_COS_UNIT( (I_u_scat), (I_s_scat), (I_sin_t) ); \
          if( (1.0 - ABS( (I_ray).u[2] )) < TOLERANCE ) \
          { \
-           for (size_t i = 0; i < 3; i++) \
+           for (int i = 0; i < 3; i++) \
            { \
              (I_ray).u[i] = SIGN( (I_ray).u[2] ) * (I_u_scat)[i]; \
            } \

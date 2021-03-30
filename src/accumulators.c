@@ -3,7 +3,29 @@
  accumulators.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- Version: 2021-01-12
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+ This source file provides functions to accumulate values for the Monte Carlo
+ integration.
+
+ In plane-parallel geometry, the simplest accumulator sum ray Stokes parameters
+ over the defined plane (infinite extent). In forward Monte Carlo radiative
+ transfer simulations, this is used when the system is composed of homogeneous
+ slabs, that is, can present vertical variation, but is horizontally
+ homogeneous. In this case, the radiative transfer problem is essentially a
+ one-dimensional problem and the horizontal position is irrelevant. Conversely,
+ in backward Monte Carlo radiative transfer simulations, the accumulator sum ray
+ Stokes parameters leaving the system over its (infinite) bounding plane. The
+ system in this case can have any spatial heterogeneity and discontinuities.
+
+ However there are situations when it is necessary to perform a spatially
+ resolved integration in the X-Y plane. This is the case for forward Monte Carlo
+ when the system cannot be represented by a slab (e.g., spatially varying bottom
+ depth). In backward Monte Carlo, the spatially resolved integral allows one to
+ calculate the contribution of each area element to a measurement at a given
+ point.
 
  Grid and sectorial geometries are available to provide spatially resolved 
  integration. If no spatially resolved integration is requested, any accumulator
@@ -254,14 +276,14 @@
    accm->ybrks[0] = 0.0;
    accm->ybrks[1] = acc_resy / 2.0;
    accm->ybrks[accm->ny] = INFINITY;
-   for (size_t ci = 2; ci < accm->ny; ci++)
+   for (int ci = 2; ci < accm->ny; ci++)
    {
      accm->ybrks[ci] = accm->ybrks[ci - 1] + acc_resy;
    }
 
    // Define break points in columns (x):
    accm->xbrks[0] = 0.0;
-   for (size_t ci = 1; ci <= accm->nx; ci++)
+   for (int ci = 1; ci <= accm->nx; ci++)
    {
      accm->xbrks[ci] = accm->xbrks[ci - 1] + acc_resx;
    }
@@ -302,14 +324,14 @@
  void
  accm_b_add_sect
  (
-   struct accumulator_bmc *accm,
-   struct skyradiance const *skr,
-   double const *p,
-   double const *s,
-   double const ***stks,
+   struct accumulator_bmc * accm,
+   struct skyradiance const * skr,
+   double const * p,
+   double const * s,
+   double const *** stks,
    double const scale,
-   int const    dirf,
-   int const    cs
+   int const dirf,
+   int const cs
  )
  {
    #ifdef SPATIALLY_RESOLVED
@@ -336,9 +358,9 @@
 
    if ( dirf )
    {
-     for (size_t cw = 0; cw < accm->nw0; cw++)
+     for (int cw = 0; cw < accm->nw0; cw++)
      {
-       for (size_t cb = 0; cb < accm->nbr; cb++)
+       for (int cb = 0; cb < accm->nbr; cb++)
        {
          accm->vector[cs][cw][cb] += (stks[cw][cb][0] * scale);
 
@@ -354,12 +376,12 @@
      FINDBIN(s[0], skr->miny, skr->ky_inv, skr->ny, rids);
      FINDBIN(s[1], skr->minx, skr->kx_inv, skr->nx, cids);
 
-     for (size_t cz = 0; cz < skr->ns; cz++)
+     for (int cz = 0; cz < skr->ns; cz++)
      {
        double skw = skr->grid[cz][rids][cids];
-       for (size_t cw = 0; cw < accm->nw0; cw++)
+       for (int cw = 0; cw < accm->nw0; cw++)
        {
-         for (size_t cb = 0; cb < accm->nbr; cb++)
+         for (int cb = 0; cb < accm->nbr; cb++)
          {
            accm->vector[cz][cw][cb] += (stks[cw][cb][0] * scale * skw);
 
@@ -416,11 +438,11 @@
    accm->ybrks[0] = -INFINITY;
    accm->ybrks[(accm->ny + 1) / 2] = acc_resy / 2;
    accm->ybrks[accm->ny] = INFINITY;
-   for (size_t ci = ((accm->ny + 1) / 2) + 1; ci < accm->ny; ci++)
+   for (int ci = ((accm->ny + 1) / 2) + 1; ci < accm->ny; ci++)
    {
      accm->ybrks[ci] = accm->ybrks[ci - 1] + acc_resy;
    }
-   for (size_t ci = ((accm->ny + 1) / 2) - 1; ci > 0; ci--)
+   for (int ci = ((accm->ny + 1) / 2) - 1; ci > 0; ci--)
    {
      accm->ybrks[ci] = accm->ybrks[ci + 1] - acc_resy;
    }
@@ -429,11 +451,11 @@
    accm->xbrks[0] = -INFINITY;
    accm->xbrks[(accm->nx + 1) / 2] = acc_resx / 2;
    accm->xbrks[accm->nx] = INFINITY;
-   for (size_t ci = ((accm->nx + 1) / 2) + 1; ci < accm->nx; ci++)
+   for (int ci = ((accm->nx + 1) / 2) + 1; ci < accm->nx; ci++)
    {
      accm->xbrks[ci] = accm->xbrks[ci - 1] + acc_resx;
    }
-   for (size_t ci = ((accm->nx + 1) / 2) - 1; ci > 0; ci--)
+   for (int ci = ((accm->nx + 1) / 2) - 1; ci > 0; ci--)
    {
      accm->xbrks[ci] = accm->xbrks[ci + 1] - acc_resx;
    }
@@ -494,9 +516,9 @@
 
    if ( dirf )
    {
-     for (size_t cw = 0; cw < accm->nw0; cw++)
+     for (int cw = 0; cw < accm->nw0; cw++)
      {
-       for (size_t cb = 0; cb < accm->nbr; cb++)
+       for (int cb = 0; cb < accm->nbr; cb++)
        {
          accm->vector[cs][cw][cb] += (stks[cw][cb][0] * scale);
 
@@ -512,12 +534,12 @@
      FINDBIN(s[0], skr->miny, skr->ky_inv, skr->ny, rids);
      FINDBIN(s[1], skr->minx, skr->kx_inv, skr->nx, cids);
 
-     for(size_t cz = 0; cz < skr->ns; cz++)
+     for(int cz = 0; cz < skr->ns; cz++)
      {
        double skw = skr->grid[cz][rids][cids];
-       for (size_t cw = 0; cw < accm->nw0; cw++)
+       for (int cw = 0; cw < accm->nw0; cw++)
        {
-         for (size_t cb = 0; cb < accm->nbr; cb++)
+         for (int cb = 0; cb < accm->nbr; cb++)
          {
            accm->vector[cz][cw][cb] += (stks[cw][cb][0] * scale * skw);
 
@@ -560,18 +582,18 @@
    double const * normf
  )
  {
-   for (size_t cz = 0; cz < accm->ns; cz++)
+   for (int cz = 0; cz < accm->ns; cz++)
    {
-     for (size_t cw = 0; cw < accm->nw0; cw++)
+     for (int cw = 0; cw < accm->nw0; cw++)
      {
-       for (size_t cb = 0; cb < accm->nbr; cb++)
+       for (int cb = 0; cb < accm->nbr; cb++)
        {
          accm->vector[cz][cw][cb] *= (f0 * normf[cz]);
 
          #ifdef SPATIALLY_RESOLVED
-         for (size_t cr = 0; cr < accm->ny; cr++)
+         for (int cr = 0; cr < accm->ny; cr++)
          {
-           for (size_t cc = 0; cc < accm->nx; cc++)
+           for (int cc = 0; cc < accm->nx; cc++)
            {
              accm->grid[cz][cw][cb][cr][cc] *= (f0 * normf[cz]);
            }
@@ -620,9 +642,9 @@
    int const cc
  )
  {
-   for (size_t cw = 0; cw < accm->nw0; cw++)
+   for (int cw = 0; cw < accm->nw0; cw++)
    {
-     for (size_t cb = 0; cb < accm->nbr; cb++)
+     for (int cb = 0; cb < accm->nbr; cb++)
      {
        accm->vector[cs][cw][cb] += val;
 
@@ -661,18 +683,18 @@
    double const scale
  )
  {
-   for (size_t cz = 0; cz < accm_in->ns; cz++)
+   for (int cz = 0; cz < accm_in->ns; cz++)
    {
-     for (size_t cw = 0; cw < accm_in->nw0; cw++)
+     for (int cw = 0; cw < accm_in->nw0; cw++)
      {
-       for (size_t cb = 0; cb < accm_in->nbr; cb++)
+       for (int cb = 0; cb < accm_in->nbr; cb++)
        {
          accm_sum->vector[cz][cw][cb] += accm_in->vector[cz][cw][cb] * scale;
 
          #ifdef SPATIALLY_RESOLVED
-         for (size_t cr = 0; cr < accm_in->ny; cr++)
+         for (int cr = 0; cr < accm_in->ny; cr++)
          {
-           for (size_t cc = 0; cc < accm_in->nx; cc++)
+           for (int cc = 0; cc < accm_in->nx; cc++)
            {
              accm_sum->grid[cz][cw][cb][cr][cc] += 
                accm_in->grid[cz][cw][cb][cr][cc] * scale;
@@ -703,18 +725,18 @@
  accm_b_reset
  ( struct accumulator_bmc * accm )
  {
-   for (size_t cz = 0; cz < accm->ns; cz++)
+   for (int cz = 0; cz < accm->ns; cz++)
    {
-     for (size_t cw = 0; cw < accm->nw0; cw++)
+     for (int cw = 0; cw < accm->nw0; cw++)
      {
-       for (size_t cb = 0; cb < accm->nbr; cb++)
+       for (int cb = 0; cb < accm->nbr; cb++)
        {
          accm->vector[cz][cw][cb] = 0.0;
 
          #ifdef SPATIALLY_RESOLVED
-         for (size_t cr = 0; cr < accm->ny; cr++)
+         for (int cr = 0; cr < accm->ny; cr++)
          {
-           for (size_t cc = 0; cc < accm->nx; cc++)
+           for (int cc = 0; cc < accm->nx; cc++)
            {
              accm->grid[cz][cw][cb][cr][cc] = 0.0;
            }
@@ -774,10 +796,10 @@
  )
  {
    char wf[12], bf[12], sz[12];
-   char ofn[200];
+   char ofn[STRMXLEN];
    FILE *fpo;
 
-   for (size_t cs = 0; cs < accm->ns; cs++)
+   for (int cs = 0; cs < accm->ns; cs++)
    {
      if (cs < sim_ns)
      {
@@ -791,13 +813,13 @@
      {
        sprintf(sz, "_Cardioidal");
      }
-     for (size_t cw = 0; cw < accm->nw0; cw++)
+     for (int cw = 0; cw < accm->nw0; cw++)
      {
        sprintf(wf, "_W%05.2f", iop_w0[cw]);
-       for (size_t cb = 0; cb < accm->nbr; cb++)
+       for (int cb = 0; cb < accm->nbr; cb++)
        {
          sprintf(bf, "_B%05.3f", btt_bh[cb]);
-         strncpy(ofn, ofbn, STRMXLEN);
+         strncpy(ofn, ofbn, STRMXLEN - 1);
          strcat(ofn, sufx);
          strcat(ofn, sz);
          strcat(ofn, wf);
@@ -810,9 +832,9 @@
            printf("\nERROR: Failed to create output file %s\n", ofn);
            exit(-3);
          }
-         for (size_t cr = 0; cr < accm->ny; cr++)
+         for (int cr = 0; cr < accm->ny; cr++)
          {
-           for (size_t cc = 0; cc < (accm->nx - 1); cc++)
+           for (int cc = 0; cc < (accm->nx - 1); cc++)
            {
              fprintf(fpo, "%.6E ", accm->grid[cs][cw][cb][cr][cc]);
            }
@@ -836,14 +858,14 @@
    double const * sim_sza
  )
  {
-   char wf[10], bf[10];
-   char ofn[200];
+   char bf[10];
+   char ofn[STRMXLEN];
    FILE *fpo;
 
-   for (size_t cb = 0; cb < accm->nbr; cb++)
+   for (int cb = 0; cb < accm->nbr; cb++)
    {
      sprintf(bf, "_B%05.3f", btt_bhr[cb]);
-     strncpy(ofn, ofbn, STRMXLEN);
+     strncpy(ofn, ofbn, STRMXLEN - 1);
      strcat(ofn, sufx);
      strcat(ofn, bf);
      strcat(ofn, ".txt");
@@ -856,12 +878,12 @@
      }
 
      fprintf(fpo, "\t");
-     for (size_t cw = 0; cw < (accm->nw0 - 1); cw++)
+     for (int cw = 0; cw < (accm->nw0 - 1); cw++)
      {
        fprintf(fpo, "W_%6.4f ", iop_w0[cw]);
      }
      fprintf(fpo, "W_%6.4f\n", iop_w0[(accm->nw0 - 1)]);
-     for (size_t cz = 0; cz < accm->ns; cz++)
+     for (int cz = 0; cz < accm->ns; cz++)
      {
        if (cz < sim_ns)
        {
@@ -871,7 +893,7 @@
        } else {
          fprintf(fpo, "CARD\t");
        }
-       for (size_t cw = 0; cw < (accm->nw0 - 1); cw++)
+       for (int cw = 0; cw < (accm->nw0 - 1); cw++)
        {
          fprintf(fpo, "%.6E ", accm->vector[cz][cw][cb]);
        }

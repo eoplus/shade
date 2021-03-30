@@ -1,11 +1,22 @@
 
+/*******************************************************************************
+ statistics.c
+
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+*******************************************************************************/
+
  #include <stdio.h>	// Functions:  fprintf, printf,
  #include <string.h>	// Functions:  strcat, strcpy, sprintf
  #include <stdlib.h>	// Functions:  exit
  #include <math.h>      // Functions:  pow, sqrt
 
- #include "accumulators.h"	// Structures: str_acm
+ #include "config.h"		// STRMXLEN
  #include "constants.h"
+ #include "accumulators.h"	// Structures: str_acm
 
 /*
  * At the moment, only calculates the SE for the total spatial integral. It is
@@ -24,8 +35,8 @@
  )
  {
    int cw, cb, cz, cj;
-   char wf[10], bf[10];
-   char ifn[200], pre[200];
+   char bf[10];
+   char ifn[STRMXLEN], pre[STRMXLEN];
    double val;
    FILE *fpi;
 
@@ -35,7 +46,7 @@
      for (cb = 0; cb < accm_se->nbr; cb++)
      {
        sprintf(bf, "_B%05.3f", btt_bhr[cb]);
-       strncpy(ifn, ofbn, STRMXLEN);
+       strncpy(ifn, ofbn, STRMXLEN - 1);
        strcat(ifn, pre);
        strcat(ifn, sufx);
        strcat(ifn, bf);

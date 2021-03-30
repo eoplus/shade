@@ -37,32 +37,31 @@
 
  // Function prototypes: *******************************************************
 
- struct skyradiance*
+ struct skyradiance *
  skr_alloc
  ( void );
 
  void
  skr_free
- ( struct skyradiance **skr );
+ ( struct skyradiance ** skr );
 
  void
  skr_setup
  (
-   struct skyradiance *skr,
+   struct skyradiance * skr,
    int const sim_ns,
    int const skr_ny,
    int const skr_nx,
    double const skr_resy,
    double const skr_resx,
-   char const **skr_fls,
-   double const *sim_sza
+   char const ** skr_fls
  );
 
  void
  skr_read
  (
-   struct skyradiance *skr,
-   char const **skr_fls
+   struct skyradiance * skr,
+   char const ** skr_fls
  );
 
  #endif // SKYRAD

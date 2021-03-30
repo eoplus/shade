@@ -3,7 +3,9 @@
  sources.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Provides functions describing light sources and to take random samples of their
  probability distribution function.
@@ -194,7 +196,7 @@
    strncpy(src->tp, src_tp, STRMXLEN);
    if ( strcmp (src_tp, "pir") == 0 )
    {
-     src->stks[0] = M_1_PI;
+     src->stks[0] = K_1_PI;
      src->fun.qtl = &src_qtl_pnt_pir; 
      src->fun.cdf = &src_cdf_pnt_pir; 
      src->fun.pdf = &src_pdf_pnt_pir; 
@@ -218,7 +220,7 @@
    }
 
    #ifdef VECTOR_RT
-   for (size_t i = 0; i < 4; i++)
+   for (int i = 0; i < 4; i++)
      src->stks[i] = src_stks[i];
    #else
    src->stks[0] = src_stks[0];
@@ -288,7 +290,7 @@
    // Set indentation:
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -448,14 +450,14 @@
    if ( s_src[0] <= src->hfov )
    {
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = src->stks[i];
      #else
      stks[0] = src->stks[0];
      #endif // VECTOR_RT
    } else {
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = 0.0;
      #else
      stks[0] = 0.0;
@@ -535,14 +537,14 @@
    if ( s_src[0] <= src->hfov )
    {
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = src->stks[i];
      #else
      stks[0] = src->stks[0];
      #endif // VECTOR_RT
    } else {
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = 0.0;
      #else
      stks[0] = 0.0;
@@ -673,14 +675,14 @@
    {
      double mu = cos(s_src[0]);
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = src->stks[i] * mu;
      #else
      stks[0] = src->stks[0] * mu;
      #endif // VECTOR_RT
    } else {
      #ifdef VECTOR_RT
-     for (size_t i = 0; i < 4; i++)
+     for (int i = 0; i < 4; i++)
        stks[i] = 0.0;
      #else
      stks[0] = 0.0;

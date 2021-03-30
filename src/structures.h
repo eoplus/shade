@@ -118,7 +118,7 @@
    int const indent 
  );
 
- void str_rects_printf (str_rect const **rects, size_t n);
+ void str_rects_printf (str_rect const **rects, int n);
 
 /*******************************************************************************
  Triangle (str_trig)
@@ -246,7 +246,7 @@
    int const indent 
  );
 
- void str_ellps_printf (str_ellp const **ellp, size_t n);
+ void str_ellps_printf (str_ellp const **ellp, int n);
 
 
 /* Header for three-dimensional types: ****************************************/

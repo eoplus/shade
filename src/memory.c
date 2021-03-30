@@ -3,7 +3,9 @@
  memory.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Provides functions to allocate and free n-dimensional arrays of doubles, where
  n is from 1 to 5. The functions test for memory allocation and updated the 
@@ -100,7 +102,7 @@
    }
    #endif // CHCK_MEM_ALLOC
 
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
      array[cr] = (double*) calloc(nc, sizeof(double));
      #ifdef CHCK_MEM_ALLOC
@@ -125,7 +127,7 @@
  {
    if( *array )
    {
-     for (size_t cr = 0; cr < nr; cr++)
+     for (int cr = 0; cr < nr; cr++)
      {
        free( (*array)[cr] );
      }
@@ -172,7 +174,7 @@
    }
    #endif // CHCK_MEM_ALLOC
 
-   for (size_t cl = 0; cl < nl; cl++)
+   for (int cl = 0; cl < nl; cl++)
    {
      array[cl] = (double**) calloc(nr, sizeof (double*));
 
@@ -185,7 +187,7 @@
      }
      #endif // CHCK_MEM_ALLOC
 
-     for (size_t cr = 0; cr < nr; cr++)
+     for (int cr = 0; cr < nr; cr++)
      {
        array[cl][cr] = (double*) calloc(nc, sizeof (double));
 
@@ -213,9 +215,9 @@
  {
    if( *array )
    {
-     for (size_t cl = 0; cl < nl; cl++)
+     for (int cl = 0; cl < nl; cl++)
      {
-       for (size_t cr = 0; cr < nr; cr++)
+       for (int cr = 0; cr < nr; cr++)
        {
          free( (*array)[cl][cr] );
        }
@@ -266,7 +268,7 @@
    }
    #endif // CHCK_MEM_ALLOC
 
-   for (size_t cm = 0; cm < nm; cm++)
+   for (int cm = 0; cm < nm; cm++)
    {
      array[cm] = (double***) calloc(nl, sizeof (double**));
 
@@ -279,7 +281,7 @@
      }
      #endif // CHCK_MEM_ALLOC
 
-     for (size_t cl = 0; cl < nl; cl++)
+     for (int cl = 0; cl < nl; cl++)
      {
        array[cm][cl] = (double**) calloc(nr, sizeof (double*));
 
@@ -292,7 +294,7 @@
        }
        #endif // CHCK_MEM_ALLOC
 
-       for (size_t cr = 0; cr < nr; cr++)
+       for (int cr = 0; cr < nr; cr++)
        {
          array[cm][cl][cr] = (double*) calloc(nc, sizeof (double));
 
@@ -322,11 +324,11 @@
  {
    if( *array )
    {
-     for (size_t cm = 0; cm < nm; cm++)
+     for (int cm = 0; cm < nm; cm++)
      {
-       for (size_t cl = 0; cl < nl; cl++)
+       for (int cl = 0; cl < nl; cl++)
        {
-         for (size_t cr = 0; cr < nr; cr++)
+         for (int cr = 0; cr < nr; cr++)
          {
            free( (*array)[cm][cl][cr] );
          }
@@ -382,7 +384,7 @@
    }
    #endif // CHCK_MEM_ALLOC
 
-   for (size_t cg = 0; cg < ng; cg++)
+   for (int cg = 0; cg < ng; cg++)
    {
      array[cg] = (double ****) calloc(nm, sizeof (double ***));
 
@@ -395,7 +397,7 @@
      }
      #endif // CHCK_MEM_ALLOC
 
-     for (size_t cm = 0; cm < nm; cm++)
+     for (int cm = 0; cm < nm; cm++)
      {
        array[cg][cm] = (double ***) calloc(nl, sizeof (double **));
 
@@ -408,7 +410,7 @@
        }
        #endif // CHCK_MEM_ALLOC
 
-       for (size_t cl = 0; cl < nl; cl++)
+       for (int cl = 0; cl < nl; cl++)
        {
          array[cg][cm][cl] = (double **) calloc(nr, sizeof (double *));
 
@@ -421,7 +423,7 @@
          }
          #endif // CHCK_MEM_ALLOC
 
-         for (size_t cr = 0; cr < nr; cr++)
+         for (int cr = 0; cr < nr; cr++)
          {
            array[cg][cm][cl][cr] = (double *) calloc(nc, sizeof (double));
 
@@ -453,13 +455,13 @@
  {
    if( *array )
    {
-     for (size_t cg = 0; cg < ng; cg++)
+     for (int cg = 0; cg < ng; cg++)
      {
-       for (size_t cm = 0; cm < nm; cm++)
+       for (int cm = 0; cm < nm; cm++)
        {
-         for (size_t cl = 0; cl < nl; cl++)
+         for (int cl = 0; cl < nl; cl++)
          {
-           for (size_t cr = 0; cr < nr; cr++)
+           for (int cr = 0; cr < nr; cr++)
            {
              free( (*array)[cg][cm][cl][cr] );
            }

@@ -2,7 +2,7 @@
  #ifndef AUXILIARY
  #define AUXILIARY
 
- #include <stddef.h>	// size_t
+ #include <math.h>
 
  #define ABS(x) \
          (((x) >= 0.0) ? (x) : -(x))
@@ -81,7 +81,7 @@
    double const val,
    double const min,
    double const k_inv,
-   size_t const n
+   int const n
  )
  {
    int i = floor((val - min) * k_inv);
@@ -112,7 +112,7 @@
  (
    double const val,
    double const * brks,
-   size_t const n
+   int const n
  );
 
  #endif // AUXILIARY

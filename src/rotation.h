@@ -86,7 +86,7 @@
  )
  {
    double c[3];
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      c[i] = v[i] - o[i];
    }
@@ -94,7 +94,7 @@
  }
 
  #define ROT_VEC(I_w, I_v, I_o, I_M, I_c) \
-         for (size_t i = 0; i < 3; i++) \
+         for (int i = 0; i < 3; i++) \
          { \
            (I_c)[i] = (I_v)[i] - (I_o)[i]; \
          } \

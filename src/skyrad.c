@@ -2,7 +2,10 @@
 /*******************************************************************************
  skyrad.c
 
- Version: 2021-01-11
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  In the current version, it reads in external sky radiance distributions 
  (i.e., from the disk). Data is allocated in three dimensional arrays with the 
@@ -53,12 +56,12 @@
  
 *******************************************************************************/
 
- struct skyradiance*
+ struct skyradiance *
  skr_alloc
  ( void )
  { 
-   struct skyradiance *skr = 
-     (struct skyradiance*) calloc(1, sizeof(struct skyradiance));
+   struct skyradiance * skr = 
+     (struct skyradiance *) calloc(1, sizeof(struct skyradiance));
    #ifdef CHCK_MEM_ALLOC
    if ( !skr )
    {
@@ -73,7 +76,7 @@
 
  void
  skr_free
- ( struct skyradiance **skr )
+ ( struct skyradiance ** skr )
  {
    free_1d( &(*skr)->ybrks );
    free_1d( &(*skr)->xbrks );
@@ -109,9 +112,6 @@
             Constant double;
  skr_fls  - Path to sky radiance files
             Pointer to pointer to constant char;
- sim_sza  - Sun zenith angles
-            Range: (0,Inf), meters
-            Constant double;
 
  OUTPUT:
  None. Updates the values pointed by skr.
@@ -121,14 +121,13 @@
  void
  skr_setup
  (
-   struct skyradiance *skr,
-   int const    sim_ns,
-   int const    skr_ny,
-   int const    skr_nx,
+   struct skyradiance * skr,
+   int const sim_ns,
+   int const skr_ny,
+   int const skr_nx,
    double const skr_resy,
    double const skr_resx,
-   char const   **skr_fls,
-   double const *sim_sza
+   char const ** skr_fls
  )
  {
    skr->ns = sim_ns + 2;
@@ -144,11 +143,11 @@
    skr->ky_inv = 1.0 / skr_resy;
 
    skr->ybrks[0] = 0.0;
-   for (size_t i = 1; i < (skr_ny + 1); i++)
+   for (int i = 1; i < (skr_ny + 1); i++)
      skr->ybrks[i] = skr->ybrks[i - 1] + skr_resy;
 
    skr->xbrks[0] = 0.0;
-   for(size_t i = 1; i < (skr_nx + 1); i++)
+   for(int i = 1; i < (skr_nx + 1); i++)
      skr->xbrks[i] = skr->xbrks[i - 1] + skr_resx;
 
    skr_read(skr, skr_fls);
@@ -174,15 +173,13 @@
  void
  skr_read
  (
-   struct skyradiance *skr,
-   char const **skr_fls
+   struct skyradiance * skr,
+   char const ** skr_fls
  )
  {
-   int NPl, NAz, skrid;
-   int cs, cy, cx;
-   FILE* fpi;
+   FILE * fpi;
 
-   for (size_t cs = 0; cs < skr->ns; cs++) 
+   for (int cs = 0; cs < skr->ns; cs++) 
    {
      fpi = fopen(skr_fls[cs], "r");
      if ( !fpi )
@@ -191,9 +188,9 @@
        exit(-1);
      }
 
-     for (size_t cy = 0; cy < skr->ny; cy++)
+     for (int cy = 0; cy < skr->ny; cy++)
      {
-       for (size_t cx = 0; cx < skr->nx; cx++)
+       for (int cx = 0; cx < skr->nx; cx++)
        {
          fscanf(fpi, "%lf", &skr->grid[cs][cy][cx]);
        }

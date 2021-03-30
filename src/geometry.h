@@ -2,6 +2,7 @@
  #ifndef GEOMETRY
  #define GEOMETRY
 
+ #include <math.h>
  #include <gsl/gsl_rng.h>
 
  #include "config.h"
@@ -197,10 +198,10 @@
    int const nc
  )
  {
-   for (size_t cr = 0; cr < nr; cr++)
+   for (int cr = 0; cr < nr; cr++)
    {
      ww[cr] = 0.0;
-     for (size_t cc = 0; cc < nc; cc++)
+     for (int cc = 0; cc < nc; cc++)
      {
        ww[cr] += M[cr][cc] * vv[cc];
      }
@@ -208,10 +209,10 @@
  }
 
  #define MAT_VEC_PROD(I_w, I_v, I_M, I_nr, I_nc) \
-         for (size_t cr = 0; cr < (I_nr); cr++) \
+         for (int cr = 0; cr < (I_nr); cr++) \
          { \
            (I_w)[cr] = 0.0; \
-           for (size_t cc = 0; cc < (I_nc); cc++) \
+           for (int cc = 0; cc < (I_nc); cc++) \
            { \
              (I_w)[cr] += (I_M)[cr][cc] * (I_v)[cc]; \
            } \

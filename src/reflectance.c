@@ -3,7 +3,9 @@
  reflectance.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  This source file provides a representation of Bidirectional Reflectance
  Distribution Function (BRDF) and functions to be used with the Monte Carlo
@@ -193,7 +195,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -204,7 +206,7 @@
      fprintf(odv, "%sType: %s (k = %.3lf)\n", pre_1, refl->tp, refl->minn.k);
      fprintf(odv, "%sN.:   %d\n", pre_1, refl->minn.nbhr);
      fprintf(odv, "%sBHR:  ", pre_1);
-     for (size_t i = 0; i < (refl->minn.nbhr - 1); i++)
+     for (int i = 0; i < (refl->minn.nbhr - 1); i++)
      {
        if ( i && !(i % 5) )
          fprintf(odv, "\n%s      ", pre_1);
@@ -217,7 +219,7 @@
      fprintf(odv, "%sType: %s (Minnaert with k = 0)\n", pre_1, refl->tp);
      fprintf(odv, "%sN.:   %d\n", pre_1, refl->lamb.nbhr);
      fprintf(odv, "%sBHR:  ", pre_1);
-     for (size_t i = 0; i < (refl->lamb.nbhr - 1); i++)
+     for (int i = 0; i < (refl->lamb.nbhr - 1); i++)
      {
        if ( i && !(i % 5) )
          fprintf(odv, "\n%s      ", pre_1);
@@ -322,10 +324,10 @@
    refl->minn.bdr  = calloc_1d (nbhr, 
      "refl->minn->bdr in refl_setup_minn (reflectance.c)");
 
-   for (size_t i = 0; i < nbhr; i++)
+   for (int i = 0; i < nbhr; i++)
    {
      refl->minn.bhr[i]  = bhr[i];
-     refl->minn.bdr[i]  = bhr[i] * M_1_PI;
+     refl->minn.bdr[i]  = bhr[i] * K_1_PI;
    }
 
    refl->minn.k      = k;
@@ -389,7 +391,7 @@
  )
  {
    double scl = 2.0 * pow(s_scat_i[0], refl->minn.k) * refl->minn.invkp2;
-   for (size_t i = 0; i < refl->minn.nbhr; i++)
+   for (int i = 0; i < refl->minn.nbhr; i++)
    {
      dhr[i] = refl->minn.bhr[i] * scl;
    }
@@ -405,7 +407,7 @@
  )
  {
    double scl = pow((s_scat_i[0] * s_scat_i[1]), refl->minn.k);
-   for (size_t i = 0; i < refl->minn.nbhr; i++)
+   for (int i = 0; i < refl->minn.nbhr; i++)
    {
      bdr[i] = refl->minn.bdr[i] * scl;
    }
@@ -457,10 +459,10 @@
      "refl->lamb.bhr in refl_setup_lamb (reflectance.c)");
    refl->lamb.bdr  = calloc_1d(nbhr,
      "refl->lamb.bdr in refl_setup_lamb (reflectance.c)");
-   for (size_t i = 0; i < nbhr; i++)
+   for (int i = 0; i < nbhr; i++)
    {
      refl->lamb.bhr[i] = bhr[i];
-     refl->lamb.bdr[i] = bhr[i] * M_1_PI;
+     refl->lamb.bdr[i] = bhr[i] * K_1_PI;
    }
 
    refl->fun.qtl  = refl_qtl_lamb;
@@ -517,7 +519,7 @@
    double * dhr
  )
  {
-   for (size_t i = 0; i < refl->lamb.nbhr; i++)
+   for (int i = 0; i < refl->lamb.nbhr; i++)
      dhr[i] = refl->lamb.bhr[i];
  }
 
@@ -530,7 +532,7 @@
    double * bdr
  )
  {
-   for (size_t i = 0; i < refl->lamb.nbhr; i++)
+   for (int i = 0; i < refl->lamb.nbhr; i++)
      bdr[i] = refl->lamb.bdr[i];
  }
 

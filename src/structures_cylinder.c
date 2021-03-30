@@ -3,7 +3,9 @@
  structures_cylinder.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Functions to read, write and setup the internal representation of a positive
  finite circular cylinder. The definition of the cone struct is detailed in the
@@ -20,10 +22,9 @@
 *******************************************************************************/
 
  #include <stdio.h>			// FILE
- #include <stddef.h>			// size_t
  #include <stdlib.h>			// exit, malloc, free
  #include <string.h>			// strcat, strncpy
- #include <math.h>			// M_PI, M_PI_2, cos, sin
+ #include <math.h>			// cos, sin
 
  #include "config.h"			// STRMXLEN, TOLERANCE
  #include "aux.h"			// ABS, SIGN
@@ -161,7 +162,7 @@
    s_top[0] *= RAD;
    s_top[1] *= RAD;
 
-   if ( (axis[0] < 0.0) || (axis[0] > M_PI) || 
+   if ( (axis[0] < 0.0) || (axis[0] > K_PI) || 
         (axis[1] < 0.0) || (axis[1] > K_2PI) )
    {
      printf("\nERROR: The orientation axis of the cylinder must be between "
@@ -184,7 +185,7 @@
      exit(-1);
    }
    if ( (s_top[0] < 0.0) || (s_top[0] > (60.0 * RAD)) || 
-        ( (s_top[1] > TOLERANCE) && (ABS(s_top[1] - M_PI) > TOLERANCE) ) )
+        ( (s_top[1] > TOLERANCE) && (ABS(s_top[1] - K_PI) > TOLERANCE) ) )
    {
       printf("\nERROR: The orientation axis of the cylinder's top must be "
        "between 0º and 60º for the polar angle and 0º or 180º for the "
@@ -239,7 +240,7 @@
    int const * closed
  )
  {
-   for (size_t i = 0; i < 2; i++)
+   for (int i = 0; i < 2; i++)
    {
      cyln->o[i]  = origin[i];
      cyln->s[i]  = axis[i];
@@ -282,7 +283,7 @@
    cyln->dhmx[0] = tan(s_base[0]); //-sin(s_base[0]);
    str_ellp_setup(cyln->base, origin, s_base, 0.0, open_r);
    cyln->rotate_f[1] = (s_base[0] < TOLERANCE)? 0 : 1;
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      origin[i] += cyln->u[i] * height;
    }
@@ -317,7 +318,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -366,19 +367,19 @@
  (
    FILE * odv,
    struct str_cyln const ** cylns,
-   size_t n,
+   int n,
    int const indent
  )
  {
    char pre_0[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
 
    fprintf(odv, "%sNumber of cylinders: %d\n", pre_0, n);
    fprintf(odv, "%s                type                     origin (m)       "
      "axis (º)  alpha (º)  Radius (m)  Height (m)  Closed      Rotate\n", 
      pre_0);
-   for(size_t i = 0; i < n; i++)
+   for(int i = 0; i < n; i++)
    {
      fprintf(odv, "%s%02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf   "
        "% .2e   % .2e    %d, %d  %d, %d, %d, %d\n",

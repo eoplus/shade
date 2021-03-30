@@ -3,7 +3,9 @@
  structures_cuboid.c
 
  Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
- 2021-03-03
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
 
  Functions to read, write and setup the internal representation of a cuboid. 
  The definition of the cone struct is detailed in the structures_cuboid.h header
@@ -20,10 +22,9 @@
 *******************************************************************************/
 
  #include <stdio.h>		// FILE
- #include <stddef.h>		// size_t
  #include <stdlib.h>		// exit, malloc, free
  #include <string.h>		// strcat, strncpy
- #include <math.h>		// M_PI, M_PI_2, cos, sin
+ #include <math.h>		// cos, sin
 
  #include "config.h"		// STRMXLEN, TOLERANCE
  #include "aux.h"		// ABS, SIGN
@@ -161,7 +162,7 @@
    s_top[0] *= RAD;
    s_top[1] *= RAD;
 
-   if ( (axis[0] < 0.0) || (axis[0] > M_PI) || 
+   if ( (axis[0] < 0.0) || (axis[0] > K_PI) || 
         (axis[1] < 0.0) || (axis[1] > K_2PI) )
    {
      printf("\nERROR: The orientation axis of the cuboid must be between "
@@ -260,7 +261,7 @@
    int const    * closed
  )
  {
-   for (size_t i = 0; i < 2; i++)
+   for (int i = 0; i < 2; i++)
    {
      cubd->o[i] = origin[i];
      cubd->s[i] = axis[i];
@@ -304,7 +305,7 @@
    // Set openings:
    str_rect_setup(cubd->base, origin, s_base, 0.0, lengths);
    cubd->rotate_f[1] = (s_base[0] < TOLERANCE)? 0 : 1;
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      origin[i] += cubd->u[i] * lengths[2];
    }
@@ -337,7 +338,7 @@
  {
    char pre_0[STRMXLEN] = "";
    char pre_1[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
    strncpy(pre_1, pre_0, STRMXLEN);
    strcat(pre_1, "  ");
@@ -391,18 +392,18 @@
  (
    FILE * odv,
    struct str_cubd const ** cubds,
-   size_t n,
+   int n,
    int const indent 
  )
  {
    char pre_0[STRMXLEN] = "";
-   for (size_t i = 0; i < indent; i++)
+   for (int i = 0; i < indent; i++)
      strcat(pre_0, "  ");
 
    fprintf(odv, "%sNumber of cuboids: %d\n", pre_0, n);
    fprintf(odv, "%s         type                     origin (m)       axis (º) "
      " alpha (º)                     Length (m)  Closed      Rotate\n", pre_0);
-   for(size_t i = 0; i < n; i++)
+   for(int i = 0; i < n; i++)
    {
      fprintf(odv, "%s%02d  %s  % .2e,% .2e,% .2e  %6.2lf,%6.2lf     %6.2lf  "
        "% .2e,% .2e,% .2e    %d, %d  %d, %d, %d, %d\n",
@@ -417,9 +418,9 @@
        cubds[i]->s[0] * DEG, 
        cubds[i]->s[1] * DEG, 
        cubds[i]->alp  * DEG,
-       cubds[i]->hl[0],
-       cubds[i]->hl[1],
-       cubds[i]->hl[2],
+       cubds[i]->hl[0] * 2.0,
+       cubds[i]->hl[1] * 2.0,
+       cubds[i]->hl[2] * 2.0,
        cubds[i]->closed_f[0],
        cubds[i]->closed_f[1],
        cubds[i]->rotate_f[0],

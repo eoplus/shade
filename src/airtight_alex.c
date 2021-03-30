@@ -1,20 +1,39 @@
-// SPECIFIC ALEX:
-//
-// For out air-tight system, the air-water boundary is at the exit of the 
-// cylinder and therefore the photon package should be propagated directly 
-// there. Comment out the next line when not simulating this sensor and when 
-// simulating the reference condition without the sensor. Uncomment the line 
-// above for teh general condition.
 
-// SPECIFIC ALEX:
-//
-// For out air-tight system, the air-water boundary is at the exit of the 
-// cylinder and therefore it is important to check this surface interaction.
-// Comment out when not simulating this sensor and when simulating the reference
-// condition without the sensor.
-/*
+/*******************************************************************************
+ airtight_alex.c
 
-     */
+ Alexandre Castagna Mourão e Lima (alexandre.castagna@ugent.be)
+ Version: 1.6
+ Date: 2021-03-25
+ License: GPL-3.0
+
+ This source code provide functions to resolve specific interface interactions 
+ for a airtight skylight-blocking cylinder, as used in the PONDER project. It is
+ a specific condition but can be generalized for other skylight-blocking
+ structures (e.g., cones).
+
+ The code allows for both right-circular and oblique-circular cylinders, with a
+ maximum inclination axis of the cylinder to the Z-axis of 40 degrees. It should 
+ represent measurements where an airtight structure is used, with low
+ inclination angles, when the water level does not rise inside the tube to its
+ external level. The interface has the same position and angle of the opening of 
+ cylinder.
+
+ Two functions are provided to resolve surface interactions for an emitted ray 
+ (downwards, air to water) and a ray in the system reaching the opening of the
+ cylinder (upward, water to air).
+
+ This simulation requires the conditional compilation flag AIRTIGHT_ALEX to
+ be defined in the config.h header file of passed as a gcc compiler option 
+ -DAIRTIGHT_ALEX. Note that because the rays will be reflected downwards when 
+ reaching the opening of the cylinder, the result for the FREE condition cannot
+ realistically represent the absence of such a sensor since the interface is
+ discontinuous. To calculate shadowing is therefore necessary to run the
+ simulation twice one with AIRTIGHT_ALEX defined and one without, normalizing
+ the shadowing values of the AIRTIGHT_ALEX to the FREE values of the simulation
+ without AIRTIGHT_ALEX.
+
+*******************************************************************************/
 
  #include <math.h>
 
@@ -122,7 +141,7 @@
      }
      else
      {
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
        {
          a_rot_1[i] = ray->a[i] - cyln->o[i];
          u_rot_1[i] = ray->u[i];
@@ -140,7 +159,7 @@
      }
      else
      {
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
        {
          a_rot_2[i] = a_rot_1[i];
          u_rot_2[i] = u_rot_1[i];
@@ -166,9 +185,9 @@
        {
          SNELL_U(u_rot_2[2], u_refrac[2], n_rat_wa, s_sin);
          FRESNEL_MC_U(u_rot_2[2], u_refrac[2], iop_nw, iop_na, Fmat);
-         for (size_t cw = 0; cw < iop_nw0; cw++)
+         for (int cw = 0; cw < iop_nw0; cw++)
          {
-           for (size_t cb = 0; cb < btt_nbr; cb++)
+           for (int cb = 0; cb < btt_nbr; cb++)
            {
              #ifdef VECTOR_RT
              printf("\nERROR: VECTOR TRANSMITTANCE NOT IMPLEMENTED\n");
@@ -181,7 +200,7 @@
        }
 
        // Update ray's position:
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
        {
          a_rot_2[i] = intrs_p[i];
          b_rot_2[i] = a_rot_2[i] + u_rot_2[i] * (l - intrs_l);
@@ -196,7 +215,7 @@
        }
        else 
        {
-         for (size_t ci = 0; ci < 3; ci++)
+         for (int ci = 0; ci < 3; ci++)
          {
            a_rot_1[ci] = a_rot_2[ci] - ref_o_2[ci];
            b_rot_1[ci] = b_rot_2[ci] - ref_o_2[ci];
@@ -212,7 +231,7 @@
        }
        else 
        {
-         for (size_t ci = 0; ci < 3; ci++)
+         for (int ci = 0; ci < 3; ci++)
          {
            ray->a[ci] = a_rot_1[ci] - ref_o_1[ci];
            ray->b[ci] = b_rot_1[ci] - ref_o_1[ci];
@@ -328,7 +347,7 @@
    }
    else
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_rot_1[i] = ray->a[i] - cyln->o[i];
        u_rot_1[i] = ray->u[i];
@@ -346,7 +365,7 @@
    }
    else
    {
-     for (size_t i = 0; i < 3; i++)
+     for (int i = 0; i < 3; i++)
      {
        a_rot_2[i] = a_rot_1[i];
        u_rot_2[i] = u_rot_1[i];
@@ -365,9 +384,9 @@
    SNELL_U(u_rot_2[2], u_refrac[2], n_rat_aw, s_sin);
    FRESNEL_MC_U(u_rot_2[2], u_refrac[2], iop_na, iop_nw, Fmat);
 
-   for (size_t cw = 0; cw < iop_nw0; cw++)
+   for (int cw = 0; cw < iop_nw0; cw++)
    {
-     for (size_t cb = 0; cb < btt_nbr; cb++)
+     for (int cb = 0; cb < btt_nbr; cb++)
      {
        #ifdef VECTOR_RT
        printf("\nERROR: VECTOR TRANSMITTANCE NOT IMPLEMENTED\n");
@@ -388,7 +407,7 @@
    }
    else 
    {
-     for (size_t ci = 0; ci < 3; ci++)
+     for (int ci = 0; ci < 3; ci++)
      {
        b_rot_1[ci] = intrs_p[ci] - ref_o_2[ci];
        u_rot_1[ci] = u_rot_2[ci];
@@ -402,7 +421,7 @@
    }
    else 
    {
-     for (size_t ci = 0; ci < 3; ci++)
+     for (int ci = 0; ci < 3; ci++)
      {
        ray->b[ci] = b_rot_1[ci] - ref_o_1[ci];
        ray->u[ci] = u_rot_1[ci];

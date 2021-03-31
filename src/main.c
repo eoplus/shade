@@ -335,7 +335,7 @@ gcc main.c aux.c mc.c skyrad.c intersect.c statistics.c memory.c geometry.c ray.
    #endif // SHADOWING
 
    #ifdef SPATIALLY_RESOLVED
-   if (acc_geom > 0 && acc_fgeom == 0)
+   if (strcmp (acc_geom, "none") && acc_fgeom == 0)
    {
      accm_b_write_grid(accm_dr_f_mn, sim_ns, ofbn, "_out_dir_f_mn_spr", iop_w0, 
        btt_bhr, sim_sza);

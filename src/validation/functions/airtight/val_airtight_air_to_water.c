@@ -126,7 +126,7 @@
    }
    fpos = ftell(fi);
 
-   for (size_t i = 0; i < str_ncl; i++)
+   for (int i = 0; i < str_ncl; i++)
    {
      cylns[i] = str_cyln_alloc();
      str_cyln_read(fi, &fpos, origin, axis, &alpha, &radius, &height, base_s, 
@@ -152,10 +152,10 @@
    struct source ** srcs;
    srcs = (struct source **) calloc(str_ncl, sizeof(struct source *));
 
-   for (size_t i = 0; i < str_ncl; i++)
+   for (int i = 0; i < str_ncl; i++)
    {
      srcs[i] = src_alloc();
-     for (size_t j = 0; j < 3; j++)
+     for (int j = 0; j < 3; j++)
      {
        src_ref_o[j] = cylns[i]->o[j];
        src_s[j] = cylns[i]->s[j];
@@ -195,7 +195,7 @@
    printf("\n Emission at 0.0º, 0.0º --------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -207,7 +207,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -225,7 +225,7 @@
    printf("\n Emission at random ------------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -238,7 +238,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -274,7 +274,7 @@
    printf("\n Emission at 0.0º, 0.0º --------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -286,7 +286,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -304,7 +304,7 @@
    printf("\n Emission at random ------------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -317,7 +317,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -352,7 +352,7 @@
    printf("\n Emission at 0.0º, 0.0º --------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -364,7 +364,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -382,7 +382,7 @@
    printf("\n Emission at random ------------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -395,7 +395,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -430,7 +430,7 @@
    printf("\n Emission at 0.0º, 0.0º --------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -442,7 +442,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }
@@ -460,7 +460,7 @@
    printf("\n Emission at random ------------------------------------------\n");
 
    mat_transpose(M_open, (double const **) cylns[ci]->top->M, 3, 3);
-   for (size_t i = 0; i < 3; i++)
+   for (int i = 0; i < 3; i++)
    {
      ref_o_2[i] = -cylns[ci]->h * cylns[ci]->top->M[i][2];			
      ref_o_1[i] = -cylns[ci]->o[2] * cylns[ci]->M[i][2];			
@@ -473,7 +473,7 @@
      if ( srcs[ci]->rotate_f )
      {
        ROT_VEC_UNIT(u_rot, ray.u, srcs[ci]->M);
-       for (size_t i = 0; i < 3; i++)
+       for (int i = 0; i < 3; i++)
          ray.u[i] = u_rot[i];
        COS_TO_SPH_UNIT(ray.s, ray.u, random);
      }

@@ -72,7 +72,7 @@ ex  <- "/home/alexandre/Documents/active_research/owa_shading"
 setwd(ex)
 for(i in 1:length(fls)) {
   print(fls[i])
-  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src_v1.6/validation/code", dir, fls[i]))
+  cmd <- paste("./mc_solver_shdw_v1.6.o", file.path("src/validation/code", dir, fls[i]))
   system(cmd)
 }
 

@@ -258,7 +258,7 @@
    double const * lengths,
    double const * s_base,
    double const * s_top,
-   int const    * closed
+   int const * closed
  )
  {
    for (int i = 0; i < 2; i++)
@@ -282,7 +282,7 @@
    cubd->z[1] =  lengths[2] * 0.5;
 
    sph_to_cos_unit(cubd->u, cubd->s);
-   if ( (ABS(cubd->u[2]) < TOLERANCE) && (axis[1] < TOLERANCE) &&
+   if ( ((1.0 - ABS(cubd->u[2])) < TOLERANCE) && (axis[1] < TOLERANCE) &&
         (alpha < TOLERANCE) )
    {
      cubd->u[0] = 0.0;

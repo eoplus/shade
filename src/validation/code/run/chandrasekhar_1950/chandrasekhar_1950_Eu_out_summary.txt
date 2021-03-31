@@ -1,16 +1,47 @@
 
-Backward Monte Carlo radiative transfer code
-Version: 1.7
-Author: Alexandre Castagna
+  Backward Monte Carlo radiative transfer code
+  Version: 1.6
+  Author: Alexandre Castagna
 
-System properties:
-  Rays:    1.00e+06
-  Source:  pir at z = -0.00 m
-  SZA:     (1): 60.0 (º)
-  f0:      1.00 (W/m2)
-  n_air:   1.00 (unitless)
-  n_water: 1.00 (unitless)
-  c coef.: 1.00 (1/m)
-  w0:      (1): 0.800 (unitless)
-  Scat.:   Isotropic (Henyey-Greenstein with g = 0)
-  Bottom:  Undefined, at INFINITE depth
+
+  Summary: ***************************************************
+
+  System properties:
+    Rays:    1.00e+07
+    Source:  pir at z = -0.00 m
+    SZA:     (1): 60.0 (º)
+    f0:      1.00 (W/m2)
+    n_air:   1.00 (unitless)
+    n_water: 1.00 (unitless)
+    c coef.: 1.00 (1/m)
+    w0:      (1): 0.800 (unitless)
+    Scat.:   Isotropic (Henyey-Greenstein with g = 0)
+    Bottom:  Undefined, at INFINITE depth
+
+  Detailed parameters: ***************************************
+
+    Source parameters:
+      Type:     Plane irradiance sensor (as source)
+      FOV:      180.00º
+      Origin:   0.00e+00,  0.00e+00, -0.00e+00 (m)
+      Axis:        0.00º,   0.00º ( 0.00e+00,  0.00e+00,  1.00e+00)
+      Stokes:   1.00e+00 (W m^-2 sr^-1)
+      Rotate:   0
+        Rotation matrix:
+        Dimension: 3, 3
+        Data:  1.000e+00  0.000e+00  0.000e+00 
+               0.000e+00  1.000e+00  0.000e+00 
+               0.000e+00  0.000e+00  1.000e+00 
+
+    Scattering parameters:
+      Type:       Isotropic (Henyey-Greenstein with g = 0)
+      fbb:        0.5000
+      Average mu: 0.0000
+      Truncate:   0
+      Method:     Analytical
+
+    Bottom parameters:
+      Depth: inf (m)
+      Reflectance parameters: Undefined
+
+

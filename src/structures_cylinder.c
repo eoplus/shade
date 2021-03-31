@@ -256,7 +256,7 @@
    cyln->alp = alpha;
 
    sph_to_cos_unit(cyln->u, cyln->s);
-   if ( (1.0 - ABS(cyln->u[2]) < TOLERANCE) && 
+   if ( ((1.0 - ABS(cyln->u[2])) < TOLERANCE) && 
         (axis[1] < TOLERANCE) && (alpha < TOLERANCE) )
    {
      cyln->u[0] = 0.0;

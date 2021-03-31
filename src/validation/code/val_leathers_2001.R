@@ -251,7 +251,6 @@ file.remove(paste0(fnm,".aux"), paste0(fnm,".log"))
 # SZA_50  0.006 0.015 0.028 0.068 0.133
 # SZA_60  0.005 0.013 0.023 0.057 0.113
 # SZA_70  0.005 0.012 0.023 0.048 0.103
-
 #
 # Benchmark execution time: 27.28, 27.46, 25.71, 25.38, 28.85 min (1E7 rays)
 

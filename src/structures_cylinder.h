@@ -126,7 +126,7 @@
    str_ellp * top;
    double r;
    double u[3];
-   double s[2];
+   double s[3];
    double alp;
    double s_base[2];
    double s_top[2];

@@ -251,13 +251,13 @@
            #ifdef VECTOR_RT
            printf("\nERROR: VECTOR TRANSMITTANCE NOT IMPLEMENTED\n");
            exit(-1);
-           #else
+           #else // NOT VECTOR_RT 
            ray.stks[cw][cb][0] *= Fmat.T[0];
-           #endif // VECTOR_RT
+           #endif // NOT VECTOR_RT
          }
        }
      }
-     #else
+     #else // AIRTIGHT_ALEX
      /*
      If AIRTIGHT_ALEX flag is defined, the sensor acting as source is inside an
      airtight tube represented by the first cylinder and ray has to come from 

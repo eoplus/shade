@@ -391,9 +391,9 @@
        #ifdef VECTOR_RT
        printf("\nERROR: VECTOR TRANSMITTANCE NOT IMPLEMENTED\n");
        exit(-1);
-       #else
+       #else // NOT VECTOR_RT
        ray->stks[cw][cb][0] *= Fmat.T[0];
-       #endif // VECTOR_RT
+       #endif // NOT VECTOR_RT
      }
    }
    COS_TO_SPH_UNIT(s_refrac, u_rot_2, random);
